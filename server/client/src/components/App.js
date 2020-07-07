@@ -13,7 +13,7 @@ import { Row, Col, Container } from "react-bootstrap";
 
 const App = () => {
   return (
-    <Container id="app-view">
+    <Container id="app_view">
       <Header />
 
       <Switch>
