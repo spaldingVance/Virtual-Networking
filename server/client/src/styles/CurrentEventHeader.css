@@ -1,6 +1,7 @@
 #current-event-tile {
   background: var(--main);
   min-height: 250px;
+  width: 100%;
   margin: 0 auto;
   color: white;
   border-radius: 20px;
