@@ -26,14 +26,14 @@ class EventsList extends Component {
             <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
             </Col>
           </Row>
-          <Row>
-            <Col className="d-flex justify-content-between">
+          <Row className="align-items-baseline">
+            <Col className="d-inline-flex justify-content-start align-items-baseline">
             {/* For each participant, reduce to a number */}
-            <FontAwesomeIcon icon={faUsers} />
-            <p>23</p>
+            <FontAwesomeIcon icon={faUsers} /> <p className="event-tile-numbers">23</p>
+            </Col>
+            <Col className="d-inline-flex justify-content-end align-items-baseline">
             {/* For each conversation, reduce to a number */}
-            <FontAwesomeIcon icon={faComments} />
-            <p>2</p>
+            <FontAwesomeIcon icon={faComments} /> <p className="event-tile-numbers ">2</p>
             </Col>
           </Row>
         </Container>
