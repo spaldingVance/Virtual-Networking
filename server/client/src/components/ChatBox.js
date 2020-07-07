@@ -36,7 +36,16 @@ class ChatBox extends Component {
       });
       this.setState({ message: "" });
     };
+
+    this.test = (e) => {
+      e.preventDefault();
+      console.log('button click')
+      this.socket.emit('test', {
+        testMessage: "Hiiiii!!!!"
+      })
+    }
   }
+
   render() {
     return (
       <Container className="m-0 p-0">
@@ -50,7 +59,7 @@ class ChatBox extends Component {
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        {message.author}: {message.message}
+                        {message.username}: {message.text}
                       </div>
                     );
                   })}
@@ -68,7 +77,7 @@ class ChatBox extends Component {
                 />
                 <br />
                 <button
-                  onClick={this.sendMessage}
+                  onClick={this.test}
                   className="btn btn-primary form-control">
                   Send
                 </button>
