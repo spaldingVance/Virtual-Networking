@@ -1,12 +1,12 @@
 import React from "react";
-import "./App.css";
+import "../styles/App.css";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <h1>Virtual Networking</h1>
     </div>
   );
-}
+};
 
 export default App;
