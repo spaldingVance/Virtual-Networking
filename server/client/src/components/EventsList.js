@@ -15,9 +15,23 @@ class EventsList extends Component {
   renderEvents() {
     
     return (
-      <Col lg={3} md={4} sm={6} xs={12} className="">
-        <Container className="event-tile m-3">
-          <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
+      <Col lg={3} md={4} sm={6} xs={12} className="mb-4">
+        <Container className="event-tile px-3">
+          <Row>
+            <Col className="pt-3">
+            {/* events.eventName */}
+            {/* 900 Roboto for All Sans Serif */}
+            <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="d-flex justify-content-between">
+            {/* For each participant, reduce to a number */}
+            <p>23</p>
+            {/* For each conversation, reduce to a number */}
+            <p>2</p>
+            </Col>
+          </Row>
         </Container>
       </Col>
     );
@@ -28,7 +42,7 @@ class EventsList extends Component {
 
       <div>
         <Container>
-          <Row className="justify-content-md-center"> <h1>Attend an Event</h1></Row>
+          <Row className="mb-4 justify-content-md-center"> <h1>Attend an Event</h1></Row>
       
         {/* {this.props.events.map(this.renderEvents)} */}
         {/* Did this 8 times */}

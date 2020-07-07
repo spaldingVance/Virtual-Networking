@@ -1,8 +1,6 @@
 .event-tile {
   background: blue;
   height: 15em;
-  /* margin: 0 auto; */
   color: white;
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: 1em;
 }
