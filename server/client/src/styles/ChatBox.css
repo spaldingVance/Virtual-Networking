@@ -5,4 +5,10 @@
 .card {
   border-radius: 20px;
   height: 700px;
+  overflow: hidden;
+}
+
+.card-footer {
+  /* border-radius: 20px; */
+  overflow: hidden;
 }
