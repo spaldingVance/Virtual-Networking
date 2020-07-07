@@ -7,6 +7,7 @@ const User = require('../models/userSchema');
 const Event = require('../models/eventSchema');
 const Conversation = require('../models/conversationSchema');
 const Message = require('../models/messageSchema');
+const mongoose = require('mongoose');
 
 //Set up routes 
 
@@ -30,29 +31,45 @@ router.get('/test', (request, response) => {
 });
 
 //login route (join event)
-router.post('/users', (request, response, next) => {
-    User.findOne({userName: request.body.userName})
+router.post('/users/:eventId', (request, response, next) => {
+    // find user to see if user already exists
+    User.findOne({ userName: request.body.userName })
         .exec((err, user) => {
             if (err) {
                 return next(error)
             } else if (user) {
+                // if username exists in the database, return an error
                 return response.send("User Name Already Taken")
+            } else if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
+                // if event id is not in the correct format, return an error
+                return response.send("Invalid Event ID Format")
+            } else {
+                // find event by the ID
+                Event.findById(request.params.eventId)
+                    .exec((err, event) => {
+                        if (err) return next(err)
+                        // if no event exists for that id (but the id is valid), return an error
+                        if (!event) {
+                            response.send("Event Not Found")
+                        } else {
+                            // create a new user and add in values from request body
+                            let user = new User();
+                            user.userName = request.body.userName;
+                            user.byLine = request.body.byLine;
+                            // save the user to the database
+                            user.save((err) => {
+                                if (err) return next(err)
+                            });
+                            //push the new user to the event
+                            event.users.push(user._id)
+                            // save the event to the database (to update the users array within)
+                            event.save((err) => {
+                                if (err) return next(err)
+                            });
+                            response.send(user._id);
+                        }
+                    })
             }
-        })
-    Event.findOne({ _id: request.body.event })
-        .exec((err, event) => {
-            if (err) {
-                return next(error)
-            }
-            let user = new User();
-            user.userName = request.body.userName;
-            user.byLine = request.body.byLine;
-            user.save();
-            console.log(event)
-            console.log(user._id)
-            event.users.push(user._id)
-            event.save();
-            response.send(user);
         })
 })
 
