@@ -13,12 +13,14 @@ const ConversationList = () => {
           <li>Java Chat</li>
         </a>
 
-        <li>
-          <a href="#2">HTML Conversation</a>
-        </li>
-        <li>
-          <a href="#3">JavaScript Room</a>
-        </li>
+        <a href="#2">
+          <li>HTML Conversation</li>
+        </a>
+
+        <a href="#3">
+          <li>JavaScript Room</li>
+        </a>
+
         <li>
           <a href="#4">HTML Chat</a>
         </li>
