@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const socketio = require('socket.io');
 const moment = require ('moment');
-const User = require('../models/userSchema');
-const Event = require('../models/eventSchema');
-const Conversation = require('../models/conversationSchema');
-const Message = require('../models/messageSchema');
+const User = require('./models/userSchema');
+const Event = require('./models/eventSchema');
+const Conversation = require('./models/conversationSchema');
+const Message = require('./models/messageSchema');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -112,36 +112,36 @@ console.log('Server listening on:', port);
 
 
 
-const events = [ event ]
+// const events = [ event ]
 
 
-const event = {
-    id: "string",
-    eventName: "string",
-    conversations: [ conversation
-    ],
-    users: [
-        user
-    ]
-}
+// const event = {
+//     id: "string",
+//     eventName: "string",
+//     conversations: [ conversation
+//     ],
+//     users: [
+//         user
+//     ]
+// }
 
-const user = {
-    id: "string",
-    username: "String",
-    byline: "string"
-}
+// const user = {
+//     id: "string",
+//     username: "String",
+//     byline: "string"
+// }
 
-const conversation = {
-    id: "string",
-    messages: [message],
-    users: [id] //populate
-}
+// const conversation = {
+//     id: "string",
+//     messages: [message],
+//     users: [id] //populate
+// }
 
-const message = {
-    text: "string",
-    time: "timestamp",
-    user: "id"
-}
+// const message = {
+//     text: "string",
+//     time: "timestamp",
+//     user: "id"
+// }
 
 
 
