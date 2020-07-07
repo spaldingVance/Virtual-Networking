@@ -7,13 +7,25 @@ const ConversationList = () => {
   // TODO
   return (
     <div id="conversation-column">
-      <h3>Join a Convo</h3>
+      <h3>Join a Chat</h3>
       <ul className="conversation-list">
-        <li>Java Convo</li>
-        <li>HTML Convo</li>
-        <li>JavaScript Convo - new</li>
-        <li>Django Convo - new</li>
-        <li>Random Convo whose name is really long and tedious jeez</li>
+        <a href="#1">
+          <li>Java Chat</li>
+        </a>
+
+        <a href="#2">
+          <li>HTML Conversation</li>
+        </a>
+
+        <a href="#3">
+          <li>JavaScript Room</li>
+        </a>
+        <a href="#4">
+          <li>HTML Chat</li>
+        </a>
+        <a href="#1">
+          <li>Random Convo whose name is really long and tedious jeez</li>
+        </a>
       </ul>
     </div>
   );

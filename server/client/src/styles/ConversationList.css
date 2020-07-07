@@ -6,15 +6,18 @@ ul.conversation-list {
   margin: 0;
   padding: 0;
   width: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  height: 400px;
 }
 
 .conversation-list li {
-  background: yellow;
-  color: blue;
+  background: var(--light);
+  color: var(--main);
   width: 100%;
   list-style-type: none;
   margin: 10px 0;
   width: 100%;
-  border-radius: 35px;
+  border-radius: 20px;
   padding: 20px;
 }

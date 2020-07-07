@@ -1,0 +1,52 @@
+body {
+  background-image: url("../assets/circle-yellow.svg");
+  background-size: cover;
+  background-position: left top;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+h1 {
+  color: var(--main);
+  text-align: center;
+  margin: 150px 0 40px 0;
+}
+
+#tag-submit {
+  width: 100%;
+  background-color: var(--main);
+  border: 0;
+}
+
+#tag-submit:hover {
+  background-color: var(--hover-blue);
+}
+
+.login-text {
+  font-weight: 300;
+  color: var(--main);
+  margin: 40px 0 0 0;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+#login-italics {
+  font-style: italic;
+}
+
+@media only screen and (min-width: 992px) {
+  .login-text {
+    text-align: left;
+  }
+
+  h1 {
+    text-align: left;
+  }
+
+  body {
+    background-image: url("../assets/circle-yellow-copy.svg");
+    background-size: cover;
+    background-position: left top;
+    background-repeat: no-repeat;
+  }
+}
