@@ -50,7 +50,7 @@ class ChatBox extends Component {
       <Container className="m-0 p-0">
         <Row className="m-0 p-0">
           <Col className="m-0 p-0">
-            <Card className="m-0 p-0">
+            <Card className="m-0 p-0 shadow">
               <Card.Body>
                 <Card.Title>JavaScript Convo</Card.Title>
                 <hr />

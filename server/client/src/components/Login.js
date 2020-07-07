@@ -11,14 +11,14 @@ const Login = () => {
           <h1 id="howdy">Howdy, Stranger</h1>
           <Form>
             <Form.Control
-              className="tag-input"
+              className="tag-input shadow-sm"
               size="lg"
               type="text"
               placeholder="Name"
             />
             <br />
             <Form.Control
-              className="tag-input"
+              className="tag-input shadow-sm"
               size="lg"
               type="text"
               placeholder="Role (e.g. Mentor)"
