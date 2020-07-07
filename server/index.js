@@ -2,19 +2,21 @@ const express = require('express');
 const http = require('http');
 const app = express();
 const mongoose = require('mongoose');
+const mainRoutes = require('./routes/main')
 const keys = require('./config/keys');
 const socketio = require('socket.io');
 const moment = require ('moment');
-const User = require('../models/user');
-const Event = require('../models/event');
-const Conversation = require('../models/conversation');
-const Message = require('../models/message');
+const User = require('./models/userSchema');
+const Event = require('./models/eventSchema');
+const Conversation = require('./models/conversationSchema');
+const Message = require('./models/messageSchema');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
+app.use(mainRoutes);
 
 //for formatting responses?
 const formatMessage = (username, text) => {
@@ -100,50 +102,4 @@ io.on('connection', socket => {
 
 server.listen(port);
 console.log('Server listening on:', port);
-
-
-
-
-
-
-
-
-
-
-
-
-const events = [ event ]
-
-
-const event = {
-    id: "string",
-    eventName: "string",
-    conversations: [ conversation
-    ],
-    users: [
-        user
-    ]
-}
-
-const user = {
-    id: "string",
-    username: "String",
-    byline: "string"
-}
-
-const conversation = {
-    id: "string",
-    messages: [message],
-    users: [id] //populate
-}
-
-const message = {
-    text: "string",
-    time: "timestamp",
-    user: "id"
-}
-
-
-
-
 
