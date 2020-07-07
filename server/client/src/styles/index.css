@@ -1,6 +1,8 @@
 :root {
   --main: #3029b3;
   --light: #ffe354;
+  --hover-blue: #4040ad;
+  --hover-yellow: #e5be1c;
 }
 
 body {
