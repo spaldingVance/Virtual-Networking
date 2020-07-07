@@ -6,11 +6,10 @@ const mainRoutes = require('./routes/main')
 const keys = require('./config/keys');
 const socketio = require('socket.io');
 const moment = require ('moment');
-const User = require('./models/user');
-const Event = require('./models/event');
-const Conversation = require('./models/conversation');
-const Message = require('./models/message');
-
+const User = require('./models/userSchema');
+const Event = require('./models/eventSchema');
+const Conversation = require('./models/conversationSchema');
+const Message = require('./models/messageSchema');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 

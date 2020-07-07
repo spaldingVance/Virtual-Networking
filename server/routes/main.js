@@ -3,9 +3,10 @@
 
 
 const router = require('express').Router();
-const User = require('../models/user');
-const Event = require('../models/event');
-const Conversation = require('../models/conversation');
+const User = require('../models/userSchema');
+const Event = require('../models/eventSchema');
+const Conversation = require('../models/conversationSchema');
+const Message = require('../models/messageSchema');
 
 //Set up routes 
 
