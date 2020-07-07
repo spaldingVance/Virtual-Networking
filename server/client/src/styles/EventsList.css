@@ -1,7 +1,7 @@
 .event-tile {
   background: blue;
-  height: 200px;
-  margin: 0 auto;
+  height: 15em;
+  /* margin: 0 auto; */
   color: white;
   border-radius: 20px;
   padding: 20px;

@@ -1,8 +1,5 @@
 #current-event-tile {
   background: blue;
-  min-height: 250px;
-  margin: 0 auto;
+
   color: white;
-  border-radius: 20px;
-  padding: 20px;
 }

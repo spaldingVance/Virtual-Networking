@@ -15,11 +15,10 @@ class EventsList extends Component {
   renderEvents() {
     
     return (
-      <Col md={3}>
-        <Container className="m-3">
-        <div className="event-tile ">
-        </div>
-        </Container >
+      <Col lg={3} md={4} sm={6} xs={12} className="">
+        <Container className="event-tile m-3">
+          <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
+        </Container>
       </Col>
     );
   }
@@ -35,7 +34,7 @@ class EventsList extends Component {
         {/* Did this 8 times */}
         <Row>{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}{this.renderEvents()}</Row>
 
-      </Container>
+        </Container>
       </div>
     );
   }
