@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-// import { bindActionCreators } from 'redux';
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-//import { fetchEvents, selectEvent } from '../actions/index';
+import { getEvents, selectEvent } from "../actions/index";
 import "../styles/EventsList.css";
 import { Row, Col, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import { faComments, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 class EventsList extends Component {
   componentDidMount() {
-    //  this.props.fetchEvents();
+    this.props.getEvents();
   }
 
   renderEvents() {
@@ -68,11 +68,12 @@ class EventsList extends Component {
 }
 
 function mapStateToProps(state) {
-  //  return { events: state.events };
+  console.log("The state being mapped to events component is ", this.state);
+  return { events: state.events };
 }
 
 function mapDispatchToProps(dispatch) {
-  //  return bindActionCreators({ fetchEvents, selectEvent }, dispatch);
+  return bindActionCreators({ getEvents, selectEvent }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
