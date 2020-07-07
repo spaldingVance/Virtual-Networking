@@ -1,5 +1,5 @@
 #current-event-tile {
-  background: blue;
+  background: var(--main);
   min-height: 250px;
   margin: 0 auto;
   color: white;

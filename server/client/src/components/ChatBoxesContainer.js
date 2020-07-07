@@ -1,4 +1,5 @@
 import React from "react";
+import ChatBox from './ChatBox'
 
 // styling imports
 import { Row, Col, Container } from "react-bootstrap";
@@ -10,10 +11,10 @@ const ChatBoxesContainer = () => {
     <Container>
       <Row>
         <Col md={6}>
-          <div className="empty-chat-box">Chat box 1</div>
+          <ChatBox />
         </Col>
         <Col md={6}>
-          <div className="empty-chat-box">Chat box 2</div>
+          <ChatBox />
         </Col>
       </Row>
     </Container>
