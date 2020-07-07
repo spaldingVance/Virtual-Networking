@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const socketio = require('socket.io');
 const moment = require ('moment');
-const User = require('../models/user');
-const Event = require('../models/event');
-const Conversation = require('../models/conversation');
-const Message = require('../models/message');
+const User = require('./models/user');
+const Event = require('./models/event');
+const Conversation = require('./models/conversation');
+const Message = require('./models/message');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -111,7 +111,7 @@ console.log('Server listening on:', port);
 
 
 
-
+/*
 const events = [ event ]
 
 
@@ -143,7 +143,7 @@ const message = {
     user: "id"
 }
 
-
+*/
 
 
 
