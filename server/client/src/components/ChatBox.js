@@ -5,4 +5,4 @@ const ChatBox = () => {
   return null;
 };
 
-export default ChatBoxesContainer;
+export default ChatBox;
