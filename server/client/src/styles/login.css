@@ -1,12 +1,6 @@
-body {
-  background-image: url("../assets/circle-yellow.svg");
-  background-size: cover;
-  background-position: left top;
-  background-repeat: no-repeat;
-  height: 100vh;
-}
 
-h1 {
+
+#howdy {
   color: var(--main);
   text-align: center;
   margin: 150px 0 40px 0;
@@ -34,19 +28,26 @@ h1 {
   font-style: italic;
 }
 
+#yellowc {
+    width: 150%;
+    position: absolute;
+    z-index: -5;
+    margin: 0 0 0 0;
+}
+
 @media only screen and (min-width: 992px) {
   .login-text {
     text-align: left;
   }
 
-  h1 {
+  #howdy {
     text-align: left;
   }
 
-  body {
-    background-image: url("../assets/circle-yellow-copy.svg");
-    background-size: cover;
-    background-position: left top;
-    background-repeat: no-repeat;
+  #yellowc {
+    width: 150%;
+    position: absolute;
+    z-index: -5;
+    margin: -200px 0 0 -20%;
   }
 }
