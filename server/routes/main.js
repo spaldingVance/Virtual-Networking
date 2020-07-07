@@ -39,10 +39,12 @@ router.post('/users/:eventId', (request, response, next) => {
                 return next(error)
             } else if (user) {
                 // if username exists in the database, return an error
-                return response.send("User Name Already Taken")
+                response.writeHead(400, "username Already Taken")
+                return response.end()
             } else if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
                 // if event id is not in the correct format, return an error
-                return response.send("Invalid Event ID Format")
+                response.writeHead(400, "Invalid Event ID Format")
+                return response.end()
             } else {
                 // find event by the ID
                 Event.findById(request.params.eventId)
@@ -50,7 +52,8 @@ router.post('/users/:eventId', (request, response, next) => {
                         if (err) return next(err)
                         // if no event exists for that id (but the id is valid), return an error
                         if (!event) {
-                            response.send("Event Not Found")
+                            response.writeHead(404, "Event Not Found")
+                            return response.end()
                         } else {
                             // create a new user and add in values from request body
                             let user = new User();
@@ -74,17 +77,23 @@ router.post('/users/:eventId', (request, response, next) => {
 })
 
 router.get('/events/:eventId', (request, response, next) => {
-    
-    if(!request.params.eventId) {
-        response.writeHead(404, "Unable to find event");
+
+    if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
+        // if event id is not in the correct format, return an error
+        response.writeHead(400, "Invalid Event ID Format")
         return response.end()
     }
-    
+
     Event.findById({ _id: request.params.eventId })
         .populate("conversations")
         .exec((err, event) => {
             if (err) {
                 return next(err)
+            }
+            //if the event is null (doesn't exist), return an error
+            if (!event) {
+                response.writeHead(404, "Event Not Found")
+                return response.end()
             }
 
             response.send(event)

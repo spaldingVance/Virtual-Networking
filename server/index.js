@@ -115,6 +115,10 @@ io.on('connection', socket => {
 });
 
 // GENERATE FAKE DATA
+  // uncomment the .save() lines to add this data to the database
+  // you can use this format to create new fake data and save it as well
+  // make sure to comment out the .save() lines when running the server multiple times
+    // to avoid duplicate data 
 
 let event1 = new Event({
   eventName: "The Best Event"
