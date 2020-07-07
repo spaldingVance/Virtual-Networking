@@ -86,7 +86,7 @@ class ChatBox extends Component {
                   <InputGroup.Append>
                     <Button
                       variant="outline-secondary"
-                      onclick={this.sendMessage}>
+                      onClick={this.test}>
                       Send
                     </Button>
                   </InputGroup.Append>
