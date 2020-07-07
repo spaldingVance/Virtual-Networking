@@ -6,12 +6,12 @@ import ConversationList from "./ConversationList";
 import ChatBoxesContainer from "./ChatBoxesContainer";
 
 // styling imports
-import "../styles/App.css";
+import "../styles/EventPage.css";
 import { Row, Col, Container } from "react-bootstrap";
 
 const EventPage = () => {
   return (
-    <Row>
+    <Row className="event-page-row">
       <Col lg={4}>
         <Row className="justify-content-md-center">
           <CurrentEventHeader />

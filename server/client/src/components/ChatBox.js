@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Row, Col, Container, Card } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Container,
+  Card,
+  InputGroup,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import "../styles/ChatBox.css";
 
 class ChatBox extends Component {
@@ -28,21 +36,31 @@ class ChatBox extends Component {
 
     //this should eventually be this.props.username bc it's coming from redux store.
     // the message will be in the local state?
-    this.sendMessage = (ev) => {
-      ev.preventDefault();
-      this.socket.emit("SEND_MESSAGE", {
-        author: this.state.username,
-        message: this.state.message,
-      });
-      this.setState({ message: "" });
-    };
+    // this.sendMessage = (ev) => {
+    //   ev.preventDefault();
+    //   this.socket.emit("SEND_MESSAGE", {
+    //     author: this.state.username,
+    //     message: this.state.message,
+    //   });
+    //   this.setState({ message: "" });
+    // };
+    this.test = (event) => {
+      event.preventDefault();
+      console.log("Button connected");
+      this.socket.emit('test', {
+        testMessage: "HI!!!!!!!!!!!!!"
+    });
+    }
   }
+
+
+
   render() {
     return (
       <Container className="m-0 p-0">
         <Row className="m-0 p-0">
           <Col className="m-0 p-0">
-            <Card className="m-0 p-0">
+            <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
                 <Card.Title>JavaScript Convo</Card.Title>
                 <hr />
@@ -50,7 +68,7 @@ class ChatBox extends Component {
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        {message.author}: {message.message}
+                        {message.username}: {message.text}
                       </div>
                     );
                   })}
@@ -58,20 +76,21 @@ class ChatBox extends Component {
               </Card.Body>
               <div className="card-footer">
                 {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
-                <br />
-                <input
-                  type="text"
-                  placeholder="Message"
-                  className="form-control"
-                  value={this.state.message}
-                  onChange={(ev) => this.setState({ message: ev.target.value })}
-                />
-                <br />
-                <button
-                  onClick={this.sendMessage}
-                  className="btn btn-primary form-control">
-                  Send
-                </button>
+
+                <InputGroup>
+                  <FormControl
+                    placeholder="Message"
+                    aria-label="Message"
+                    aria-describedby="basic-addon2"
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={this.test}>
+                      Send
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
               </div>
             </Card>
           </Col>

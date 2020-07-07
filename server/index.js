@@ -11,6 +11,7 @@ const Event = require('./models/eventSchema');
 const Conversation = require('./models/conversationSchema');
 const Message = require('./models/messageSchema');
 const bodyParser = require('body-parser')
+const cors = require('cors');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -18,20 +19,13 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-
 app.use(mainRoutes);
+app.use(cors);
 
 //for formatting responses?
 const formatMessage = (username, text) => {
@@ -42,10 +36,26 @@ const formatMessage = (username, text) => {
   };
 }
 //for auto messages
-const botName = 'Virtual Networking Bot';
+const botName = 'Muze Bot';
 
 // Run when client connects
 io.on('connection', socket => {
+
+  socket.on('test', data => {
+    console.log(data.testMessage)
+    io.emit(
+      'RECEIVE_MESSAGE',
+      {
+        username: botName, 
+        text: `${data.testMessage}`,
+        time: moment().format('h:mm a')
+      }
+    );
+  });
+
+
+
+
 
   socket.on('joinEvent', ({ username, byline, eventId }) => {
     //create instance of user model in mongo (set _id as socket.id)
@@ -115,6 +125,10 @@ io.on('connection', socket => {
 });
 
 // GENERATE FAKE DATA
+  // uncomment the .save() lines to add this data to the database
+  // you can use this format to create new fake data and save it as well
+  // make sure to comment out the .save() lines when running the server multiple times
+    // to avoid duplicate data 
 
 let event1 = new Event({
   eventName: "The Best Event"
