@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Row, Col, Container, Card } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Container,
+  Card,
+  InputGroup,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import "../styles/ChatBox.css";
 
 class ChatBox extends Component {
@@ -68,20 +76,21 @@ class ChatBox extends Component {
               </Card.Body>
               <div className="card-footer">
                 {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
-                <br />
-                <input
-                  type="text"
-                  placeholder="Message"
-                  className="form-control"
-                  value={this.state.message}
-                  onChange={(ev) => this.setState({ message: ev.target.value })}
-                />
-                <br />
-                <button
-                  onClick={this.test}
-                  className="btn btn-primary form-control">
-                  Send
-                </button>
+
+                <InputGroup>
+                  <FormControl
+                    placeholder="Message"
+                    aria-label="Message"
+                    aria-describedby="basic-addon2"
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      variant="outline-secondary"
+                      onclick={this.sendMessage}>
+                      Send
+                    </Button>
+                  </InputGroup.Append>
+                </InputGroup>
               </div>
             </Card>
           </Col>
