@@ -29,6 +29,33 @@ router.get('/test', (request, response) => {
     response.send("TEST ROUTE WORKING")
 });
 
+//login route (join event)
+router.post('/users', (request, response, next) => {
+    User.findOne({userName: request.body.userName})
+        .exec((err, user) => {
+            if (err) {
+                return next(error)
+            } else if (user) {
+                return response.send("User Name Already Taken")
+            }
+        })
+    Event.findOne({ _id: request.body.event })
+        .exec((err, event) => {
+            if (err) {
+                return next(error)
+            }
+            let user = new User();
+            user.userName = request.body.userName;
+            user.byLine = request.body.byLine;
+            user.save();
+            console.log(event)
+            console.log(user._id)
+            event.users.push(user._id)
+            event.save();
+            response.send(user);
+        })
+})
+
 
 module.exports = router;
 
