@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 //import { fetchEvents, selectEvent } from '../actions/index';
-import "../styles/App.css";
+import "../styles/EventsList.css";
 import { Row, Col, Container } from "react-bootstrap";
 
 class EventsList extends Component {
@@ -16,9 +16,10 @@ class EventsList extends Component {
     
     return (
       <Col md={3}>
-
-        <img className="img-fluid mx-auto d-block py-2 " src="https://via.placeholder.com/250?text=Product+Image"></img>
-  
+        <Container className="m-3">
+        <div className="event-tile ">
+        </div>
+        </Container >
       </Col>
     );
   }
@@ -28,7 +29,7 @@ class EventsList extends Component {
 
       <div>
         <Container>
-          <Row className="justify-content-md-center"> <h1>Events</h1></Row>
+          <Row className="justify-content-md-center"> <h1>Attend an Event</h1></Row>
       
         {/* {this.props.events.map(this.renderEvents)} */}
         {/* Did this 8 times */}
