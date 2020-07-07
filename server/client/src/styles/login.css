@@ -1,4 +1,6 @@
-
+body {
+    overflow: hidden;
+}
 
 #howdy {
   color: var(--main);
