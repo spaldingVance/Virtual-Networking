@@ -13,15 +13,16 @@ import { Row, Col, Container } from "react-bootstrap";
 
 const App = () => {
   return (
-    <Container id="app_view">
+    <div>
       <Header />
-
-      <Switch>
-        <Route exact path={"/"} component={EventsList} />
-        <Route path={"/events/:eventId/login"} component={Login} />
-        <Route path={"/events/:eventId"} component={EventPage} />
-      </Switch>
-    </Container>
+      <Container id="app_view">
+        <Switch>
+          <Route exact path={"/"} component={EventsList} />
+          <Route path={"/events/:eventId/login"} component={Login} />
+          <Route path={"/events/:eventId"} component={EventPage} />
+        </Switch>
+      </Container>
+    </div>
   );
 };
 
