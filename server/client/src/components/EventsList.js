@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 //import { fetchEvents, selectEvent } from '../actions/index';
 import "../styles/EventsList.css";
 import { Row, Col, Container } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComments, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 class EventsList extends Component {
 
@@ -27,8 +29,10 @@ class EventsList extends Component {
           <Row>
             <Col className="d-flex justify-content-between">
             {/* For each participant, reduce to a number */}
+            <FontAwesomeIcon icon={faUsers} />
             <p>23</p>
             {/* For each conversation, reduce to a number */}
+            <FontAwesomeIcon icon={faComments} />
             <p>2</p>
             </Col>
           </Row>
