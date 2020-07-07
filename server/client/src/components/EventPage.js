@@ -3,6 +3,7 @@ import React from "react";
 // components
 import ChatBox from "./ChatBox";
 import CurrentEventHeader from "./CurrentEventHeader";
+import ConversationList from "./ConversationList";
 
 // styling imports
 import "../styles/App.css";
@@ -12,7 +13,12 @@ const EventPage = () => {
   return (
     <Row>
       <Col lg="4">
-        <CurrentEventHeader />
+        <Row className="justify-content-md-center">
+          <CurrentEventHeader />
+        </Row>
+        <Row>
+          <ConversationList />
+        </Row>
       </Col>
       <Col lg="4">
         <ChatBox />
