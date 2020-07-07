@@ -1,5 +1,4 @@
 import React from "react";
-import { Row, Col, Container } from "react-bootstrap";
 import muzeLogo from "../assets/muze-logo.svg";
 import "../styles/header.css";
 
