@@ -57,12 +57,14 @@ router.post('/users', (request, response, next) => {
 })
 
 router.get('/events/:eventId', (request, response, next) => {
+    
     if(!request.params.eventId) {
         response.writeHead(404, "Unable to find event");
         return response.end()
     }
     
     Event.findById({ _id: request.params.eventId })
+        .populate("conversations")
         .exec((err, event) => {
             if (err) {
                 return next(err)
