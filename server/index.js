@@ -29,8 +29,8 @@ app.use(
   })
 );
 
-app.use(cors);
 app.use(mainRoutes);
+app.use(cors);
 
 //for formatting responses?
 const formatMessage = (username, text) => {

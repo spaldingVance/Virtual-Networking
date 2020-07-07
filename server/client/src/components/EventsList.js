@@ -8,6 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 class EventsList extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     this.props.getEvents();
   }
