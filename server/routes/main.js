@@ -1,11 +1,11 @@
 //might not need these routes with socket
 
-/*
+
 
 const router = require('express').Router();
 const User = require('../models/user');
 const Event = require('../models/event');
-const Convo = require('../models/convo');
+const Conversation = require('../models/conversation');
 
 //Set up routes 
 
@@ -31,4 +31,3 @@ router.get('/test', (request, response) => {
 
 module.exports = router;
 
-*/
