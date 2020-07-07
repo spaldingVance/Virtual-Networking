@@ -1,7 +1,8 @@
 import React from "react";
 
 const EventsList = () => {
-  // TODO
+  // todo
+  return null;
 };
 
 export default EventsList;
