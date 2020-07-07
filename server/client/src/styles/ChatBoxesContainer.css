@@ -1,0 +1,7 @@
+.empty-chat-box {
+  height: 650px;
+  background-color: gray;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}

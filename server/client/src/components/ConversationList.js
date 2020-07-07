@@ -7,6 +7,7 @@ const ConversationList = () => {
   // TODO
   return (
     <div id="conversation-column">
+      <h3>Join a Convo</h3>
       <ul className="conversation-list">
         <li>Java Convo</li>
         <li>HTML Convo</li>
