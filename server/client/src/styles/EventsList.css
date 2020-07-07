@@ -1,0 +1,10 @@
+.event-tile {
+  background: blue;
+  height: 15em;
+  color: white;
+  border-radius: 1em;
+}
+
+.event-tile-numbers {
+  margin-left: 0.5em;
+}

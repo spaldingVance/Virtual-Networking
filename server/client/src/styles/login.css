@@ -1,0 +1,53 @@
+
+
+#howdy {
+  color: var(--main);
+  text-align: center;
+  margin: 150px 0 40px 0;
+}
+
+#tag-submit {
+  width: 100%;
+  background-color: var(--main);
+  border: 0;
+}
+
+#tag-submit:hover {
+  background-color: var(--hover-blue);
+}
+
+.login-text {
+  font-weight: 300;
+  color: var(--main);
+  margin: 40px 0 0 0;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+#login-italics {
+  font-style: italic;
+}
+
+#yellowc {
+    width: 150%;
+    position: absolute;
+    z-index: -5;
+    margin: 0 0 0 0;
+}
+
+@media only screen and (min-width: 992px) {
+  .login-text {
+    text-align: left;
+  }
+
+  #howdy {
+    text-align: left;
+  }
+
+  #yellowc {
+    width: 150%;
+    position: absolute;
+    z-index: -5;
+    margin: -200px 0 0 -20%;
+  }
+}
