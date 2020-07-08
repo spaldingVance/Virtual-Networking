@@ -1,5 +1,8 @@
 import axios from "axios";
-const ROOT_URL = `http://localhost:5000`;
+//const ROOT_URL = `http://localhost:5000`; commenting out for deployment
+
+const ROOT_URL = ``;
+
 
 export const GET_EVENTS = "GET_EVENTS";
 export const SELECT_EVENT = "SELECT_EVENT";
