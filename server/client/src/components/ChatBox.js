@@ -15,17 +15,21 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
 
+    //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
+    //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
     this.state = {
-      username: "",
-      message: "",
-      messages: []
+      room: this.props.room,
+      username: '',
+      userId: '',
+      message: '',
+      messages: [],
     };
 
     //how are we getting the name of the room? incoming props from parent component?
     this.socket = io("localhost:5000");
 
     this.socket.on(`MESSAGE_TO_${this.props.room}`, function (data) {
-      // console.log("RECEIVING SOCKET ROOM", this.props.room)
+      console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
       addMessage(data);
     });
 
@@ -37,6 +41,17 @@ class ChatBox extends Component {
 
     //this should eventually be this.props.username bc it's coming from redux store.
     // the message will be in the local state?
+    this.sendMessage = (ev) => {
+      console.log("Send button clicked, send message invoked");
+      console.log('The sent message is:', this.state.message)
+      ev.preventDefault();
+      this.socket.emit("SEND_MESSAGE", {
+        username: this.state.username,
+        message: this.state.message,
+        room: this.state.room
+      });
+      this.setState({ message: "" });
+    };
     // this.sendMessage = (ev) => {
     //   ev.preventDefault();
     //   this.socket.emit("SEND_MESSAGE", {
@@ -57,6 +72,14 @@ class ChatBox extends Component {
   }
 
 
+    // this.test = (e) => {
+    //   e.preventDefault();
+    //   console.log('button click')
+    //   this.socket.emit('test', {
+    //     testMessage: "Hiiiii!!!!"
+    //   })
+    // }
+ // }
 
   render() {
     return (
@@ -71,15 +94,13 @@ class ChatBox extends Component {
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        {message.username}: {message.text}
+                        {message.username}: {message.message}
                       </div>
                     );
                   })}
                 </div>
               </Card.Body>
               <div className="card-footer">
-                {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
-
                 <InputGroup>
                   <FormControl
                     placeholder="Message"
@@ -91,7 +112,7 @@ class ChatBox extends Component {
                   <InputGroup.Append>
                     <Button
                       variant="outline-secondary"
-                      onClick={this.test}>
+                      onClick={this.sendMessage}>
                       Send
                     </Button>
                   </InputGroup.Append>
@@ -102,7 +123,7 @@ class ChatBox extends Component {
         </Row>
       </Container>
     );
-  }
+  };
 }
 
 export default ChatBox;
