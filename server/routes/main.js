@@ -104,7 +104,6 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
         response.writeHead(400, "Invalid User ID Format");
         return response.end();
     }
-
     // find User by ID to get conversations that user is in
     User.findById(request.params.userId)
         //populate conversations so we can get the IDs from them
@@ -116,7 +115,6 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
             // and remove the user from that conersation
             if (user) {
                 user.conversations.forEach(userConvo => {
-                    console.log("ONE CONVO IN USER")
                     Conversation.updateOne(
                         { _id: userConvo.id },
                         { $pullAll: { users: [user.id] } }
@@ -157,5 +155,45 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
             });
         })
 });
+            
+
+
+//'/events/:eventId/:convoId'
+//Disables conversation by toggling view from true to false (still present in database)
+//we will need to add "view" to data
+router.put('/conversations/:convoId', (request, response, next) => {
+    if (!mongoose.Types.ObjectId.isValid(request.params.convoId)) {
+        // if event id is not in the correct format, return an error
+        response.writeHead(400, "Invalid Conversation ID Format");
+        return response.end();
+    }
+    Conversation.findById({ _id: request.params.convoId })
+        .exec((err, convo) => {
+            if (err) {
+                return next(err)
+            }
+            if(!convo) {
+                response.writeHead(404, "Conversation Not Found")
+                return response.end();
+            }
+
+            //if the "active" property is set to true, toggle it to false
+            //there is currently no need to toggle false to true
+            if (convo.active === true){
+                convo.active = false
+                convo.save((err) => {
+                    if (err) return next(err);
+                });
+                response.send(convo);
+            } else {
+                response.writeHead(409, "Conversation.active is already set to false")
+                return response.end();
+            }
+        })   
+})
+
+
+
+
 
 module.exports = router;
