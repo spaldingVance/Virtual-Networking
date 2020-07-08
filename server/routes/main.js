@@ -5,6 +5,7 @@ const User = require("../models/userSchema");
 const Event = require("../models/eventSchema");
 const Conversation = require("../models/conversationSchema");
 const Message = require("../models/messageSchema");
+const { request } = require("express");
 const mongoose = require("mongoose");
 
 //Set up routes
@@ -90,6 +91,17 @@ router.get("/events/:eventId", (request, response, next) => {
 
       response.send(event);
     });
+});
+
+router.delete("/events/:eventId/users/:userId", (request, response, next) => {
+  Event.updateOne(
+    { _id: request.params.eventId },
+    { $pullAll: { users: [request.params.userId] } }
+  ).exec((err, event) => {
+    if (err) {
+      return next(err);
+    }
+  });
 });
 
 module.exports = router;
