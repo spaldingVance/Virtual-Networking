@@ -19,7 +19,7 @@ class ChatBox extends Component {
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
     this.state = {
       room: this.props.room,
-      username: '',
+      username: 'joanna',
       userId: '',
       message: '',
       messages: [],
