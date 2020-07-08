@@ -9,8 +9,23 @@
   margin-left: 0.5em;
 }
 
-.event-tile-bottom {
-  position:absolute;
-  bottom:0;
-  width: 87.76%;
+.event-tile-top {
+  padding-top: 10px;
 }
+
+
+.event-tile-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 76.67%;
+}
+
+
+/* .event-tile-bottom-people {
+  align-items: start;
+}
+
+.event-tile-bottom-conversations {
+  align-items: end;
+
+} */
