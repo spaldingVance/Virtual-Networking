@@ -15,15 +15,19 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
 
+    //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message to send and their message "history" (the array)
     this.state = {
-      username: "danielle",
-      message: "",
+      conversation: '',
+      username: 'danielle',
+      userId: '',
+      message: '',
       messages: [],
     };
 
     //how are we getting the name of the room? incoming props from parent component?
     this.socket = io("localhost:5000");
 
+    //
     this.socket.on("RECEIVE_MESSAGE", function (data) {
       addMessage(data);
     });
@@ -45,13 +49,13 @@ class ChatBox extends Component {
       this.setState({ message: "" });
     };
 
-    this.test = (e) => {
-      e.preventDefault();
-      console.log('button click')
-      this.socket.emit('test', {
-        testMessage: "Hiiiii!!!!"
-      })
-    }
+    // this.test = (e) => {
+    //   e.preventDefault();
+    //   console.log('button click')
+    //   this.socket.emit('test', {
+    //     testMessage: "Hiiiii!!!!"
+    //   })
+    // }
   }
 
   render() {
@@ -74,8 +78,6 @@ class ChatBox extends Component {
                 </div>
               </Card.Body>
               <div className="card-footer">
-                {/* <input type="text" placeholder="Username" value={this.state.username} onChange={ev => this.setState({username: ev.target.value})} className="form-control"/> */}
-
                 <InputGroup>
                   <FormControl
                     placeholder="Message"
@@ -87,7 +89,7 @@ class ChatBox extends Component {
                   <InputGroup.Append>
                     <Button
                       variant="outline-secondary"
-                      onClick={this.test}>
+                      onClick={this.sendMessage}>
                       Send
                     </Button>
                   </InputGroup.Append>
