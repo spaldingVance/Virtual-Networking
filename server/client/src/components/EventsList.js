@@ -19,7 +19,7 @@ class EventsList extends Component {
   renderEvents() {
     return (
       <Col lg={3} md={4} sm={6} xs={12} className="event-tile-column mb-4">
-        <Container className="event-tile px-3">
+        <Container className="event-tile">
           <Row >
             <Col className="pt-3">
               {/* events.eventName */}
@@ -28,8 +28,9 @@ class EventsList extends Component {
             </Col>
           </Row>
           
+
           <Row className="event-tile-bottom">
-            <Col className="d-inline-flex justify-content-start align-items-baseline">
+            <Col className="d-inline-flex justify-content-start align-items-baseline ">
               {/* For each participant, reduce to a number */}
               <FontAwesomeIcon icon={faUsers} />{" "}
               <p className="event-tile-numbers">23</p>
@@ -37,7 +38,7 @@ class EventsList extends Component {
             <Col className="d-inline-flex justify-content-end align-items-baseline">
               {/* For each conversation, reduce to a number */}
               <FontAwesomeIcon icon={faComments} />{" "}
-              <p className="event-tile-numbers ">2</p>
+              <p className="event-tile-numbers ">24</p>
             </Col>
           </Row>
         </Container>
