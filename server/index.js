@@ -130,11 +130,11 @@ io.on("connection", (socket) => {
 // to avoid duplicate data
 
 let event1 = new Event({
-  eventName: "The Best Event",
+  eventName: "Cool Generic Event 3",
 });
 
 let conversation1 = new Conversation({
-  conversationName: "The Best Conversation",
+  conversationName: "Neat Conversation 3",
 });
 
 let user1 = new User({
@@ -150,16 +150,16 @@ conversation1.messages.push({
 
 conversation1.users.push(user1);
 
-// conversation1.save();
+conversation1.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
 
 user1.conversations.push(conversation1);
 
-// event1.save();
+event1.save();
 
-// user1.save();
+user1.save();
 
 server.listen(port);
 console.log("Server listening on:", port);
