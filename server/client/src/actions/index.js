@@ -1,12 +1,14 @@
 import axios from "axios";
-//const ROOT_URL = `http://localhost:5000`; commenting out for deployment
+import Login from "../components/Login";
+const ROOT_URL = `http://localhost:5000`;
 
-const ROOT_URL = ``;
+//const ROOT_URL = ``
 
 
 export const GET_EVENTS = "GET_EVENTS";
 export const SELECT_EVENT = "SELECT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
+export const LOGIN = "LOGIN";
 
 export function getEvents() {
   const url = `${ROOT_URL}/events`;
@@ -16,7 +18,7 @@ export function getEvents() {
 
   return {
     type: GET_EVENTS,
-    payload: request,
+    payload: request
   };
 }
 
@@ -25,20 +27,37 @@ export function selectEvent() {
 
   return {
     type: SELECT_EVENT,
-    payload: request,
+    payload: request
   };
 }
 
 export function getConversations() {
   // hard coding convo ID for testing
-  // we need to get the conversations by
-  const url = `${ROOT_URL}/events/5f04d44afdc420235c69ca26`;
+  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
   const request = axios.get(url);
 
-  request.then(console.log("the request is being made for conversations"));
+  request.then(console.log("conversations retrieved"));
 
   return {
     type: GET_CONVERSATIONS,
-    payload: request,
+    payload: request
   };
+}
+
+export function login(eventID, userName, role) {
+  const url = `${ROOT_URL}/users/${eventID}`
+  const request = axios({
+    method: 'post',
+    url: url,
+    data: {
+      userName: userName,
+      role: role
+    }});
+
+  request.then(console.log("login attempted"));
+
+  return {
+    type: LOGIN,
+    payload: request
+  }
 }

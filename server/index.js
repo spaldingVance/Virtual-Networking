@@ -62,16 +62,17 @@ const botName = "Muze Bot";
 // Run when client connects
 io.on("connection", (socket) => {
 
-  socket.on("test", (data) => {
-    console.log(data.testMessage);
-    console.log("SERVER ROOM NAME", data.room)
-    io.emit(`MESSAGE_TO_${data.room}`, {
-      socketid: socket.id,
-      username: botName,
-      text: `${data.testMessage}`,
-      time: moment().format("h:mm a"),
-    });
-  });
+  //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
+  socket.on('room', function(room) {
+    Conversation
+    .findOneAndUpdate({conversationName: room.conversationName}, {socketId: room.id })
+    .exec((error, updatedConversation) => {
+      if (error) {console.log(error)}
+
+      console.log(updatedConversation)
+    })
+    socket.join(room.id);
+});
 
   socket.on('SEND_MESSAGE', data => {
     console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
@@ -86,13 +87,26 @@ io.on("connection", (socket) => {
       time: moment().format('h:mm a')})
   })
 
-  
-  socket.on("joinEvent", ({ username, byline, eventId }) => {
-    //create instance of user model in mongo (set _id as socket.id)
-    //add user to users array in selected event
-    //add person to a room
+//listen for chat messages
+socket.on("SEND_MESSAGE", (data) => {
+  console.log("SENT MESSAGE DATA", data)
+  //when chat messages sent, display to room
+  io.sockets.in(socket.id)
+  .emit("MESSAGE", {
+    socketid: socket.id,
+    username: data.username || "Anonymous",
+    message: data.message,
+    time: moment().format("h:mm a")
   });
 
+  //add to messages in conversation db
+  Conversation
+  .findOneAndUpdate({socketId: socket.id}, {$push: {messages: {user: data.userId, text: data.message}}})
+  .exec((error, messageAdded) => {
+    if (error) throw error;
+  });
+
+});
 
   socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
     //not sure about variables
@@ -125,16 +139,6 @@ io.on("connection", (socket) => {
     });
   });
 
-  // Listen for chatMessage
-  socket.on("CHAT_MESSAGE", (message) => {
-    //find user
-    //add message to conversation in mongodb
-
-    //diplay message in chat window
-    io.to(/*userConversation*/).emit(
-      "MESSAGE",
-      formatMessage(user.username, msg)
-    );
   });
 
   // Runs when client disconnects
@@ -156,7 +160,7 @@ io.on("connection", (socket) => {
   //   });
   //    }
   // });
-});
+// });
 
 
 
@@ -187,9 +191,22 @@ conversation1.messages.push({
   text: "Hellooooo",
 });
 
+let conversation2 = new Conversation({
+  conversationName: "room1",
+  active: true
+});
+
+let conversation3 = new Conversation({
+  conversationName: "room2",
+  active: true
+});
+
 conversation1.users.push(user1);
 
 // conversation1.save();
+
+// conversation2.save();
+// conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);

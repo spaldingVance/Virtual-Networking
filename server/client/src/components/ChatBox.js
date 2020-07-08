@@ -31,7 +31,11 @@ class ChatBox extends Component {
     //this.socket = io("localhost:5000");
     this.socket = io();
 
-    this.socket.on(`MESSAGE_TO_${this.props.room}`, function (data) {
+    this.socket.on('connect', () => {
+      this.socket.emit('room', {conversationName: this.props.room, id: this.socket.id})
+    } )
+
+    this.socket.on("MESSAGE", function (data) {
       console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
       addMessage(data);
     });

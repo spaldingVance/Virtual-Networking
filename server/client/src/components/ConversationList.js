@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getConversations } from "../actions/index";
-
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom"
+ 
 // styling imports
 import "../styles/ConversationList.css";
 
@@ -59,9 +61,12 @@ class ConversationList extends Component {
       <div id="conversation-column">
         <ul className="conversation-list">
           <a href="#">
-            <li>Start your own chat!</li>
+            <li>Start your own convo!</li>
           </a>
         </ul>
+        <Link to="/">
+        <Button variant="outline-danger" id="leave-event">Leave Event</Button>
+        </Link>
         <h3>Join a Chat</h3>
         <ul className="conversation-list">{this.renderConversationList()}</ul>
       </div>

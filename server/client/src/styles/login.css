@@ -1,7 +1,7 @@
 #howdy {
   color: var(--main);
   text-align: center;
-  margin: 150px 0 40px 0;
+  margin: 40px 0 40px 0;
 }
 
 #tag-submit {
@@ -31,6 +31,13 @@
   position: absolute;
   z-index: -5;
   margin: 0 0 0 0;
+
+}
+
+#leave-button {
+  width: 150px;
+  display: block;
+  margin: 20px auto;
 }
 
 .tag-submit {
@@ -52,5 +59,9 @@
     position: absolute;
     z-index: -5;
     margin: -200px 0 0 -20%;
+  }
+
+  #leave-button {
+    margin: 20px 0;
   }
 }
