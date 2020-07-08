@@ -104,7 +104,6 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
         response.writeHead(400, "Invalid User ID Format");
         return response.end();
     }
-
     // find User by ID to get conversations that user is in
     User.findById(request.params.userId)
         //populate conversations so we can get the IDs from them
@@ -157,5 +156,33 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
             });
         })
 });
+            
+
+
+//'/events/:eventId/:convoId'
+//Disables conversation by toggling view from true to false (still present in database)
+//we will need to add "view" to data
+router.put('/events/:convoId', (request, response, next) => {
+    Conversation.findById({ _id: request.params.convoId })
+        .exec((err, convo) => {
+            if (err) {
+                return next(err)
+            }
+
+            //if the view is set to true, toggle it to false
+            //there is currently no need to toggle false to true
+            if (convo.view === "true"){
+                convo.view = "false"
+                convo.save
+            }
+            response.send(convo);
+        })   
+
+    
+})
+
+
+
+
 
 module.exports = router;
