@@ -32,7 +32,7 @@ export function getConversations() {
   const url = `${ROOT_URL}/events/5f04d44afdc420235c69ca26`;
   const request = axios.get(url);
 
-  request.then(console.log("conversations retrieved"));
+  request.then(console.log("the request is being made for conversations"));
 
   return {
     type: GET_CONVERSATIONS,
