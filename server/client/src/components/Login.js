@@ -20,10 +20,14 @@ class Login extends Component {
 
   componentDidMount() {
     document.body.style.overflow = "hidden";
+    document.getElementById('user-info').style.display = "none"
+    document.getElementById('header').style.backgroundColor = "white"
     this.props.setCurrentEvent(this.props.match.params.eventId);
   }
 
   componentWillUnmount() {
+    document.getElementById('user-info').style.display = "block"
+    document.getElementById('header').style.backgroundColor = "var(--light)"
     document.body.style.overflow = "scroll";
   }
 

@@ -15,6 +15,11 @@ class EventsList extends Component {
 
   componentDidMount() {
     this.props.getEvents();
+    document.getElementById('user-info').style.display = "none"
+  }
+
+  componentWillUnmount() {
+    document.getElementById('user-info').style.display = "block"
   }
 
   renderEvents(data) {
