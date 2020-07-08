@@ -24,45 +24,53 @@ router.get("/events", (request, response, next) => {
 //login route (join event)
 router.post("/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
-    User.findOne({ userName: request.body.userName }).exec((err, user) => {
-        if (err) {
-            return next(error);
-        } else if (user) {
-            // if username exists in the database, return an error
-            response.writeHead(400, "username Already Taken");
-            return response.end();
-        } else if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
-            // if event id is not in the correct format, return an error
-            response.writeHead(400, "Invalid Event ID Format");
-            return response.end();
-        } else {
-            // find event by the ID
-            Event.findById(request.params.eventId).exec((err, event) => {
-                if (err) return next(err);
-                // if no event exists for that id (but the id is valid), return an error
-                if (!event) {
-                    response.writeHead(404, "Event Not Found");
-                    return response.end();
-                } else {
-                    // create a new user and add in values from request body
-                    let user = new User();
-                    user.userName = request.body.userName;
-                    user.role = request.body.role;
-                    // save the user to the database
-                    user.save((err) => {
-                        if (err) return next(err);
-                    });
-                    //push the new user to the event
-                    event.users.push(user._id);
-                    // save the event to the database (to update the users array within)
-                    event.save((err) => {
-                        if (err) return next(err);
-                    });
-                    response.send(user);
-                }
-            });
-        }
-    });
+    if (request.body.userName === "" || !request.body.userName) {
+        response.writeHead(400, "Invalid Username")
+        return response.end();
+    } else if (request.body.role === "" || !request.body.role) {
+        response.writeHead(400, "Invalid User Role")
+        return response.end();
+    } else {
+        User.findOne({ userName: request.body.userName }).exec((err, user) => {
+            if (err) {
+                return next(error);
+            } else if (user) {
+                // if username exists in the database, return an error
+                response.writeHead(400, "username Already Taken");
+                return response.end();
+            } else if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
+                // if event id is not in the correct format, return an error
+                response.writeHead(400, "Invalid Event ID Format");
+                return response.end();
+            } else {
+                // find event by the ID
+                Event.findById(request.params.eventId).exec((err, event) => {
+                    if (err) return next(err);
+                    // if no event exists for that id (but the id is valid), return an error
+                    if (!event) {
+                        response.writeHead(404, "Event Not Found");
+                        return response.end();
+                    } else {
+                        // create a new user and add in values from request body
+                        let user = new User();
+                        user.userName = request.body.userName;
+                        user.role = request.body.role;
+                        // save the user to the database
+                        user.save((err) => {
+                            if (err) return next(err);
+                        });
+                        //push the new user to the event
+                        event.users.push(user._id);
+                        // save the event to the database (to update the users array within)
+                        event.save((err) => {
+                            if (err) return next(err);
+                        });
+                        response.send(user);
+                    }
+                });
+            }
+        });
+    }
 });
 
 router.get("/events/:eventId", (request, response, next) => {
@@ -239,8 +247,8 @@ router.post('/events/:eventId/conversation', (request, response, next) => {
 })
 
 router.post("/events", (request, response, next) => {
-    let newEvent = new Event({eventName: request.body.eventName});
-    Event.findOne({eventName: request.body.eventName})
+    let newEvent = new Event({ eventName: request.body.eventName });
+    Event.findOne({ eventName: request.body.eventName })
         .exec((err, event) => {
             console.log(event)
             if (err) return next(err)
