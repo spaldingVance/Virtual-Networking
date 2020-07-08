@@ -76,8 +76,7 @@ class ChatBox extends Component {
           <Col className="m-0 p-0">
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
-                <Card.Title className="mr-5" style={{ display: 'inline' }}>JavaScript Convo</Card.Title>
-                <Badge pill variant="danger">X</Badge>
+                <Card.Title>JavaScript Convo<Badge pill variant="danger" className="close-button ml-4">X</Badge></Card.Title>
                 <hr />
                 <div className="messages">
                   {this.state.messages.map((message) => {
