@@ -1,8 +1,6 @@
 import axios from "axios";
 import Login from "../components/Login";
-const ROOT_URL = `http://localhost:5000`;
-
-//const ROOT_URL = ``
+//const ROOT_URL = `http://localhost:5000`;
 
 
 export const GET_EVENTS = "GET_EVENTS";
@@ -11,7 +9,7 @@ export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
 
 export function getEvents() {
-  const url = `${ROOT_URL}/events`;
+  const url = `/events`;
   const request = axios.get(url);
 
   request.then(console.log("hi!!!"));
@@ -33,7 +31,7 @@ export function selectEvent() {
 
 export function getConversations() {
   // hard coding convo ID for testing
-  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
+  const url = `/events/5f0517a09e543554fcb133e4`;
   const request = axios.get(url);
 
   request.then(console.log("conversations retrieved"));
@@ -45,7 +43,7 @@ export function getConversations() {
 }
 
 export function login(eventID, userName, role) {
-  const url = `${ROOT_URL}/users/${eventID}`
+  const url = `/users/${eventID}`
   const request = axios({
     method: 'post',
     url: url,
