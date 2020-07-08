@@ -13,7 +13,7 @@ export function getEvents() {
 
   return {
     type: GET_EVENTS,
-    payload: request
+    payload: request,
   };
 }
 
@@ -22,19 +22,20 @@ export function selectEvent() {
 
   return {
     type: SELECT_EVENT,
-    payload: request
+    payload: request,
   };
 }
 
 export function getConversations() {
   // hard coding convo ID for testing
-  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
+  // we need to get the conversations by
+  const url = `${ROOT_URL}/events/5f04d44afdc420235c69ca26`;
   const request = axios.get(url);
 
-  request.then(console.log("conversations retrieved"));
+  request.then(console.log("the request is being made for conversations"));
 
   return {
     type: GET_CONVERSATIONS,
-    payload: request
+    payload: request,
   };
 }

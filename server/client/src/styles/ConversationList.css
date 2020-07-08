@@ -7,17 +7,23 @@ ul.conversation-list {
   padding: 0;
   width: 100%;
   overflow: hidden;
-  overflow-y: auto;
-  height: 400px;
+  /* overflow-y: auto; */
 }
 
 .conversation-list li {
   background: var(--light);
   color: var(--main);
-  width: 100%;
   list-style-type: none;
   margin: 10px 0;
   width: 100%;
   border-radius: 20px;
   padding: 20px;
+}
+
+.conversation-list li:hover {
+  background: var(--hover-yellow);
+}
+
+.joined {
+  background: var(--hover-yellow);
 }
