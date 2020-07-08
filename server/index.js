@@ -15,6 +15,8 @@ const cors = require('cors');
 
 mongoose.connect(keys.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+app.use(cors());
+
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
@@ -22,10 +24,10 @@ const io = socketio(server);
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
-}))
+}));
 
 app.use(mainRoutes);
-app.use(cors);
+
 
 //for formatting responses?
 const formatMessage = (username, text) => {
@@ -151,7 +153,7 @@ conversation1.messages.push({
 
 conversation1.users.push(user1);
 
-// conversation1.save();
+conversation1.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
@@ -159,9 +161,9 @@ event1.conversations.push(conversation1);
 user1.conversations.push(conversation1);
 
 
-// event1.save();
+event1.save();
 
-// user1.save();
+user1.save();
 
 server.listen(port);
 console.log('Server listening on:', port);
