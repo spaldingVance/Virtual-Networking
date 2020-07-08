@@ -1,6 +1,6 @@
 import axios from "axios";
 import Login from "../components/Login";
-//const ROOT_URL = `http://localhost:5000`;
+const ROOT_URL = `http://localhost:5000`;
 
 
 export const GET_EVENTS = "GET_EVENTS";
@@ -11,7 +11,7 @@ export const LOGIN = "LOGIN";
 export function getEvents() {
   const url = `/events`;
   const request = axios.get(url);
-
+  
   request.then(console.log("hi!!!"));
 
   return {

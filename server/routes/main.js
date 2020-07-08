@@ -9,6 +9,8 @@ const { request } = require("express");
 const mongoose = require("mongoose");
 
 //Set up routes
+module.exports = function(app) {
+
 
 //possible route example:
 router.get("/events", (request, response, next) => {
@@ -265,8 +267,8 @@ router.post("/events", (request, response, next) => {
         })
 })
 
+}
 
 
 
-
-module.exports = router;
+//module.exports = router;

@@ -20,7 +20,19 @@ mongoose.connect(keys.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
+
 app.use(cors());
+
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+
+
+mainRoutes(app);
+
 
 if (process.env.NODE_ENV === 'production') {
   // Express will serve up production assets
@@ -39,14 +51,7 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
 
-app.use(mainRoutes);
 
 //for formatting responses?
 const formatMessage = (username, text) => {
