@@ -21,11 +21,6 @@ router.get("/events", (request, response, next) => {
     });
 });
 
-//test route
-router.get("/test", (request, response) => {
-    response.send("TEST ROUTE WORKING");
-});
-
 //login route (join event)
 router.post("/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
@@ -240,6 +235,25 @@ router.post('/events/:eventId/conversation', (request, response, next) => {
 
             }
 
+        })
+})
+
+router.post("/events", (request, response, next) => {
+    let newEvent = new Event({eventName: request.body.eventName});
+    Event.findOne({eventName: request.body.eventName})
+        .exec((err, event) => {
+            console.log(event)
+            if (err) return next(err)
+            if (!event) {
+                console.log("not event")
+                newEvent.save((err) => {
+                    if (err) return next(err)
+                })
+                response.send(newEvent)
+            } else {
+                response.writeHead(400, "Event Name Already Taken")
+                return response.end();
+            }
         })
 })
 
