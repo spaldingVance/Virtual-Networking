@@ -11,10 +11,10 @@ const ChatBoxesContainer = () => {
     <Container>
       <Row>
         <Col md={6}>
-          <ChatBox />
+          <ChatBox room="room1"/>
         </Col>
         <Col md={6}>
-          <ChatBox />
+          <ChatBox room="room2"/>
         </Col>
       </Row>
     </Container>

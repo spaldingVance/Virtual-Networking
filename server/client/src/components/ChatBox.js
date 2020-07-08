@@ -18,13 +18,14 @@ class ChatBox extends Component {
     this.state = {
       username: "",
       message: "",
-      messages: [],
+      messages: []
     };
 
     //how are we getting the name of the room? incoming props from parent component?
     this.socket = io("localhost:5000");
 
-    this.socket.on("RECEIVE_MESSAGE", function (data) {
+    this.socket.on(`MESSAGE_TO_${this.props.room}`, function (data) {
+      // console.log("RECEIVING SOCKET ROOM", this.props.room)
       addMessage(data);
     });
 
@@ -48,7 +49,8 @@ class ChatBox extends Component {
       event.preventDefault();
       console.log("Button connected");
       this.socket.emit('test', {
-        testMessage: "HI!!!!!!!!!!!!!"
+        testMessage: "HI!!!!!!!!!!!!!",
+        room: this.props.room
     });
     }
   }
@@ -82,6 +84,8 @@ class ChatBox extends Component {
                     placeholder="Message"
                     aria-label="Message"
                     aria-describedby="basic-addon2"
+                    value={this.state.message}
+                    onChange={event => {this.setState({message: event.target.value})}}
                   />
                   <InputGroup.Append>
                     <Button
