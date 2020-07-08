@@ -20,7 +20,7 @@ class EventsList extends Component {
 
   renderEvents(data) {
     return (
-      <Col lg={3} md={4} sm={6} xs={12} className="mb-4">
+      <Col lg={3} md={4} sm={6} xs={12} className="event-tile-column mb-4">
         <Link to={`/events/${data._id}/login`}>
           <Container className="event-tile px-3">
             <Row className="align-items-baseline">
