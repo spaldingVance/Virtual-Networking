@@ -73,6 +73,24 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on('SEND_MESSAGE', data => {
+    console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
+    console.log('Next step will be io.emit RECEIVE_MESSAGE')
+    //do we need the functionality to store the message and user here?
+    //what is RECEIVE_MESSAGE doing?
+    io.emit(`MESSAGE_TO_${data.room}`, { 
+      socketid: socket.id,
+      username: data.username, 
+      message: data.message,
+      time: moment().format('h:mm a')})
+  })
+
+  
+  socket.on("joinEvent", ({ username, byline, eventId }) => {
+    //create instance of user model in mongo (set _id as socket.id)
+    //add user to users array in selected event
+    //add person to a room
+  });
 
 
   socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
@@ -119,23 +137,24 @@ io.on("connection", (socket) => {
   });
 
   // Runs when client disconnects
-  socket.on("disconnect", () => {
-    // const user = userLeave(socket.id);
-    //find user and remove from conversation in mongodb
+  // socket.on("disconnect", () => {
+  //   // const user = userLeave(socket.id);
+  //   //find user and remove from conversation in mongodb
+  //   //remove socketid
 
-    // if (user) {
-    io.to(/*conversation*/).emit(
-      "message",
-      formatMessage(botName, `${user.username} has left the chat`)
-    );
+  //   if (user) {
+  //   io.to(/*conversation*/).emit(
+  //     "message",
+  //     formatMessage(botName, `${user.username} has left the chat`)
+  //   );
 
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
-    });
-    // }
-  });
+  //   // Send users and room info
+  //   io.to(user.room).emit("roomUsers", {
+  //     room: user.room,
+  //     users: getRoomUsers(user.room),
+  //   });
+  //    }
+  // });
 });
 
 
@@ -158,7 +177,7 @@ let conversation1 = new Conversation({
 
 let user1 = new User({
   userName: "Robert",
-  byLine: "Socket.io Wizard",
+  role: "Socket.io Wizard",
   event: event1._id,
 });
 
