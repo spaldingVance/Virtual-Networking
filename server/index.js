@@ -125,11 +125,12 @@ io.on("connection", (socket) => {
 // to avoid duplicate data
 
 let event1 = new Event({
-  eventName: "The Best Event",
+  eventName: "Cool Generic Event 3",
 });
 
 let conversation1 = new Conversation({
-  conversationName: "The Best Conversation",
+  conversationName: "Neat Conversation 3",
+  active: true
 });
 
 let user1 = new User({
