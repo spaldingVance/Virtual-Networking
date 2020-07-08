@@ -1,9 +1,11 @@
 import axios from "axios";
+import Login from "../components/Login";
 const ROOT_URL = `http://localhost:5000`;
 
 export const GET_EVENTS = "GET_EVENTS";
 export const SELECT_EVENT = "SELECT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
+export const LOGIN = "LOGIN";
 
 export function getEvents() {
   const url = `${ROOT_URL}/events`;
@@ -37,4 +39,22 @@ export function getConversations() {
     type: GET_CONVERSATIONS,
     payload: request
   };
+}
+
+export function login(eventID, userName, role) {
+  const url = `${ROOT_URL}/users/${eventID}`
+  const request = axios({
+    method: 'post',
+    url: url,
+    data: {
+      userName: userName,
+      role: role
+    }});
+
+  request.then(console.log("login attempted"));
+
+  return {
+    type: LOGIN,
+    payload: request
+  }
 }
