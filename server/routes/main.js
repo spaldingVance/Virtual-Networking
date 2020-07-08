@@ -58,7 +58,7 @@ router.post("/users/:eventId", (request, response, next) => {
                     event.save((err) => {
                         if (err) return next(err);
                     });
-                    response.send(user._id);
+                    response.send(user);
                 }
             });
         }
