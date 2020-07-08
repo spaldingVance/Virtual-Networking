@@ -5,7 +5,7 @@ import yellowc from "../assets/circle-yellow.svg"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { login } from "../actions/index";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
@@ -77,6 +77,9 @@ class Login extends Component {
                 <br /> on your messages.
               </span>
             </p>
+            <Link to="/">
+            <Button variant="outline-danger" id="leave-button">Back to Events</Button>
+            </Link>
         </Col>
         <img id="yellowc" src={yellowc}/>
       </Row>

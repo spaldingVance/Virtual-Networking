@@ -33,6 +33,12 @@
   margin: 0 0 0 0;
 }
 
+#leave-button {
+  width: 150px;
+  display: block;
+  margin: 20px auto;
+}
+
 .tag-submit {
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
   background-color: blue;
@@ -52,5 +58,9 @@
     position: absolute;
     z-index: -5;
     margin: -200px 0 0 -20%;
+  }
+
+  #leave-button {
+    margin: 20px 0;
   }
 }
