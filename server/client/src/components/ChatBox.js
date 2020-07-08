@@ -16,9 +16,10 @@ class ChatBox extends Component {
     super(props);
 
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
+    //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
     this.state = {
       room: this.props.room,
-      username: 'danielle',
+      username: '',
       userId: '',
       message: '',
       messages: [],
@@ -93,7 +94,7 @@ class ChatBox extends Component {
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        {message.username}: {message.text}
+                        {message.username}: {message.message}
                       </div>
                     );
                   })}

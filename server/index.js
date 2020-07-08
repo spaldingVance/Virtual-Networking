@@ -122,24 +122,24 @@ io.on("connection", (socket) => {
   });
 
   // Runs when client disconnects
-  socket.on("disconnect", () => {
-    // const user = userLeave(socket.id);
-    //find user and remove from conversation in mongodb
-    //remove socketid
+  // socket.on("disconnect", () => {
+  //   // const user = userLeave(socket.id);
+  //   //find user and remove from conversation in mongodb
+  //   //remove socketid
 
-    // if (user) {
-    io.to(/*conversation*/).emit(
-      "message",
-      formatMessage(botName, `${user.username} has left the chat`)
-    );
+  //   if (user) {
+  //   io.to(/*conversation*/).emit(
+  //     "message",
+  //     formatMessage(botName, `${user.username} has left the chat`)
+  //   );
 
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
-    });
-    // }
-  });
+  //   // Send users and room info
+  //   io.to(user.room).emit("roomUsers", {
+  //     room: user.room,
+  //     users: getRoomUsers(user.room),
+  //   });
+  //    }
+  // });
 });
 
 
