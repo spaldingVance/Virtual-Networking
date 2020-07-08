@@ -24,7 +24,11 @@ class ChatBox extends Component {
     //how are we getting the name of the room? incoming props from parent component?
     this.socket = io("localhost:5000");
 
-    this.socket.on(`MESSAGE_TO_${this.props.room}`, function (data) {
+    this.socket.on('connect', () => {
+      this.socket.emit('room', {conversationName: this.props.room, id: this.socket.id})
+    } )
+
+    this.socket.on("MESSAGE", function (data) {
       // console.log("RECEIVING SOCKET ROOM", this.props.room)
       addMessage(data);
     });

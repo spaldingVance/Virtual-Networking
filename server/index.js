@@ -62,16 +62,33 @@ const botName = "Muze Bot";
 // Run when client connects
 io.on("connection", (socket) => {
 
-  socket.on("test", (data) => {
-    console.log(data.testMessage);
-    console.log("SERVER ROOM NAME", data.room)
-    io.emit(`MESSAGE_TO_${data.room}`, {
-      socketid: socket.id,
-      username: botName,
-      text: `${data.testMessage}`,
-      time: moment().format("h:mm a"),
-    });
+  socket.on('room', function(room) {
+    //find conversation == name room.conversationName, change _id to room.id
+    socket.join(room.id);
+    io.sockets.in(room.id)
+  .emit("MESSAGE", {
+    socketid: socket.id,
+    username: botName,
+    text: "HIIIIIIII!!!!!!!!!!!!!!!!!!!!!!",
+    time: moment().format("h:mm a"),
   });
+});
+
+socket.on('SEND_TO_ALL', rooms => {
+  io.to(rooms.room1).to(rooms.room2)
+})
+
+socket.on("test", (data) => {
+  console.log(data.testMessage);
+  console.log("SERVER ROOM NAME", data.room)
+  io.sockets.in(socket.id)
+  .emit("MESSAGE", {
+    socketid: socket.id,
+    username: botName,
+    text: `${data.testMessage}`,
+    time: moment().format("h:mm a"),
+  });
+});
 
 
 
