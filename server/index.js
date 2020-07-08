@@ -18,6 +18,8 @@ mongoose.connect(keys.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
+app.use(cors());
+
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
@@ -30,7 +32,6 @@ app.use(
 );
 
 app.use(mainRoutes);
-app.use(cors);
 
 //for formatting responses?
 const formatMessage = (username, text) => {
