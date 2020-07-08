@@ -48,8 +48,9 @@ class ChatBox extends Component {
     this.test = (event) => {
       event.preventDefault();
       console.log("Button connected");
+      console.log("STATE MESSAGE", this.state.message)
       this.socket.emit('test', {
-        testMessage: "HI!!!!!!!!!!!!!",
+        testMessage: this.state.message,
         room: this.props.room
     });
     }
