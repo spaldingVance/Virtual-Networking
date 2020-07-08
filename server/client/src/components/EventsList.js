@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getEvents, selectEvent } from "../actions/index";
@@ -10,6 +11,7 @@ import { faComments, faUsers } from "@fortawesome/free-solid-svg-icons";
 class EventsList extends Component {
   constructor(props) {
     super(props);
+
   }
 
   componentDidMount() {
@@ -19,6 +21,7 @@ class EventsList extends Component {
   renderEvents(data) {
     return (
       <Col lg={3} md={4} sm={6} xs={12} className="event-tile-column mb-4">
+        <Link to={`/events/${data._id}/login`}>
         <Container className="event-tile">
           <Row >
             <Col className="event-tile-top">
@@ -39,6 +42,7 @@ class EventsList extends Component {
             </Row>
           </div>
         </Container>
+        </Link>
       </Col>
     );
   }
