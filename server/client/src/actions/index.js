@@ -28,7 +28,7 @@ export function selectEvent() {
 
 export function getConversations() {
   // hard coding convo ID for testing
-  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e5`;
+  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
   const request = axios.get(url);
 
   request.then(console.log("conversations retrieved"));
