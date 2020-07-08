@@ -51,21 +51,15 @@ io.on("connection", (socket) => {
 
   socket.on("test", (data) => {
     console.log(data.testMessage);
-    io.emit("RECEIVE_MESSAGE", {
+    console.log("SERVER ROOM NAME", data.room)
+    io.emit(`MESSAGE_TO_${data.room}`, {
       username: botName,
       text: `${data.testMessage}`,
       time: moment().format("h:mm a"),
     });
   });
 
-  socket.on("joinEvent", ({ username, byline, eventId }) => {
-    //create instance of user model in mongo (set _id as socket.id)
-    //add user to users array in selected event
-  });
 
-  socket.on("getConversations", ({ eventId }) => {
-    //return array of conversations existing in event
-  });
 
   socket.on("joinConversation", ({ username, conversation }) => {
     //not sure about variables
