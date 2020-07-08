@@ -27,3 +27,11 @@ ul.conversation-list {
 .joined {
   background: var(--hover-yellow);
 }
+
+#leave-event {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  height: 50px;
+  text-align: left;
+}
