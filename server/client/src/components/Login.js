@@ -5,7 +5,7 @@ import yellowc from "../assets/circle-yellow.svg"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { login } from "../actions/index";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
@@ -16,6 +16,14 @@ class Login extends Component {
       userRole: "",
       redirect: false
     }
+  }
+
+  componentDidMount() {
+    document.body.style.overflow = "hidden"
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = "scroll"
   }
 
   loginSubmit() {
@@ -42,7 +50,7 @@ class Login extends Component {
       return <Redirect to={`/events/${this.props.match.params.eventId}`} />
     } else
     return (
-      <Row>
+      <Row style={{overflow: "hidden"}}>
         <Col lg="6">
             <h1 id="howdy">Howdy, Stranger</h1>
             <Form>
@@ -77,6 +85,9 @@ class Login extends Component {
                 <br /> on your messages.
               </span>
             </p>
+            <Link to="/">
+            <Button variant="outline-danger" id="leave-button">Back to Events</Button>
+            </Link>
         </Col>
         <img id="yellowc" src={yellowc}/>
       </Row>
