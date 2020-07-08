@@ -17,19 +17,10 @@ class Login extends Component {
       redirect: false
     }
   }
-  componentDidMount() {
-    if (this.props.user._id) {
-      this.setState({redirect: true})
-    }
-  }
 
   loginSubmit() {
     if (this.state.userName && this.state.userRole) {
     this.props.login(this.props.match.params.eventId, this.state.userName, this.state.userRole)
-    // if (this.props.user._id) {
-    //   console.log(`user props = ${this.props.user}`)
-    //   this.setState({redirect: true})
-    // } else alert("Username already taken")
     } else alert("Please fill out a name and role")
   }
 
@@ -47,7 +38,7 @@ class Login extends Component {
   
 
   render() {
-    if (this.state.redirect === true) {
+    if (this.props.user.userName) {
       return <Redirect to={`/events/${this.props.match.params.eventId}`} />
     } else
     return (
