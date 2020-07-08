@@ -5,18 +5,25 @@ import { connect } from "react-redux";
 import "../styles/CurrentEventHeader.css";
 
 const CurrentEventHeader = (props) => {
-  console.log("The current event is ", props.currentEvent);
+  console.log("The current event is ", props);
   return (
     <div>
       <div id="current-event-tile">
-        <h2>You are attending</h2> <h1>Event Name Here</h1>
+        <h2>You are attending</h2>
+        <h1>
+          {props.conversations[0]
+            ? props.conversations[0].conversationName
+            : "Event"}
+        </h1>
       </div>
     </div>
   );
 };
 
 function mapStateToProps(state) {
-  return { currentEvent: state.currentEvent };
+  return {
+    conversations: state.conversations,
+  };
 }
 
 export default connect(mapStateToProps)(CurrentEventHeader);
