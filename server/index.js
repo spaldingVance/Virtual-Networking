@@ -62,45 +62,45 @@ const botName = "Muze Bot";
 // Run when client connects
 io.on("connection", (socket) => {
 
+  //on socket connection to chatbox, 
   socket.on('room', function(room) {
-    //find conversation == name room.conversationName, change _id to room.id
+    Conversation
+    .findOneAndUpdate({conversationName: room.conversationName}, {socketId: room.id })
+    .exec((error, updatedConversation) => {
+      if (error) {console.log(error)}
+
+      console.log(updatedConversation)
+    })
     socket.join(room.id);
-    io.sockets.in(room.id)
-  .emit("MESSAGE", {
-    socketid: socket.id,
-    username: botName,
-    text: "HIIIIIIII!!!!!!!!!!!!!!!!!!!!!!",
-    time: moment().format("h:mm a"),
-  });
 });
 
 socket.on('SEND_TO_ALL', rooms => {
   io.to(rooms.room1).to(rooms.room2)
 })
 
-socket.on("test", (data) => {
+socket.on("SEND_MESSAGE", (data) => {
   console.log(data.testMessage);
   console.log("SERVER ROOM NAME", data.room)
   io.sockets.in(socket.id)
   .emit("MESSAGE", {
     socketid: socket.id,
     username: botName,
-    text: `${data.testMessage}`,
+    message: `${data.message}`,
     time: moment().format("h:mm a"),
   });
 });
 
-  socket.on('SEND_MESSAGE', data => {
-    console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
-    console.log('Next step will be io.emit RECEIVE_MESSAGE')
-    //do we need the functionality to store the message and user here?
-    //what is RECEIVE_MESSAGE doing?
-    io.emit(`MESSAGE_TO_${data.room}`, { 
-      socketid: socket.id,
-      username: data.username, 
-      message: data.message,
-      time: moment().format('h:mm a')})
-  })
+  // socket.on('SEND_MESSAGE', data => {
+  //   console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
+  //   console.log('Next step will be io.emit RECEIVE_MESSAGE')
+  //   //do we need the functionality to store the message and user here?
+  //   //what is RECEIVE_MESSAGE doing?
+  //   io.emit(`MESSAGE_TO_${data.room}`, { 
+  //     socketid: socket.id,
+  //     username: data.username, 
+  //     message: data.message,
+  //     time: moment().format('h:mm a')})
+  // })
 
   
   socket.on("joinEvent", ({ username, byline, eventId }) => {
@@ -203,9 +203,22 @@ conversation1.messages.push({
   text: "Hellooooo",
 });
 
+let conversation2 = new Conversation({
+  conversationName: "room1",
+  active: true
+});
+
+let conversation3 = new Conversation({
+  conversationName: "room2",
+  active: true
+});
+
 conversation1.users.push(user1);
 
 // conversation1.save();
+
+// conversation2.save();
+// conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
