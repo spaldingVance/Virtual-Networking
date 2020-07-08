@@ -5,6 +5,14 @@
   border-radius: 1em;
 }
 
+/* .event-tile-column a {
+  color:#fff;
+}
+
+.event-tile-column a:hover {
+  color:#000;
+} */
+
 .event-tile-numbers {
   margin-left: 0.5em;
 }
