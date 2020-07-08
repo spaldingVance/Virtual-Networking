@@ -5,6 +5,7 @@ import yellowc from "../assets/circle-yellow.svg"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { login } from "../actions/index";
+import { Redirect } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
@@ -12,13 +13,24 @@ class Login extends Component {
 
     this.state = {
       userName: "",
-      userRole: ""
+      userRole: "",
+      redirect: false
     }
   }
+  componentDidMount() {
+    if (this.props.user._id) {
+      this.setState({redirect: true})
+    }
+  }
+
   loginSubmit() {
-    console.log(console.log(this.props.match.params.eventId))
+    if (this.state.userName && this.state.userRole) {
     this.props.login(this.props.match.params.eventId, this.state.userName, this.state.userRole)
-    console.log('loginSubmit clicked!')
+    // if (this.props.user._id) {
+    //   console.log(`user props = ${this.props.user}`)
+    //   this.setState({redirect: true})
+    // } else alert("Username already taken")
+    } else alert("Please fill out a name and role")
   }
 
   updateName(event) {
@@ -35,6 +47,9 @@ class Login extends Component {
   
 
   render() {
+    if (this.state.redirect === true) {
+      return <Redirect to={`/events/${this.props.match.params.eventId}`} />
+    } else
     return (
       <Row>
         <Col lg="6">
@@ -79,7 +94,7 @@ class Login extends Component {
 };
 
 function mapStateToProps(state) {
-  return { user: state.conversations };
+  return { user: state.user };
 }
 
 function mapDispatchToProps(dispatch) {
