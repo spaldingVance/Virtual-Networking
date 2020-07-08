@@ -18,6 +18,14 @@ class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    document.body.style.overflow = "hidden"
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = "scroll"
+  }
+
   loginSubmit() {
     if (this.state.userName && this.state.userRole) {
     this.props.login(this.props.match.params.eventId, this.state.userName, this.state.userRole)
@@ -42,7 +50,7 @@ class Login extends Component {
       return <Redirect to={`/events/${this.props.match.params.eventId}`} />
     } else
     return (
-      <Row>
+      <Row style={{overflow: "hidden"}}>
         <Col lg="6">
             <h1 id="howdy">Howdy, Stranger</h1>
             <Form>
