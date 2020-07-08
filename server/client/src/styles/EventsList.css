@@ -1,6 +1,10 @@
+#attend-event {
+  color: var(--main);
+}
+
 .event-tile {
-  background: blue;
-  height: 15em;
+  background: var(--main);
+  height: 250px;
   color: white;
   border-radius: 1em;
 }
@@ -14,26 +18,10 @@
 } */
 
 .event-tile-numbers {
-  margin-left: 0.5em;
+  display: inline-block;
 }
 
-.event-tile-top {
-  padding-top: 10px;
-}
-
-
-.event-tile-bottom {
+.event-comments, .event-users {
   position: absolute;
-  bottom: 0;
-  width: 76.67%;
+  bottom: -250px;
 }
-
-
-/* .event-tile-bottom-people {
-  align-items: start;
-}
-
-.event-tile-bottom-conversations {
-  align-items: end;
-
-} */
