@@ -62,7 +62,7 @@ const botName = "Muze Bot";
 // Run when client connects
 io.on("connection", (socket) => {
 
-  //on socket connection to chatbox, 
+  //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on('room', function(room) {
     Conversation
     .findOneAndUpdate({conversationName: room.conversationName}, {socketId: room.id })
@@ -74,41 +74,27 @@ io.on("connection", (socket) => {
     socket.join(room.id);
 });
 
-socket.on('SEND_TO_ALL', rooms => {
-  io.to(rooms.room1).to(rooms.room2)
-})
 
+//listen for chat messages
 socket.on("SEND_MESSAGE", (data) => {
-  console.log(data.testMessage);
-  console.log("SERVER ROOM NAME", data.room)
+  console.log("SENT MESSAGE DATA", data)
+  //when chat messages sent, display to room
   io.sockets.in(socket.id)
   .emit("MESSAGE", {
     socketid: socket.id,
-    username: botName,
-    message: `${data.message}`,
-    time: moment().format("h:mm a"),
+    username: data.username || "Anonymous",
+    message: data.message,
+    time: moment().format("h:mm a")
   });
+
+  //add to messages in conversation db
+  Conversation
+  .findOneAndUpdate({socketId: socket.id}, {$push: {messages: {user: data.userId, text: data.message}}})
+  .exec((error, messageAdded) => {
+    if (error) throw error;
+  });
+
 });
-
-  // socket.on('SEND_MESSAGE', data => {
-  //   console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
-  //   console.log('Next step will be io.emit RECEIVE_MESSAGE')
-  //   //do we need the functionality to store the message and user here?
-  //   //what is RECEIVE_MESSAGE doing?
-  //   io.emit(`MESSAGE_TO_${data.room}`, { 
-  //     socketid: socket.id,
-  //     username: data.username, 
-  //     message: data.message,
-  //     time: moment().format('h:mm a')})
-  // })
-
-  
-  socket.on("joinEvent", ({ username, byline, eventId }) => {
-    //create instance of user model in mongo (set _id as socket.id)
-    //add user to users array in selected event
-    //add person to a room
-  });
-
 
   socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
     //not sure about variables
@@ -141,16 +127,6 @@ socket.on("SEND_MESSAGE", (data) => {
     });
   });
 
-  // Listen for chatMessage
-  socket.on("CHAT_MESSAGE", (message) => {
-    //find user
-    //add message to conversation in mongodb
-
-    //diplay message in chat window
-    io.to(/*userConversation*/).emit(
-      "MESSAGE",
-      formatMessage(user.username, msg)
-    );
   });
 
   // Runs when client disconnects
@@ -172,7 +148,7 @@ socket.on("SEND_MESSAGE", (data) => {
   //   });
   //    }
   // });
-});
+// });
 
 
 
