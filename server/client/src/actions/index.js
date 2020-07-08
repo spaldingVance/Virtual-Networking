@@ -9,7 +9,7 @@ export const SELECT_EVENT = "SELECT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 
 export function getEvents() {
-  const url = `${ROOT_URL}/events`;
+  const url = `/events`;
   const request = axios.get(url);
 
   request.then(console.log("hi!!!"));
@@ -32,7 +32,7 @@ export function selectEvent() {
 export function getConversations() {
   // hard coding convo ID for testing
   // we need to get the conversations by
-  const url = `${ROOT_URL}/events/5f04d44afdc420235c69ca26`;
+  const url = `/events/5f04d44afdc420235c69ca26`;
   const request = axios.get(url);
 
   request.then(console.log("the request is being made for conversations"));
