@@ -42,12 +42,12 @@ const formatMessage = (username, text) => {
   };
 }
 //for auto messages
-const botName = 'Virtual Networking Bot';
+const botName = 'Muze Bot';
 
 // Run when client connects
 io.on('connection', socket => {
 
-  socket.on('test', data => {
+  socket.on('SEND_MESSAGE', data => {
     console.log(data.testMessage)
     io.emit('RECEIVE_MESSAGE', { 
       username: botName, 
@@ -58,6 +58,7 @@ io.on('connection', socket => {
   socket.on('joinEvent', ({ username, byline, eventId }) => {
     //create instance of user model in mongo (set _id as socket.id)
     //add user to users array in selected event
+    //add person to a room
   });
   
   socket.on('getConversations', ({ eventId }) => {
@@ -106,6 +107,7 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     // const user = userLeave(socket.id);
     //find user and remove from conversation in mongodb
+    //remove socketid
 
     // if (user) {
       io.to(/*conversation*/).emit(

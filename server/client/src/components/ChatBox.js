@@ -16,7 +16,7 @@ class ChatBox extends Component {
     super(props);
 
     this.state = {
-      username: "",
+      username: "danielle",
       message: "",
       messages: [],
     };
@@ -39,7 +39,7 @@ class ChatBox extends Component {
     this.sendMessage = (ev) => {
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
-        author: this.state.username,
+        username: this.state.username,
         message: this.state.message,
       });
       this.setState({ message: "" });
@@ -81,11 +81,13 @@ class ChatBox extends Component {
                     placeholder="Message"
                     aria-label="Message"
                     aria-describedby="basic-addon2"
+                    value={this.state.message} 
+                    onChange={ev => this.setState({message: ev.target.value})}
                   />
                   <InputGroup.Append>
                     <Button
                       variant="outline-secondary"
-                      onclick={this.sendMessage}>
+                      onClick={this.sendMessage}>
                       Send
                     </Button>
                   </InputGroup.Append>
