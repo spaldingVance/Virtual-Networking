@@ -8,3 +8,8 @@
 .event-tile-numbers {
   margin-left: 0.5em;
 }
+
+.event-tile-bottom {
+  position:absolute;
+  bottom:0;
+}
