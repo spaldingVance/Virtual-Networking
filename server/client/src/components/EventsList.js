@@ -29,44 +29,15 @@ class EventsList extends Component {
 
             <Row >
               <Col className="d-inline-flex justify-content-start align-items-baseline ">
-                {/* For each participant, reduce to a number */}
-                <FontAwesomeIcon icon={faUsers} />{" "}
-                <p className="event-tile-numbers">23</p>
+                <FontAwesomeIcon icon={faUsers} />
+                <p className="event-tile-numbers">{data.users.length}</p>
               </Col>
               <Col className="d-inline-flex justify-content-end align-items-baseline">
-                {/* For each conversation, reduce to a number */}
                 <FontAwesomeIcon icon={faComments} />{" "}
-                <p className="event-tile-numbers ">24</p>
+                <p className="event-tile-numbers ">{data.conversations.length}</p>
               </Col>
             </Row>
           </div>
-        {/* <Container className="event-tile"> */}
-          {/* <Row >
-            <Col className="pt-3"> */}
-              {/* events.eventName */}
-              {/* 900 Roboto for All Sans Serif */}
-              {/* <div className="event-tile-top">
-              <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
-              </div> */}
-            {/* </Col>
-          </Row> */}
-          
-
-
-          {/* <div className="event-tile-bottom">
-            {/* For each participant, reduce to a number */}
-            {/* <div className="event-tile-bottom-people">
-              <FontAwesomeIcon icon={faUsers} />
-              <p className="event-tile-numbers">23</p>
-            </div> */}
-            {/* For each conversation, reduce to a number */}
-            {/* <div className="event-tile-bottom-conversations">
-              <FontAwesomeIcon icon={faComments} />{" "}
-              <p className="event-tile-numbers ">24</p>
-            </div>
-          </div>
-        </Container> */} 
-
         </Container>
       </Col>
     );
