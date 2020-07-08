@@ -16,15 +16,13 @@ class EventsList extends Component {
     this.props.getEvents();
   }
 
-  renderEvents() {
+  renderEvents(data) {
     return (
       <Col lg={3} md={4} sm={6} xs={12} className="event-tile-column mb-4">
         <Container className="event-tile">
           <Row >
             <Col className="event-tile-top">
-              {/* events.eventName */}
-              {/* 900 Roboto for All Sans Serif */}
-              <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
+              <h3>{data.eventName}</h3>
             </Col>
           </Row>
           <div className="event-tile-bottom">
@@ -84,21 +82,10 @@ class EventsList extends Component {
       <div>
         <Container>
           <Row className="mb-4 justify-content-md-center">
-            {" "}
             <h1>Attend an Event</h1>
           </Row>
-
-          {/* {this.props.events.map(this.renderEvents)} */}
-          {/* Did this 8 times */}
           <Row>
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
+          {this.props.events.map(this.renderEvents)}
           </Row>
         </Container>
       </div>
