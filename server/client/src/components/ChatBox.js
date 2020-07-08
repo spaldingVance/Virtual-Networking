@@ -59,7 +59,7 @@ class ChatBox extends Component {
       <Container className="m-0 p-0">
         <Row className="m-0 p-0">
           <Col className="m-0 p-0">
-            <Card className="m-0 p-0">
+            <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
                 <Card.Title>JavaScript Convo</Card.Title>
                 <hr />
@@ -87,7 +87,7 @@ class ChatBox extends Component {
                   <InputGroup.Append>
                     <Button
                       variant="outline-secondary"
-                      onClick={this.sendMessage}>
+                      onClick={this.test}>
                       Send
                     </Button>
                   </InputGroup.Append>
