@@ -7,38 +7,65 @@ import { getConversations } from "../actions/index";
 import "../styles/ConversationList.css";
 
 class ConversationList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      joinedConversations: [], // by id
+    };
+
+    this.renderConversationList = this.renderConversationList.bind(this);
+    this.handleJoinConversation = this.handleJoinConversation.bind(this);
+    this.handleJoinConversation = this.handleJoinConversation.bind(this);
+  }
+
   componentDidMount() {
     this.props.getConversations();
   }
 
-  // TODO
+  handleJoinConversation() {
+    // send the conversation id and which room to the chatboxescontainer
+  }
+
+  checkJoinedStatus(conversation) {
+    // this is where we check if the user is joined in the conversation
+    // if joinedConversations in local state has an ID that matches the conversation
+    console.log("conversation is", conversation);
+    if (this.state.joinedConversations.includes(conversation._id)) {
+      return ".joined";
+    }
+  }
+
+  renderConversationList() {
+    return this.props.conversations.map((conversation) => {
+      return (
+        <a
+          href="#2"
+          key={`ConversationLink${conversation._id}`}
+          onClick={this.handleJoinConversation}
+          className={this.checkJoinedStatus(conversation)}>
+          <li>{conversation.conversationName}</li>
+        </a>
+      );
+    });
+  }
+
   render() {
+    console.log("The props for ConversationList is", this.props);
+
     return (
       <div id="conversation-column">
-        <h3>Join a Chat</h3>
         <ul className="conversation-list">
-          <a href="#1">
-            <li>Java Chat</li>
-          </a>
-  
-          <a href="#2">
-            <li>HTML Conversation</li>
-          </a>
-  
-          <a href="#3">
-            <li>JavaScript Room</li>
-          </a>
-          <a href="#4">
-            <li>HTML Chat</li>
-          </a>
-          <a href="#1">
-            <li>Random Convo whose name is really long and tedious jeez</li>
+          <a href="#">
+            <li>Start your own chat!</li>
           </a>
         </ul>
+        <h3>Join a Chat</h3>
+        <ul className="conversation-list">{this.renderConversationList()}</ul>
       </div>
-    )
+    );
   }
-};
+}
 
 function mapStateToProps(state) {
   return { conversations: state.conversations };
