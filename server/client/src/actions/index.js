@@ -8,7 +8,7 @@ export function getEvents() {
   const url = `${ROOT_URL}/events`;
   const request = axios.get(url);
 
-  request.then(console.log("hi"));
+  request.then(console.log("hi!!!"));
 
   return {
     type: GET_EVENTS,
@@ -17,11 +17,10 @@ export function getEvents() {
 }
 
 export function selectEvent() {
-  const url = `${ROOT_URL}/events`;
-  const request = axios.get(url);
+  const request = "";
 
   return {
-    type: GET_EVENTS,
+    type: SELECT_EVENT,
     payload: request,
   };
 }

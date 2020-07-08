@@ -45,6 +45,11 @@ class EventsList extends Component {
   }
 
   render() {
+    console.log(
+      "The state that has been mapped to the EventsList component props is ",
+      this.props
+    );
+
     return (
       <div>
         <Container>
@@ -72,7 +77,6 @@ class EventsList extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("The state being mapped to events component is ", this.state);
   return { events: state.events };
 }
 
