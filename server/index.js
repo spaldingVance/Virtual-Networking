@@ -74,6 +74,18 @@ io.on("connection", (socket) => {
     socket.join(room.id);
 });
 
+  socket.on('SEND_MESSAGE', data => {
+    console.log('Inside SEND_MESSAGE on server index.js, data= ', data)
+    console.log('Next step will be io.emit RECEIVE_MESSAGE')
+    //do we need the functionality to store the message and user here?
+    //what is RECEIVE_MESSAGE doing?
+    io.emit(`MESSAGE_TO_${data.room}`, { 
+      socketid: socket.id,
+      username: data.username, 
+      message: data.message,
+      role: data.role,
+      time: moment().format('h:mm a')})
+  })
 
 //listen for chat messages
 socket.on("SEND_MESSAGE", (data) => {
