@@ -21,11 +21,6 @@ router.get("/events", (request, response, next) => {
     });
 });
 
-//test route
-router.get("/test", (request, response) => {
-    response.send("TEST ROUTE WORKING");
-});
-
 //login route (join event)
 router.post("/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
@@ -104,7 +99,6 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
         response.writeHead(400, "Invalid User ID Format");
         return response.end();
     }
-
     // find User by ID to get conversations that user is in
     User.findById(request.params.userId)
         //populate conversations so we can get the IDs from them
@@ -116,12 +110,11 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
             // and remove the user from that conersation
             if (user) {
                 user.conversations.forEach(userConvo => {
-                    console.log("ONE CONVO IN USER")
                     Conversation.updateOne(
                         { _id: userConvo.id },
                         { $pullAll: { users: [user.id] } }
                     ).exec((err, conbo) => {
-                        if(err) return next(err)
+                        if (err) return next(err)
                     })
                 })
             } else {
@@ -129,7 +122,7 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
                 response.writeHead(404, "User Not Found")
                 response.end();
             }
-            
+
             //remove the user from the event
             Event.updateOne(
                 { _id: request.params.eventId },
@@ -148,7 +141,7 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
                     .exec((err, user) => {
                         if (err) return next(err)
                         // if no user is found, return an error
-                        if(!user) {
+                        if (!user) {
                             response.writeHead(404, "User Not Found")
                             response.end();
                         }
@@ -157,5 +150,115 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
             });
         })
 });
+
+
+
+//'/events/:eventId/:convoId'
+//Disables conversation by toggling view from true to false (still present in database)
+//we will need to add "view" to data
+router.put('/conversations/:convoId', (request, response, next) => {
+    if (!mongoose.Types.ObjectId.isValid(request.params.convoId)) {
+        // if event id is not in the correct format, return an error
+        response.writeHead(400, "Invalid Conversation ID Format");
+        return response.end();
+    }
+    Conversation.findById({ _id: request.params.convoId })
+        .exec((err, convo) => {
+            if (err) {
+                return next(err)
+            }
+            if (!convo) {
+                response.writeHead(404, "Conversation Not Found")
+                return response.end();
+            }
+
+            //if the "active" property is set to true, toggle it to false
+            //there is currently no need to toggle false to true
+            if (convo.active === true) {
+                convo.active = false
+                convo.save((err) => {
+                    if (err) return next(err);
+                });
+                response.send(convo);
+            } else {
+                response.writeHead(409, "Conversation.active is already set to false")
+                return response.end();
+            }
+        })
+})
+
+router.post('/events/:eventId/conversation', (request, response, next) => {
+    if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
+        // if event id is not in the correct format, return an error
+        response.writeHead(400, "Invalid Event ID Format");
+        return response.end();
+    } else if (request.body.conversationName === "" || !request.body.conversationName) {
+        // if coversation name is empty or doesn't exist, return an error
+        response.writeHead(400, "Invalid Conversation Name")
+        return response.end();
+    }
+    // create a conversation with the name and active set to true
+    let conversation = new Conversation({ conversationName: request.body.conversationName, active: true })
+
+    Event.findById(request.params.eventId)
+        //populate the conversations so that we can access their names and check if the name is taken
+        .populate("conversations")
+        .exec((err, event) => {
+            if (err) return next(err)
+            //if the event doesn't exist, return an error
+            if (!event) {
+                response.writeHead(404, "Event Not Found")
+                return response.end();
+            } else {
+                //variable for future if statement to prevent trying to send multiple responses
+                let nameTaken = false;
+                //loop through the conversations in the event
+                event.conversations.forEach(convo => {
+                    //if the event has a conversation with the same name, return an error
+                    if (convo.conversationName === request.body.conversationName) {
+                        nameTaken = true;
+                        response.writeHead(400, "Conversation Name Already Taken")
+                        return response.end()
+                    }
+                })
+                // if the name is available, save the conversation and add it to the event
+                if (!nameTaken) {
+                    conversation.save((err) => {
+                        if (err) return next(err)
+                    });
+                    event.conversations.push(conversation._id)
+                    event.save((err) => {
+                        if (err) return next(err);
+                    })
+                    response.send(conversation)
+                }
+
+            }
+
+        })
+})
+
+router.post("/events", (request, response, next) => {
+    let newEvent = new Event({eventName: request.body.eventName});
+    Event.findOne({eventName: request.body.eventName})
+        .exec((err, event) => {
+            console.log(event)
+            if (err) return next(err)
+            if (!event) {
+                console.log("not event")
+                newEvent.save((err) => {
+                    if (err) return next(err)
+                })
+                response.send(newEvent)
+            } else {
+                response.writeHead(400, "Event Name Already Taken")
+                return response.end();
+            }
+        })
+})
+
+
+
+
 
 module.exports = router;

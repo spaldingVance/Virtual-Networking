@@ -20,23 +20,27 @@ class EventsList extends Component {
     return (
       <Col lg={3} md={4} sm={6} xs={12} className="mb-4">
         <Container className="event-tile px-3">
+          <Row className="align-items-baseline">
+            <Col className="d-inline-flex justify-content-start align-items-baseline">
+              <div className="event-users">
+                {/* For each participant, reduce to a number */}
+                <FontAwesomeIcon icon={faUsers} />{" "}
+                <p className="event-tile-numbers">23</p>
+              </div>
+            </Col>
+            <Col className="d-inline-flex justify-content-end align-items-baseline">
+              <div className="event-comments">
+                {/* For each conversation, reduce to a number */}
+                <FontAwesomeIcon icon={faComments} />{" "}
+                <p className="event-tile-numbers ">2</p>
+              </div>
+            </Col>
+          </Row>
           <Row>
             <Col className="pt-3">
               {/* events.eventName */}
               {/* 900 Roboto for All Sans Serif */}
               <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
-            </Col>
-          </Row>
-          <Row className="align-items-baseline">
-            <Col className="d-inline-flex justify-content-start align-items-baseline">
-              {/* For each participant, reduce to a number */}
-              <FontAwesomeIcon icon={faUsers} />{" "}
-              <p className="event-tile-numbers">23</p>
-            </Col>
-            <Col className="d-inline-flex justify-content-end align-items-baseline">
-              {/* For each conversation, reduce to a number */}
-              <FontAwesomeIcon icon={faComments} />{" "}
-              <p className="event-tile-numbers ">2</p>
             </Col>
           </Row>
         </Container>
@@ -55,7 +59,7 @@ class EventsList extends Component {
         <Container>
           <Row className="mb-4 justify-content-md-center">
             {" "}
-            <h1>Attend an Event</h1>
+            <h1 id="attend-event">Attend an Event</h1>
           </Row>
 
           {/* {this.props.events.map(this.renderEvents)} */}
