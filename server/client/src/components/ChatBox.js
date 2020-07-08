@@ -8,6 +8,7 @@ import {
   InputGroup,
   FormControl,
   Button,
+  Badge
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
 
@@ -19,14 +20,16 @@ class ChatBox extends Component {
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
     this.state = {
       room: this.props.room,
-      username: '',
+      username: 'Danielle',
+      role: 'Student',
       userId: '',
       message: '',
       messages: [],
     };
 
     //how are we getting the name of the room? incoming props from parent component?
-    this.socket = io("localhost:5000");
+    //this.socket = io("localhost:5000");
+    this.socket = io();
 
     this.socket.on(`MESSAGE_TO_${this.props.room}`, function (data) {
       console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
@@ -48,38 +51,23 @@ class ChatBox extends Component {
       this.socket.emit("SEND_MESSAGE", {
         username: this.state.username,
         message: this.state.message,
-        room: this.state.room
+        room: this.state.room,
+        userId: this.state.userId, 
+        role: this.state.role
       });
       this.setState({ message: "" });
     };
-    // this.sendMessage = (ev) => {
-    //   ev.preventDefault();
-    //   this.socket.emit("SEND_MESSAGE", {
-    //     author: this.state.username,
-    //     message: this.state.message,
-    //   });
-    //   this.setState({ message: "" });
-    // };
-    this.test = (event) => {
-      event.preventDefault();
-      console.log("Button connected");
-      console.log("STATE MESSAGE", this.state.message)
-      this.socket.emit('test', {
-        testMessage: this.state.message,
-        room: this.props.room
-    });
+
+
+    this.handleKeyPress = (event) => {
+      if (event.charCode === 13){
+        console.log('inside if statement')
+        this.sendMessage(event);
+      }
     }
+  
   }
 
-
-    // this.test = (e) => {
-    //   e.preventDefault();
-    //   console.log('button click')
-    //   this.socket.emit('test', {
-    //     testMessage: "Hiiiii!!!!"
-    //   })
-    // }
- // }
 
   render() {
     return (
@@ -88,13 +76,15 @@ class ChatBox extends Component {
           <Col className="m-0 p-0">
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
-                <Card.Title>JavaScript Convo</Card.Title>
+                <Card.Title className="mr-5" style={{ display: 'inline' }}>JavaScript Convo</Card.Title>
+                <Badge pill variant="danger">X</Badge>
                 <hr />
                 <div className="messages">
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        {message.username}: {message.message}
+                        <div><strong className="mr-1">{message.username} ({message.role})</strong><strong></strong><span>{message.time}</span></div>
+                        <div>{message.message}</div>
                       </div>
                     );
                   })}
@@ -107,10 +97,12 @@ class ChatBox extends Component {
                     aria-label="Message"
                     aria-describedby="basic-addon2"
                     value={this.state.message}
+                    onKeyPress={this.handleKeyPress}
                     onChange={event => {this.setState({message: event.target.value})}}
                   />
                   <InputGroup.Append>
                     <Button
+                      className="ml-2"
                       variant="outline-secondary"
                       onClick={this.sendMessage}>
                       Send

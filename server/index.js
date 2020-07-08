@@ -82,6 +82,7 @@ io.on("connection", (socket) => {
       socketid: socket.id,
       username: data.username, 
       message: data.message,
+      role: data.role,
       time: moment().format('h:mm a')})
   })
 
