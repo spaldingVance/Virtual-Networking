@@ -9,6 +9,14 @@
   border-radius: 1em;
 }
 
+/* .event-tile-column a {
+  color:#fff;
+} */
+
+.event-tile-column a:hover {
+  text-decoration: none;
+}
+
 .event-tile-numbers {
   display: inline-block;
 }
