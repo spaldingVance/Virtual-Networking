@@ -13,6 +13,7 @@ class ConversationList extends Component {
 
   // TODO
   render() {
+    console.log("The props for ConversationList is", this.props);
     return (
       <div id="conversation-column">
         <h3>Join a Chat</h3>
@@ -20,11 +21,11 @@ class ConversationList extends Component {
           <a href="#1">
             <li>Java Chat</li>
           </a>
-  
+
           <a href="#2">
             <li>HTML Conversation</li>
           </a>
-  
+
           <a href="#3">
             <li>JavaScript Room</li>
           </a>
@@ -36,9 +37,9 @@ class ConversationList extends Component {
           </a>
         </ul>
       </div>
-    )
+    );
   }
-};
+}
 
 function mapStateToProps(state) {
   return { conversations: state.conversations };
