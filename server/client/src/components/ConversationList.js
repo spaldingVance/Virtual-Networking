@@ -23,8 +23,10 @@ class ConversationList extends Component {
     this.props.getConversations();
   }
 
-  handleJoinConversation() {
+  handleJoinConversation(event) {
     // send the conversation id and which room to the chatboxescontainer
+    console.log(event);
+    // this.setState({joinedConversations.push()})
   }
 
   checkJoinedStatus(conversation) {
