@@ -158,7 +158,7 @@ let conversation1 = new Conversation({
 
 let user1 = new User({
   userName: "Robert",
-  byLine: "Socket.io Wizard",
+  role: "Socket.io Wizard",
   event: event1._id,
 });
 

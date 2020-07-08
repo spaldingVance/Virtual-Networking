@@ -47,7 +47,7 @@ router.post("/users/:eventId", (request, response, next) => {
                     // create a new user and add in values from request body
                     let user = new User();
                     user.userName = request.body.userName;
-                    user.byLine = request.body.byLine;
+                    user.role = request.body.role;
                     // save the user to the database
                     user.save((err) => {
                         if (err) return next(err);
