@@ -28,12 +28,12 @@ export function setCurrentEvent(id) {
   };
 }
 
-export function getConversations() {
+export function getConversations(currentEvent) {
   // hard coding convo ID for testing
-  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
+  const url = `${ROOT_URL}/events/${currentEvent}`;
   const request = axios.get(url);
 
-  request.then(console.log("conversations retrieved"));
+  request.then(console.log(`Conversations requested for ${currentEvent}`));
 
   return {
     type: GET_CONVERSATIONS,

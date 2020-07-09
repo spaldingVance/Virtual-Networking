@@ -3,8 +3,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getConversations } from "../actions/index";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom"
- 
+import { Link } from "react-router-dom";
+
 // styling imports
 import "../styles/ConversationList.css";
 
@@ -22,7 +22,7 @@ class ConversationList extends Component {
   }
 
   componentDidMount() {
-    this.props.getConversations();
+    this.props.getConversations(this.props.currentEvent);
   }
 
   handleJoinConversation(event) {
@@ -65,7 +65,9 @@ class ConversationList extends Component {
           </a>
         </ul>
         <Link to="/">
-        <Button variant="outline-danger" id="leave-event">Leave Event</Button>
+          <Button variant="outline-danger" id="leave-event">
+            Leave Event
+          </Button>
         </Link>
         <h3>Join a Chat</h3>
         <ul className="conversation-list">{this.renderConversationList()}</ul>
@@ -75,7 +77,10 @@ class ConversationList extends Component {
 }
 
 function mapStateToProps(state) {
-  return { conversations: state.conversations };
+  return {
+    conversations: state.conversations,
+    currentEvent: state.currentEvent,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
