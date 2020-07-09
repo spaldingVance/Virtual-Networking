@@ -74,7 +74,7 @@ export function leaveAllConversations() {
 }
 
 export function logout(eventId, userId) {
-  const url = `/events/${eventId}/users/${userId}`;
+  const url = `/api/events/${eventId}/users/${userId}`;
 
   const request = axios({
     method: "delete",
