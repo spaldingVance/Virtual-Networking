@@ -44,14 +44,11 @@ class ChatBox extends Component {
         "inside this.socket.on connect, this.state.room=",
         this.state.room
       );
-      this.socket.emit("room", {
-        conversationName: this.state.room,
-        id: this.socket.id,
-      });
+      this.socket.emit("room", { conversationId: this.props.conversation._id });
     });
 
     //this receives back the message from server/index.js
-    this.socket.on(`MESSAGE_TO_${this.state.room}`, function (data) {
+    this.socket.on("MESSAGE", function (data) {
       console.log(
         "Chatbox receiving back message to add message to messages array. Data= ",
         data
@@ -72,11 +69,11 @@ class ChatBox extends Component {
       console.log("The sent message is:", this.state.message);
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
-        username: this.state.username,
+        username: this.props.user.userName,
         message: this.state.message,
-        room: this.state.room,
-        userId: this.state.userId,
-        role: this.state.role,
+        room: this.props.conversation._id,
+        userId: this.props.user._id,
+        role: this.props.user.role,
       });
       this.setState({ message: "" });
     };
