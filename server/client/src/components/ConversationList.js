@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getConversations, getJoinedConversations } from "../actions/index";
+import { getConversations, getJoinedConversations, logout } from "../actions/index";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -28,15 +28,12 @@ class ConversationList extends Component {
   }
 
   handleJoinConversation(conversation) {
-
     console.log('conversation button clicked, conversation is =', conversation)
     const newJoinedConversations = this.state.joinedConversations.concat(conversation)
     this.setState({ joinedConversations: newJoinedConversations }, () => {
       this.props.getJoinedConversations(this.state.joinedConversations)
       console.log('state inside handleJoinConversation', this.state)
     });
-
-
   }
 
   checkJoinedStatus(conversation) {
@@ -46,6 +43,11 @@ class ConversationList extends Component {
     // if (this.props.joinedConversations.includes(conversation._id)) {
     //   return ".joined";
     // }
+  }
+
+  logoutUser() {
+    console.log(this.props.user)
+    this.props.logout(this.props.user.userId, this.props.currentEvent)
   }
 
   renderConversationList() {
@@ -64,23 +66,26 @@ class ConversationList extends Component {
 
   render() {
     console.log("Inside render of Conversation List, this.props= ", this.props);
-
-    return (
-      <div id="conversation-column">
-        <ul className="conversation-list">
-          <a href="#">
-            <li>Start your own convo!</li>
-          </a>
-        </ul>
-        <Link to="/">
-          <Button variant="outline-danger" id="leave-event">
+    if (this.props.logout.logout) {
+      return (
+        <Redirect to={`/`} />
+      )
+    } else {
+      return (
+        <div id="conversation-column">
+          <ul className="conversation-list">
+            <a href="#">
+              <li>Start your own convo!</li>
+            </a>
+          </ul>
+          <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
             Leave Event
           </Button>
-        </Link>
-        <h3>Join a Chat</h3>
-        <ul className="conversation-list">{this.renderConversationList()}</ul>
-      </div>
-    );
+          <h3>Join a Chat</h3>
+          <ul className="conversation-list">{this.renderConversationList()}</ul>
+        </div>
+      );
+    }
   }
 }
 
@@ -88,11 +93,13 @@ function mapStateToProps(state) {
   return {
     conversations: state.conversations,
     currentEvent: state.currentEvent,
+    logout: state.logoutUser,
+    user: state.user
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getConversations, getJoinedConversations }, dispatch);
+  return bindActionCreators({ getConversations, getJoinedConversations, logout }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConversationList);
