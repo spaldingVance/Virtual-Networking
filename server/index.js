@@ -74,6 +74,7 @@ io.on("connect", (socket) => {
     //join socket to room
     socket.join(data.conversationId);
 
+    //Letting other users know that current user entered the conversation
     socket.in(data.conversationId)
       .broadcast
       .emit("MESSAGE", {
@@ -85,7 +86,7 @@ io.on("connect", (socket) => {
 
     //add user id to conversation in database
     Conversation
-      .findOneAndUpdate({_id: data.conversationId }, {$push: {users: data.userId}})
+      .findOneAndUpdate({ _id: data.conversationId }, { $push: { users: data.userId } })
       .exec((error, conversationUpdated) => {
         if (error) throw error;
         console.log(conversationUpdated)
@@ -106,61 +107,38 @@ io.on("connect", (socket) => {
 
     //add to messages in conversation db
     Conversation
-      .findOneAndUpdate({ _id: data.room }, { $push: { messages: { user: data.userId, text: data.message }}})
+      .findOneAndUpdate({ _id: data.room }, { $push: { messages: { user: data.userId, text: data.message } } })
       .exec((error, messageAdded) => {
         if (error) throw error;
       });
   });
 
-  // socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
-  //   //not sure about variables
-  //   //add user to users array in conversation mongodb collection
-  //   //query mongo for username and conversation name
-  //   // const username;
-  //   // const conversationName;
-  //   // const usersInConversation;
-  //   // Welcome current user
-  //   socket.emit("MESSAGE", {
-  //     username: botName,
-  //     text: `Welcome to ${conversation}!`,
-  //     time: moment().format("h:mm a"),
-  //   });
 
-  //   // Broadcast when a user connects
-  //   socket.broadcast.to(conversationId).emit("MESSAGE", {
-  //     username: botName,
-  //     text: `${username} has joined the chat`,
-  //     time: moment().format("h:mm a"),
-  //   });
+  // Runs when client disconnects
+//   socket.on("disconnect", () => {
+//     // const user = userLeave(socket.id);
+   
+//     //broadcast to room that user left
 
-  //   // Send users and room info
-  //   io.to(conversationId).emit("CONVERSATION_PARTICIPANTS", {
-  //     room: conversationName,
-  //     users: usersInConversation,
-  //   });
-  // });
+//     //update the conversation in database to remove user from it
+
+
+//     if (user) {
+//       io.to(/*conversation*/).emit(
+//         "message",
+//         formatMessage(botName, `${user.username} has left the chat`)
+//       );
+
+//       // Send users and room info
+//       io.to(user.room).emit("roomUsers", {
+//         room: user.room,
+//         users: getRoomUsers(user.room),
+//       });
+//     }
+//   });
+
 });
 
-// Runs when client disconnects
-// socket.on("disconnect", () => {
-//   // const user = userLeave(socket.id);
-//   //find user and remove from conversation in mongodb
-//   //remove socketid
-
-//   if (user) {
-//   io.to(/*conversation*/).emit(
-//     "message",
-//     formatMessage(botName, `${user.username} has left the chat`)
-//   );
-
-//   // Send users and room info
-//   io.to(user.room).emit("roomUsers", {
-//     room: user.room,
-//     users: getRoomUsers(user.room),
-//   });
-//    }
-// });
-// });
 
 ////////////////////////////////////////////////////////////
 // GENERATE FAKE DATA
