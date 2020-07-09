@@ -1,10 +1,10 @@
 //might not need these routes with socket
 
 const router = require("express").Router();
-const User = require("../models/userSchema");
-const Event = require("../models/eventSchema");
-const Conversation = require("../models/conversationSchema");
-const Message = require("../models/messageSchema");
+const User = require("./models/userSchema");
+const Event = require("./models/eventSchema");
+const Conversation = require("./models/conversationSchema");
+const Message = require("./models/messageSchema");
 const { request } = require("express");
 const mongoose = require("mongoose");
 
