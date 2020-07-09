@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getConversations, getJoinedConversations } from "../actions/index";
+import { getConversations, getJoinedConversations, logout } from "../actions/index";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
 
 // styling imports
@@ -51,6 +51,14 @@ class ConversationList extends Component {
     // }
   }
 
+  logoutUser() {
+    console.log("User ID = " + this.props.user._id)
+    this.props.logout(this.props.event._id, this.props.user._id)
+    if (this.props.logoutUser) {
+      console.log(this.props.logoutUser)
+    }
+  }
+
   renderConversationList() {
     console.log("This.props.event are ", this.props.event);
 
@@ -75,23 +83,26 @@ class ConversationList extends Component {
 
   render() {
     console.log("Inside render of Conversation List, this.props= ", this.props);
-
-    return (
-      <div id="conversation-column">
-        <ul className="conversation-list">
-          <a href="#">
-            <li>Start your own convo!</li>
-          </a>
-        </ul>
-        <Link to="/">
-          <Button variant="outline-danger" id="leave-event">
-            Leave Event
-          </Button>
-        </Link>
-        <h3>Join a Chat</h3>
-        <ul className="conversation-list">{this.renderConversationList()}</ul>
-      </div>
-    );
+    if (!this.props.user.hasOwnProperty("userName")) {
+      return (
+        <Redirect to={`/`} />
+      )
+    } else {
+      return (
+        <div id="conversation-column">
+          <ul className="conversation-list">
+            <a href="#">
+              <li>Start your own convo!</li>
+            </a>
+          </ul>
+            <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
+              Leave Event
+            </Button>
+          <h3>Join a Chat</h3>
+          <ul className="conversation-list">{this.renderConversationList()}</ul>
+        </div>
+      );
+    }
   }
 }
 
@@ -100,13 +111,14 @@ function mapStateToProps(state) {
     return {
       event: state.event,
       currentEvent: state.currentEvent,
+      user: state.user
     };
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { getConversations, getJoinedConversations },
+    { getConversations, getJoinedConversations, logout },
     dispatch
   );
 }
