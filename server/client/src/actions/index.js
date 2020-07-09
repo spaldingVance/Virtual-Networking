@@ -26,7 +26,6 @@ export function setCurrentEvent(id) {
 }
 
 export function getConversations(currentEvent) {
-  // hard coding convo ID for testing
   const url = `/events/${currentEvent}`;
   const request = axios.get(url);
 
@@ -58,11 +57,9 @@ export function login(eventID, userName, role) {
   };
 }
 
-
 export function getJoinedConversations(joinedConversations) {
-
   return {
     type: JOIN_CONVERSATION,
-    payload: joinedConversations
+    payload: joinedConversations,
   };
 }
