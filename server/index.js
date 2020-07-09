@@ -80,7 +80,7 @@ io.on("connect", (socket) => {
         username: bot.username,
         role: bot.role,
         message: `${data.username} has joined ${data.conversationName}`,
-
+        time: moment().format("h:mm a")
       })
 
     //add user id to conversation in database
