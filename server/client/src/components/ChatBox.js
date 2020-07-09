@@ -20,7 +20,7 @@ class ChatBox extends Component {
     console.log("inside chatbox constructor, props is=", this.props);
     const roomId = this.props.conversationId;
     const roomName = this.props.conversationName;
-
+console.log("THE USER IS ", this.props.user)
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
@@ -44,9 +44,13 @@ class ChatBox extends Component {
         "inside this.socket.on connect, this.state.room=",
         this.state.room
       );
-      this.socket.emit("room", { conversationId: this.props.conversationId });
-    });
-
+      this.socket.emit("JOIN_CONVERSATION", { 
+        conversationId: this.props.conversationId,
+        userId:  this.props.user._id});
+      });
+      console.log("CONVERSATION ID BEING SENT TO SOCKET ON JOINING ROOM:", this.props.conversationId)
+      console.log("USER ID BEING SENT TO SOCKET ON JOINING ROOM:", this.props.user._id)
+      
     //this receives back the message from server/index.js
     this.socket.on("MESSAGE", function (data) {
       console.log(

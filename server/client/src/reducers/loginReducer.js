@@ -1,4 +1,5 @@
 import { LOGIN } from "../actions/index";
+import { LOGOUT } from "../actions/index";
 
 export default function (state = {}, action) {
   switch (action.type) {
@@ -9,6 +10,8 @@ export default function (state = {}, action) {
             alert("username already taken")
             return {}
         }
+    case LOGOUT:
+      return {}
     default:
       return state;
   }
