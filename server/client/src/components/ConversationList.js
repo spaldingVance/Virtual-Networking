@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getConversations, getJoinedConversations, logout } from "../actions/index";
+import {
+  getConversations,
+  getJoinedConversations,
+  logout,
+  leaveAllConversations,
+} from "../actions/index";
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
@@ -32,44 +37,43 @@ class ConversationList extends Component {
   }
 
   handleJoinConversation(conversation) {
-    console.log("conversation button clicked, conversation is =", conversation);
-    const newJoinedConversations = this.state.joinedConversations.concat(
-      conversation
-    );
-    this.setState({ joinedConversations: newJoinedConversations }, () => {
-      this.props.getJoinedConversations(this.state.joinedConversations);
-      console.log("state inside handleJoinConversation", this.state);
-    });
+    this.props.getJoinedConversations(conversation);
   }
 
-  checkJoinedStatus(conversation) {
+  checkJoinedStatus(conversationFromList) {
     // this is where we check if the user is joined in the conversation
     // if joinedConversations in local state has an ID that matches the conversation
-    // console.log("conversation is", conversation);
-    // if (this.props.joinedConversations.includes(conversation._id)) {
-    //   return ".joined";
-    // }
-  }
 
-  logoutUser() {
-    console.log("User ID = " + this.props.user._id)
-    this.props.logout(this.props.event._id, this.props.user._id)
-    if (this.props.logoutUser) {
-      console.log(this.props.logoutUser)
+    let joinedStatus = this.props.conversations.find((joinedConversation) => {
+      return joinedConversation._id === conversationFromList._id;
+    });
+
+    if (joinedStatus !== undefined) {
+      return "joined";
     }
   }
 
+  logoutUser() {
+    console.log("User ID = " + this.props.user._id);
+    this.props.logout(this.props.event._id, this.props.user._id);
+    if (this.props.logoutUser) {
+      console.log(this.props.logoutUser);
+    }
+    this.props.leaveAllConversations(); // need to empty the conversations array in global store
+  }
+
   renderConversationList() {
-    console.log("This.props.event are ", this.props.event);
+    console.log(
+      "In Render Conversation List, this.props.event are ",
+      this.props.event
+    );
 
     if (this.props.event.conversations) {
       return this.props.event.conversations.map((conversation) => {
         return (
-          <a
-            href="#2"
-            key={`ConversationLink${conversation._id}`}
-            className={this.checkJoinedStatus(conversation)}>
+          <a href="#2" key={`ConversationLink${conversation._id}`}>
             <li
+              className={this.checkJoinedStatus(conversation)}
               onClick={(event) => {
                 this.handleJoinConversation(conversation);
               }}>
@@ -84,9 +88,7 @@ class ConversationList extends Component {
   render() {
     console.log("Inside render of Conversation List, this.props= ", this.props);
     if (!this.props.user.hasOwnProperty("userName")) {
-      return (
-        <Redirect to={`/`} />
-      )
+      return <Redirect to={`/`} />;
     } else {
       return (
         <div id="conversation-column">
@@ -95,9 +97,12 @@ class ConversationList extends Component {
               <li>Start your own convo!</li>
             </a>
           </ul>
-            <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
-              Leave Event
-            </Button>
+          <Button
+            onClick={this.logoutUser.bind(this)}
+            variant="outline-danger"
+            id="leave-event">
+            Leave Event
+          </Button>
           <h3>Join a Chat</h3>
           <ul className="conversation-list">{this.renderConversationList()}</ul>
         </div>
@@ -111,14 +116,15 @@ function mapStateToProps(state) {
     return {
       event: state.event,
       currentEvent: state.currentEvent,
-      user: state.user
+      user: state.user,
+      conversations: state.currentConversations,
     };
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { getConversations, getJoinedConversations, logout },
+    { getConversations, getJoinedConversations, logout, leaveAllConversations },
     dispatch
   );
 }
