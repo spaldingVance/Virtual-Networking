@@ -1,4 +1,4 @@
-import { GET_CONVERSATIONS } from "../actions/index";
+import { GET_CONVERSATIONS, CREATE_CONVERSATION } from "../actions/index";
 
 export default function (state = [], action) {
   switch (action.type) {
@@ -9,6 +9,8 @@ export default function (state = [], action) {
       } else {
         return state;
       }
+    case CREATE_CONVERSATION:
+      return state;
     default:
       return state;
   }

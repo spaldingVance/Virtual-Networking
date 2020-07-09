@@ -6,6 +6,7 @@ export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
 export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 export const LOGOUT = "LOGOUT";
+export const CREATE_CONVERSATION = "CREATE_CONVERSATION"
 
 export function getEvents() {
   const url = `/api/events`;
@@ -77,6 +78,22 @@ export function logout(eventId, userId) {
 
   return {
     type: LOGOUT,
+    payload: request
+  };
+}
+
+export function createConversation(eventId) {
+  const url = `/events/${eventId}/conversation`
+ 
+  const request = axios({
+    method: "post",
+    url: url
+  });
+
+  request.then(console.log("create conversation attempted"));
+
+  return {
+    type: CREATE_CONVERSATION,
     payload: request
   };
 }
