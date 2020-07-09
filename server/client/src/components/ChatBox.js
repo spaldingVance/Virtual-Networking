@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
+import { connect } from "react-redux";
+import { user } from "../actions/index";
 import {
   Row,
   Col,
@@ -15,11 +17,16 @@ import "../styles/ChatBox.css";
 class ChatBox extends Component {
   constructor(props) {
     super(props);
+    console.log('inside chatbox constructor, props is=', this.props)
+    const roomName = this.props.conversation[0].conversationName;
+    const roomId = this.props.conversation[0]._id;
 
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
+
+    //need to get the name of the user, userid and message history from more mapStateToProps
     this.state = {
-      room: this.props.room,
+      room: roomName,
       username: 'Danielle',
       role: 'Student',
       userId: '',
@@ -31,11 +38,13 @@ class ChatBox extends Component {
     //this.socket = io("localhost:5000");
     this.socket = io();
 
+    //this starts up the room socket connection when the component is initialized
     this.socket.on('connect', () => {
-      this.socket.emit('room', {conversationName: this.props.room, id: this.socket.id})
+      console.log('inside this.socket.on connect, this.state.room=', this.state.room)
+      this.socket.emit('room', {conversationName: this.state.room, id: this.socket.id})
     } )
 
-    this.socket.on("MESSAGE", function (data) {
+    this.socket.on(`MESSAGE_TO_${this.state.room}`, function (data) {
       console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
       addMessage(data);
     });
@@ -69,6 +78,10 @@ class ChatBox extends Component {
         this.sendMessage(event);
       }
     }
+
+    this.exitConversation = () => {
+
+    }
   
   }
 
@@ -80,7 +93,7 @@ class ChatBox extends Component {
           <Col className="m-0 p-0">
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
-                <Card.Title>JavaScript Convo<Badge pill variant="danger" className="close-button ml-4">X</Badge></Card.Title>
+                <Card.Title>{this.state.room}<Badge pill variant="danger" className="close-button ml-4" onClick={this.exitConversation}>X</Badge></Card.Title>
                 <hr />
                 <div className="messages">
                   {this.state.messages.map((message) => {
@@ -121,4 +134,11 @@ class ChatBox extends Component {
   };
 }
 
-export default ChatBox;
+
+function mapStateToProps(state) {
+  console.log('inside mapstatetoprops chatbox, state=', state)
+  return { conversations: state.conversations, 
+          user: state.user };
+}
+
+export default connect(mapStateToProps)(ChatBox);

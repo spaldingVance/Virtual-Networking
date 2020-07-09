@@ -1,34 +1,44 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getConversations } from "../actions/index";
+import { getConversations, getJoinedConversations } from "../actions/index";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom"
- 
+
 // styling imports
 import "../styles/ConversationList.css";
 
 class ConversationList extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
+    
+     this.state = {
+      conversations: [{conversationName: "JavaScript", _id: 100}, {conversationName: "HTML", _id: 200}],
       joinedConversations: [], // by id
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
     this.handleJoinConversation = this.handleJoinConversation.bind(this);
-    this.handleJoinConversation = this.handleJoinConversation.bind(this);
+
   }
 
-  componentDidMount() {
-    this.props.getConversations();
-  }
+  // componentDidMount() {
+  //   this.props.getConversations();
+  // }
 
-  handleJoinConversation(event) {
+  handleJoinConversation(conversation) {
     // send the conversation id and which room to the chatboxescontainer
-    console.log(event);
-    // this.setState({joinedConversations.push()})
+    // const newState = this.state.joinedConversations.push(conversation);
+    // this.setState((
+    //   {joinedConversations: newState}))
+    console.log('conversation button clicked, conversation is =', conversation)
+    const newJoinedConversations = this.state.joinedConversations.concat(conversation)
+    this.setState({joinedConversations: newJoinedConversations}, () => {
+      this.props.getJoinedConversations(this.state.joinedConversations)
+      console.log('state inside handleJoinConversation', this.state)
+    });
+   
+   
   }
 
   checkJoinedStatus(conversation) {
@@ -41,14 +51,14 @@ class ConversationList extends Component {
   }
 
   renderConversationList() {
-    return this.props.conversations.map((conversation) => {
+    return this.state.conversations.map((conversation) => {
       return (
         <a
           href="#2"
           key={`ConversationLink${conversation._id}`}
-          onClick={this.handleJoinConversation}
+          
           className={this.checkJoinedStatus(conversation)}>
-          <li>{conversation.conversationName}</li>
+          <li onClick={event => {this.handleJoinConversation(conversation)}}>{conversation.conversationName}</li>
         </a>
       );
     });
@@ -65,7 +75,7 @@ class ConversationList extends Component {
           </a>
         </ul>
         <Link to="/">
-        <Button variant="outline-danger" id="leave-event">Leave Event</Button>
+          <Button variant="outline-danger" id="leave-event">Leave Event</Button>
         </Link>
         <h3>Join a Chat</h3>
         <ul className="conversation-list">{this.renderConversationList()}</ul>
@@ -79,7 +89,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getConversations }, dispatch);
+  return bindActionCreators({ getConversations, getJoinedConversations}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConversationList);

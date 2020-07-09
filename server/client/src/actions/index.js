@@ -9,6 +9,7 @@ export const GET_EVENTS = "GET_EVENTS";
 export const SELECT_EVENT = "SELECT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
+export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 
 export function getEvents() {
   const url = `${ROOT_URL}/events`;
@@ -31,9 +32,9 @@ export function selectEvent() {
   };
 }
 
-export function getConversations() {
+export function getConversations(eventId) {
   // hard coding convo ID for testing
-  const url = `${ROOT_URL}/events/5f0517a09e543554fcb133e4`;
+  const url = `${ROOT_URL}/events/${eventId}`;
   const request = axios.get(url);
 
   request.then(console.log("conversations retrieved"));
@@ -60,4 +61,12 @@ export function login(eventID, userName, role) {
     type: LOGIN,
     payload: request
   }
+}
+
+export function getJoinedConversations(joinedConversations) {
+
+  return {
+    type: JOIN_CONVERSATION,
+    payload: joinedConversations
+  };
 }
