@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { connect } from "react-redux";
 import { user } from "../actions/index";
 import {
   Row,
@@ -13,6 +12,7 @@ import {
   Badge,
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
+import { connect } from "react-redux";
 
 class ChatBox extends Component {
   constructor(props) {
@@ -60,7 +60,7 @@ class ChatBox extends Component {
     const addMessage = (data) => {
       console.log(data);
       this.setState({ messages: [...this.state.messages, data] });
-      console.log(this.state.messages);
+      console.log(this.state);
     };
 
     // the message will be in the local state?
