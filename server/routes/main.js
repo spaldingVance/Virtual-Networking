@@ -10,7 +10,8 @@ const mongoose = require("mongoose");
 
 //Set up routes
 
-//possible route example:
+//This endpoint returns all events
+//Requirements: None
 router.get("/events", (request, response, next) => {
     //get all available events
     Event.find({}).exec((error, event) => {
@@ -26,7 +27,8 @@ router.get("/test", (request, response) => {
     response.send("TEST ROUTE WORKING");
 });
 
-//login route (join event)
+//This endpoint adds a user to the mongo DB, and adds a user to the selected event
+//Requirements: UserName (in body), role (in body), event ID (in path)
 router.post("/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
     User.findOne({ userName: request.body.userName }).exec((err, user) => {
@@ -70,6 +72,8 @@ router.post("/users/:eventId", (request, response, next) => {
     });
 });
 
+//This endpoint returns an array of conversations for a selected event
+//Requirements: Event id (in path)
 router.get("/events/:eventId", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
         // if event id is not in the correct format, return an error
@@ -93,6 +97,8 @@ router.get("/events/:eventId", (request, response, next) => {
         });
 });
 
+//This endpoint removes the user from the event array and from the user collection
+//Requirements: user id (in path), event id (in path)
 router.delete("/events/:eventId/users/:userId", (request, response, next) => {
     //check if eventId and userId are valid
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
@@ -158,9 +164,8 @@ router.delete("/events/:eventId/users/:userId", (request, response, next) => {
 
 
 
-//'/events/:eventId/:convoId'
 //Disables conversation by toggling view from true to false (still present in database)
-//we will need to add "view" to data
+//Requirements: Conversation id(in body), Event id (in path)
 router.put('/conversations/:convoId', (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.convoId)) {
         // if event id is not in the correct format, return an error
@@ -192,6 +197,8 @@ router.put('/conversations/:convoId', (request, response, next) => {
         })
 })
 
+//This endpoint creates a conversation and adds it to the database
+//Requirements: Conversation ID (in body), event ID (in path)
 router.post('/events/:eventId/conversation', (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
         // if event id is not in the correct format, return an error
