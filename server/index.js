@@ -76,7 +76,11 @@ io.on("connect", (socket) => {
 
     //add user id to conversation in database
     Conversation
-      .findOneAndUpdate({_id: data.userId }, {$push: {users: data.userId}})
+      .findOneAndUpdate({_id: data.conversationId }, {$push: {users: data.userId}})
+      .exec((error, conversationUpdated) => {
+        if (error) throw error;
+        console.log(conversationUpdated)
+      })
   });
 
   //listen for chat messages
