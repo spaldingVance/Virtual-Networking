@@ -19,7 +19,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden"; // have to commnet out bc with many events it breaks
     document.getElementById("user-info").style.display = "none";
     document.getElementById("header").style.backgroundColor = "white";
     this.props.setCurrentEvent(this.props.match.params.eventId);
