@@ -55,19 +55,18 @@ const io = socketio(server);
 // };
 //for auto messages
 const botName = "Muze Bot";
-const conversation = "The Best Conversation"
+const conversation = "The Best Conversation";
 
 // Run when client connects
 io.on("connect", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
-
-      socket.emit("MESSAGE", {
+    socket.emit("MESSAGE", {
       username: botName,
       message: `Welcome to ${conversation}!`,
       time: moment().format("h:mm a"),
     });
-    
+
     socket.join(room.conversationId);
   });
 
@@ -191,9 +190,9 @@ event1.conversations.push(conversation1);
 
 user1.conversations.push(conversation1);
 
-// event1.save();
+event1.save();
 
-// user1.save();
+user1.save();
 
 server.listen(port);
 console.log("Server listening on:", port);
