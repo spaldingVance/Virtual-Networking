@@ -16,9 +16,12 @@ class PopUp extends Component {
 }
 
   conversationSubmit() {
-      console.log(this.props.event)
-    if (this.state.conversationName && this.props.event) {
-        this.props.createConversation(this.props.event._id, this.state.conversationName);
+      console.log(this.props.currentEvent._id)
+    if (this.state.conversationName && this.props.currentEvent) {
+        // if there's a convo name, create conversation with that name
+        this.props.createConversation(this.props.currentEvent._id, this.state.conversationName);
+        // reset conversation name to be nothing
+        this.setState({conversationName: ""})
       } else alert("Please fill out a conversation title");
   };
 

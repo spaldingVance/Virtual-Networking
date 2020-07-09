@@ -91,12 +91,14 @@ export function logout(eventId, userId) {
 }
 
 export function createConversation(eventId, conversationName) {
-  const url = `/events/${eventId}/conversation`
+  const url = `/api/events/${eventId}/conversation`
  
   const request = axios({
     method: "post",
     url: url,
-    data: conversationName
+    data: {
+      conversationName: conversationName
+    }
   });
 
   request.then(console.log("create conversation attempted"));
