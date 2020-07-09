@@ -56,8 +56,8 @@ const io = socketio(server);
 //for auto messages
 const bot = {
   username: "Muze",
-  role: "Bot"
-}
+  role: "Bot",
+};
 const conversation = "The Best Conversation";
 
 // Run when client connects
@@ -67,16 +67,30 @@ io.on("connect", (socket) => {
     socket.emit("MESSAGE", {
       username: bot.username,
       role: bot.role,
-      message: `Welcome to ${conversation}!`,
+      message: `Welcome to ${data.conversationName}!`,
       time: moment().format("h:mm a"),
     });
 
     //join socket to room
     socket.join(data.conversationId);
 
+    socket.in(data.conversationId)
+      .broadcast
+      .emit("MESSAGE", {
+        username: bot.username,
+        role: bot.role,
+        message: `${data.username} has joined ${data.conversationName}`,
+        time: moment().format("h:mm a")
+      })
+
     //add user id to conversation in database
-    Conversation
-      .findOneAndUpdate({_id: data.userId }, {$push: {users: data.userId}})
+    Conversation.findOneAndUpdate(
+      { _id: data.conversationId },
+      { $push: { users: data.userId } }
+    ).exec((error, conversationUpdated) => {
+      if (error) throw error;
+      console.log(conversationUpdated);
+    });
   });
 
   //listen for chat messages
@@ -92,11 +106,12 @@ io.on("connect", (socket) => {
     });
 
     //add to messages in conversation db
-    Conversation
-      .findOneAndUpdate({ _id: data.room }, { $push: { messages: { user: data.userId, text: data.message }}})
-      .exec((error, messageAdded) => {
-        if (error) throw error;
-      });
+    Conversation.findOneAndUpdate(
+      { _id: data.room },
+      { $push: { messages: { user: data.userId, text: data.message } } }
+    ).exec((error, messageAdded) => {
+      if (error) throw error;
+    });
   });
 
   // socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {

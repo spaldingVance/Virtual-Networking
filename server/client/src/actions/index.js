@@ -5,13 +5,14 @@ export const SET_CURRENT_EVENT = "SET_CURRENT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
 export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
+export const LEAVE_ALL_CONVERSATIONS = "LEAVE_ALL_CONVERSATIONS";
 export const LOGOUT = "LOGOUT";
 export const CREATE_CONVERSATION = "CREATE_CONVERSATION"
 
 export function getEvents() {
   const url = `/api/events`;
   const request = axios.get(url);
-  
+
   request.then(console.log("hi!!!"));
 
   return {
@@ -40,8 +41,8 @@ export function getConversations(currentEvent) {
 }
 
 export function login(eventID, userName, role) {
-  const url = `/api/users/${eventID}`
- 
+  const url = `/api/users/${eventID}`;
+
   const request = axios({
     method: "post",
     url: url,
@@ -59,26 +60,33 @@ export function login(eventID, userName, role) {
   };
 }
 
-export function getJoinedConversations(joinedConversations) {
+export function getJoinedConversations(conversation) {
   return {
     type: JOIN_CONVERSATION,
-    payload: joinedConversations,
+    payload: conversation,
+  };
+}
+
+export function leaveAllConversations() {
+  return {
+    type: LEAVE_ALL_CONVERSATIONS,
+    payload: [],
   };
 }
 
 export function logout(eventId, userId) {
-  const url = `/events/${eventId}/users/${userId}`
- 
+  const url = `/api/events/${eventId}/users/${userId}`;
+
   const request = axios({
     method: "delete",
-    url: url
+    url: url,
   });
 
   request.then(console.log("logout attempted"));
 
   return {
     type: LOGOUT,
-    payload: request
+    payload: request,
   };
 }
 

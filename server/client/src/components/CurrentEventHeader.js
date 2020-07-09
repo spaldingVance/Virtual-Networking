@@ -10,7 +10,7 @@ const CurrentEventHeader = (props) => {
     <div>
       <div id="current-event-tile">
         <h2>You are attending</h2>
-        <h1>{props.event ? props.event.eventName : "Event"}</h1>
+        <h1>{props.eventName}</h1>
       </div>
     </div>
   );
@@ -18,8 +18,9 @@ const CurrentEventHeader = (props) => {
 
 function mapStateToProps(state) {
   if (state.event) {
+    console.log("Inside currentEventHeader mapstatetoprops, state is", state);
     return {
-      event: state.event.conversations,
+      eventName: state.event.eventName || "Event",
     };
   } else {
     return {};
