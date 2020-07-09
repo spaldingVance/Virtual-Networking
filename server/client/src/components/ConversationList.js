@@ -37,25 +37,20 @@ class ConversationList extends Component {
   }
 
   handleJoinConversation(conversation) {
-    console.log("conversation button clicked, conversation is =", conversation);
-    // const newJoinedConversations = this.state.joinedConversations.concat(
-    //   conversation
-    // );
-    // this.setState({ joinedConversations: newJoinedConversations }, () => {
-    //   this.props.getJoinedConversations(this.state.joinedConversations);
-    //   console.log("state inside handleJoinConversation", this.state);
-    // });
-
     this.props.getJoinedConversations(conversation);
   }
 
-  checkJoinedStatus(conversation) {
+  checkJoinedStatus(conversationFromList) {
     // this is where we check if the user is joined in the conversation
     // if joinedConversations in local state has an ID that matches the conversation
-    // console.log("conversation is", conversation);
-    // if (this.props.joinedConversations.includes(conversation._id)) {
-    //   return ".joined";
-    // }
+
+    let joinedStatus = this.props.conversations.find((joinedConversation) => {
+      return joinedConversation._id === conversationFromList._id;
+    });
+
+    if (joinedStatus !== undefined) {
+      return "joined";
+    }
   }
 
   logoutUser() {
@@ -76,11 +71,9 @@ class ConversationList extends Component {
     if (this.props.event.conversations) {
       return this.props.event.conversations.map((conversation) => {
         return (
-          <a
-            href="#2"
-            key={`ConversationLink${conversation._id}`}
-            className={this.checkJoinedStatus(conversation)}>
+          <a href="#2" key={`ConversationLink${conversation._id}`}>
             <li
+              className={this.checkJoinedStatus(conversation)}
               onClick={(event) => {
                 this.handleJoinConversation(conversation);
               }}>
@@ -124,6 +117,7 @@ function mapStateToProps(state) {
       event: state.event,
       currentEvent: state.currentEvent,
       user: state.user,
+      conversations: state.currentConversations,
     };
   }
 }
