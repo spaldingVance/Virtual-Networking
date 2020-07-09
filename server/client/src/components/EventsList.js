@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getEvents, selectEvent } from "../actions/index";
+import { getEvents } from "../actions/index";
 import "../styles/EventsList.css";
 import { Row, Col, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,11 +11,15 @@ import { faComments, faUsers } from "@fortawesome/free-solid-svg-icons";
 class EventsList extends Component {
   constructor(props) {
     super(props);
-
   }
 
   componentDidMount() {
     this.props.getEvents();
+    document.getElementById('user-info').style.display = "none"
+  }
+
+  componentWillUnmount() {
+    document.getElementById('user-info').style.display = "block"
   }
 
   renderEvents(data) {
@@ -33,7 +37,9 @@ class EventsList extends Component {
               <Col className="d-inline-flex justify-content-end align-items-baseline">
                 <div className="event-comments">
                   <FontAwesomeIcon icon={faComments} />{" "}
-                  <p className="event-tile-numbers ">{data.conversations.length}</p>
+                  <p className="event-tile-numbers ">
+                    {data.conversations.length}
+                  </p>
                 </div>
               </Col>
             </Row>
@@ -60,9 +66,7 @@ class EventsList extends Component {
           <Row className="mb-4 justify-content-md-center">
             <h1 id="attend-event">Attend an Event</h1>
           </Row>
-          <Row>
-          {this.props.events.map(this.renderEvents)}
-          </Row>
+          <Row>{this.props.events.map(this.renderEvents)}</Row>
         </Container>
       </div>
     );
@@ -74,7 +78,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getEvents, selectEvent }, dispatch);
+  return bindActionCreators({ getEvents }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
