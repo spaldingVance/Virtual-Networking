@@ -20,15 +20,15 @@ class Login extends Component {
 
   componentDidMount() {
     document.body.style.overflow = "hidden";
-    document.getElementById('user-info').style.display = "none"
-    document.getElementById('header').style.backgroundColor = "white"
+    document.getElementById("user-info").style.display = "none";
+    document.getElementById("header").style.backgroundColor = "white";
     this.props.setCurrentEvent(this.props.match.params.eventId);
-    this.props.getConversations(this.props.match.params.eventId)
+    this.props.getConversations(this.props.match.params.eventId);
   }
 
   componentWillUnmount() {
-    document.getElementById('user-info').style.display = "block"
-    document.getElementById('header').style.backgroundColor = "var(--light)"
+    document.getElementById("user-info").style.display = "block";
+    document.getElementById("header").style.backgroundColor = "var(--light)";
     document.body.style.overflow = "scroll";
   }
 
@@ -86,9 +86,10 @@ class Login extends Component {
                 onClick={this.loginSubmit.bind(this)}
                 id="tag-submit"
                 size="lg">
-                Join {this.props.conversations[0]
-            ? this.props.conversations[0].conversationName
-            : "this Event"}
+                Join {/* this doesn't work as is, need to fix */}
+                {/* {this.props.conversations[0]
+                  ? this.props.conversations[0].conversationName
+                  : "this Event"} */}
               </Button>
             </Form>
             <p className="login-text">
@@ -112,11 +113,14 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { user: state.user, conversations: state.conversations };
+  return { user: state.user, conversations: state.event.conversations };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ login, setCurrentEvent, getConversations }, dispatch);
+  return bindActionCreators(
+    { login, setCurrentEvent, getConversations },
+    dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

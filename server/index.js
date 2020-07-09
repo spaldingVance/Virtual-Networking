@@ -18,7 +18,6 @@ mongoose.connect(keys.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -46,22 +45,28 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-//for formatting responses?
-const formatMessage = (username, text) => {
-  return {
-    username,
-    text,
-    time: moment().format("h:mm a"),
-  };
-};
+// //for formatting responses?
+// const formatMessage = (username, text) => {
+//   return {
+//     username,
+//     text,
+//     time: moment().format("h:mm a"),
+//   };
+// };
 //for auto messages
 const botName = "Muze Bot";
+const conversation = "The Best Conversation";
 
 // Run when client connects
-io.on("connection", (socket) => {
+io.on("connect", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
-    
+    socket.emit("MESSAGE", {
+      username: botName,
+      message: `Welcome to ${conversation}!`,
+      time: moment().format("h:mm a"),
+    });
+
     socket.join(room.conversationId);
   });
 
@@ -70,22 +75,19 @@ io.on("connection", (socket) => {
     console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
     console.log("Next step will be io.emit RECEIVE_MESSAGE");
     //when chat messages sent, display to room
-    io.sockets
-      .in(data.room)
-      .emit("MESSAGE", {
-        username: data.username,
-        message: data.message,
-        role: data.role,
-        time: moment().format("h:mm a")
+    io.sockets.in(data.room).emit("MESSAGE", {
+      username: data.username,
+      message: data.message,
+      role: data.role,
+      time: moment().format("h:mm a"),
     });
 
     //add to messages in conversation db
-    Conversation
-      .findOneAndUpdate(
-        { _id: data.room },
-        { $push: { messages: { user: data.userId, text: data.message }}})
-      .exec((error, messageAdded) => {
-        if (error) throw error;
+    Conversation.findOneAndUpdate(
+      { _id: data.room },
+      { $push: { messages: { user: data.userId, text: data.message } } }
+    ).exec((error, messageAdded) => {
+      if (error) throw error;
     });
   });
 
@@ -116,7 +118,6 @@ io.on("connection", (socket) => {
   //     users: usersInConversation,
   //   });
   // });
-  
 });
 
 // Runs when client disconnects
@@ -186,6 +187,8 @@ conversation1.users.push(user1);
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
+event1.conversations.push(conversation2);
+event1.conversations.push(conversation3);
 
 user1.conversations.push(conversation1);
 
