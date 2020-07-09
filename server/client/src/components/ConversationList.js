@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getConversations, getJoinedConversations } from "../actions/index";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -27,7 +28,7 @@ class ConversationList extends Component {
 
   componentDidMount() {
     // grab from URL
-    this.props.getConversations("5f04d4837cb5f423746916bd");
+    this.props.getConversations(this.props.match.params.eventId);
   }
 
   handleJoinConversation(conversation) {
@@ -110,4 +111,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConversationList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ConversationList)
+);
