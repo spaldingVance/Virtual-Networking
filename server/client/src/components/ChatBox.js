@@ -44,6 +44,7 @@ class ChatBox extends Component {
         "inside this.socket.on connect, this.state.room=",
         this.state.room
       );
+      
       this.socket.emit("JOIN_CONVERSATION", {
         conversationId: this.props.conversationId,
         userId: this.props.user._id,
@@ -99,8 +100,27 @@ class ChatBox extends Component {
       }
     };
 
+    //when user disconnects from conversation (socket)
+    this.socket.on('disconnect', () => {
+      this.socket.emit('disconnect', {
+        userId: this.props.user._id,
+        room: this.props.conversationId,
+        username: this.props.user.userName
+      }) 
+    });
+
     //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
-    this.exitConversation = () => {};
+    this.exitConversation = () => {
+      //disconnect from socket
+      this.socket.emit('LEAVE_CONVERSATION', {
+        room: this.props.conversationId,
+        userId: this.props.user._id,
+        role: this.props.user.role,
+        username: this.props.user.userName,
+        conversationName: this.props.conversationName
+      })
+    //TODO: get chatbox to disappear
+    };
   }
 
   render() {
