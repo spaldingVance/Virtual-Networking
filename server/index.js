@@ -187,6 +187,8 @@ conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
+event1.conversations.push(conversation2);
+event1.conversations.push(conversation3);
 
 user1.conversations.push(conversation1);
 
