@@ -86,10 +86,7 @@ class Login extends Component {
                 onClick={this.loginSubmit.bind(this)}
                 id="tag-submit"
                 size="lg">
-                Join {/* this doesn't work as is, need to fix */}
-                {/* {this.props.conversations[0]
-                  ? this.props.conversations[0].conversationName
-                  : "this Event"} */}
+                {`Join ${this.props.eventName}`}
               </Button>
             </Form>
             <p className="login-text">
@@ -113,7 +110,11 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { user: state.user, conversations: state.event.conversations };
+  return {
+    user: state.user,
+    conversations: state.event.conversations,
+    eventName: state.event.eventName,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
