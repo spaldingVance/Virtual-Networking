@@ -7,8 +7,7 @@ const conversationSchema = new Schema({
   conversationName: String,
   messages: [messageSchema],
   users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
-  active: Boolean,
-  socketId: String
+  active: Boolean
 })
 
 const Conversation = mongoose.model('conversation', conversationSchema);
