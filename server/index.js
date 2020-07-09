@@ -45,21 +45,29 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-//for formatting responses?
-const formatMessage = (username, text) => {
-  return {
-    username,
-    text,
-    time: moment().format("h:mm a"),
-  };
-};
+// //for formatting responses?
+// const formatMessage = (username, text) => {
+//   return {
+//     username,
+//     text,
+//     time: moment().format("h:mm a"),
+//   };
+// };
 //for auto messages
 const botName = "Muze Bot";
+const conversation = "The Best Conversation"
 
 // Run when client connects
-io.on("connection", (socket) => {
+io.on("connect", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
+
+      socket.emit("MESSAGE", {
+      username: botName,
+      message: `Welcome to ${conversation}!`,
+      time: moment().format("h:mm a"),
+    });
+    
     socket.join(room.conversationId);
   });
 

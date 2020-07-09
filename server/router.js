@@ -22,7 +22,8 @@ module.exports = function (router) {
     });
   });
 
-  //login route (join event)
+  //This endpoint adds a user to mongo DB, and adds a user to a selected event
+  //Requirements: UserName (in body), Role (in body), Event ID (in Path)
   router.post("/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
     if (request.body.userName === "" || !request.body.userName) {
@@ -74,6 +75,8 @@ module.exports = function (router) {
     }
   });
 
+    //This endpoint returns an array of conversations for a selected event
+    //Requirements: Event ID (in path)
   router.get("/events/:eventId", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
       // if event id is not in the correct format, return an error
@@ -97,6 +100,8 @@ module.exports = function (router) {
       });
   });
 
+    //This endpoint removes user from event array and from user collection  
+    //Requirements: User ID (in path), Event ID (in path)
   router.delete("/events/:eventId/users/:userId", (request, response, next) => {
     //check if eventId and userId are valid
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
@@ -159,9 +164,9 @@ module.exports = function (router) {
       });
   });
 
-  //'/events/:eventId/:convoId'
-  //Disables conversation by toggling view from true to false (still present in database)
-  //we will need to add "view" to data
+
+  //This endpoint Disables conversation by toggling "active" from true to false (still present in database)
+  //Requirements: Conversation ID (in body), Event ID (in path)
   router.put("/conversations/:convoId", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.convoId)) {
       // if event id is not in the correct format, return an error
@@ -197,6 +202,8 @@ module.exports = function (router) {
     );
   });
 
+  //This endpoint creates a conversation and adds it to the database
+  //Requirements: Conversation ID (in body), Event ID (in path)
   router.post("/events/:eventId/conversation", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
       // if event id is not in the correct format, return an error
@@ -252,6 +259,8 @@ module.exports = function (router) {
       });
   });
 
+  //This endpoint creates a conversation and adds it to the database
+  //Requirements: Event Name (in body)
   router.post("/events", (request, response, next) => {
     let newEvent = new Event({ eventName: request.body.eventName });
     Event.findOne({ eventName: request.body.eventName }).exec((err, event) => {
