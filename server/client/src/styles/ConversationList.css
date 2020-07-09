@@ -2,12 +2,27 @@
   width: 100%;
 }
 
+#create-event {
+  width: 100%;
+  border-radius: 15px;
+  margin: 20px auto;
+  height: 50px;
+  text-align: left;
+  color: var(--main);
+  border-color: var(--main);
+}
+
+#create-event:hover {
+  background-color: var(--main);
+  color: white;
+}
+
 ul.conversation-list {
   margin: 0;
   padding: 0;
   width: 100%;
   overflow: hidden;
-  /* overflow-y: auto; */
+  overflow-y: auto; 
 }
 
 .conversation-list li {

@@ -1,0 +1,26 @@
+#convo-popup {
+    background-color: white;
+    border-radius: 20px;
+    border: 10px solid var(--light);
+    z-index: 100;
+    width: 100%;
+    margin: 20px 0 0 0;
+    padding: 15px;
+}
+
+#convo-submit {
+    width: 100%;
+    margin: 0 0 0 0;
+    background-color: var(--main);
+    border: none;
+}
+
+#convo-submit:hover {
+    background-color: var(--hover-blue)
+}
+
+#create-convo {
+    color: var(--main);
+    text-align: center;
+    margin: 0 0 20px 0;
+}

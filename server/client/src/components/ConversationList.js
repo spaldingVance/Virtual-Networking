@@ -5,6 +5,8 @@ import { getConversations, getJoinedConversations, logout } from "../actions/ind
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
+import PopUp from "./PopUp"
+
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -59,6 +61,10 @@ class ConversationList extends Component {
     }
   }
 
+  popUpAppears() {
+    
+  }
+
   renderConversationList() {
     console.log("This.props.event are ", this.props.event);
 
@@ -90,11 +96,10 @@ class ConversationList extends Component {
     } else {
       return (
         <div id="conversation-column">
-          <ul className="conversation-list">
-            <a href="#">
-              <li>Start your own convo!</li>
-            </a>
-          </ul>
+            <PopUp />
+            <Button onClick={this.popUpAppears.bind(this)} variant="outline-primary" id="create-event">
+              Create a Conversation
+            </Button>
             <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
               Leave Event
             </Button>

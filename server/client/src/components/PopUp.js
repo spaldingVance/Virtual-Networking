@@ -4,7 +4,7 @@ import "../styles/login.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { createConversation } from "../actions/index";
-import { Redirect, Link } from "react-router-dom";
+import "../styles/PopUp.css";
 
 class PopUp extends Component {
   constructor(props) {
@@ -16,8 +16,9 @@ class PopUp extends Component {
 }
 
   conversationSubmit() {
-    if (this.state.conversationName) {
-        this.props.createConversation("convoName", "eventID");
+      console.log(this.props.event)
+    if (this.state.conversationName && this.props.event) {
+        this.props.createConversation(this.props.event._id, this.state.conversationName);
       } else alert("Please fill out a conversation title");
   };
 
@@ -29,16 +30,17 @@ class PopUp extends Component {
 
   render() {
       return (
+        <div id="convo-popup">
         <Row>
-          <Col lg="6">
+          <Col >
             <h1 id="create-convo">Create a New Convo</h1>
             <Form>
               <Form.Control
-                id="userNameForm"
+                id="conversationNameForm"
                 className="tag-input shadow-sm"
                 size="lg"
                 type="text"
-                placeholder="Name"
+                placeholder="Conversation Name"
                 value={this.state.conversationName}
                 onChange={this.updateConversationName.bind(this)}
               />
@@ -52,6 +54,7 @@ class PopUp extends Component {
             </Form>
           </Col>
         </Row>
+        </div>
       );
     }   
 }
