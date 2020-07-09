@@ -5,6 +5,7 @@ export const SET_CURRENT_EVENT = "SET_CURRENT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
 export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
+export const LOGOUT = "LOGOUT";
 
 export function getEvents() {
   const url = `/events`;
@@ -61,5 +62,21 @@ export function getJoinedConversations(joinedConversations) {
   return {
     type: JOIN_CONVERSATION,
     payload: joinedConversations,
+  };
+}
+
+export function logout(eventId, userId) {
+  const url = `/events/${eventId}/users/${userId}`
+ 
+  const request = axios({
+    method: "delete",
+    url: url,
+  });
+
+  request.then(console.log("logout attempted"));
+
+  return {
+    type: LOGOUT,
+    payload: request,
   };
 }

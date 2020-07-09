@@ -106,7 +106,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { getConversations, getJoinedConversations },
+    { getConversations, getJoinedConversations, logout },
     dispatch
   );
 }
