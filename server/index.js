@@ -18,7 +18,6 @@ mongoose.connect(keys.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -61,7 +60,6 @@ const botName = "Muze Bot";
 io.on("connection", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
-    
     socket.join(room.conversationId);
   });
 
@@ -70,22 +68,19 @@ io.on("connection", (socket) => {
     console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
     console.log("Next step will be io.emit RECEIVE_MESSAGE");
     //when chat messages sent, display to room
-    io.sockets
-      .in(data.room)
-      .emit("MESSAGE", {
-        username: data.username,
-        message: data.message,
-        role: data.role,
-        time: moment().format("h:mm a")
+    io.sockets.in(data.room).emit("MESSAGE", {
+      username: data.username,
+      message: data.message,
+      role: data.role,
+      time: moment().format("h:mm a"),
     });
 
     //add to messages in conversation db
-    Conversation
-      .findOneAndUpdate(
-        { _id: data.room },
-        { $push: { messages: { user: data.userId, text: data.message }}})
-      .exec((error, messageAdded) => {
-        if (error) throw error;
+    Conversation.findOneAndUpdate(
+      { _id: data.room },
+      { $push: { messages: { user: data.userId, text: data.message } } }
+    ).exec((error, messageAdded) => {
+      if (error) throw error;
     });
   });
 
@@ -116,7 +111,6 @@ io.on("connection", (socket) => {
   //     users: usersInConversation,
   //   });
   // });
-  
 });
 
 // Runs when client disconnects
@@ -179,10 +173,10 @@ let conversation3 = new Conversation({
 
 conversation1.users.push(user1);
 
-// conversation1.save();
+conversation1.save();
 
-// conversation2.save();
-// conversation3.save();
+conversation2.save();
+conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
