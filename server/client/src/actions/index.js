@@ -7,7 +7,7 @@ export const LOGIN = "LOGIN";
 export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 
 export function getEvents() {
-  const url = `/events`;
+  const url = `/api/events`;
   const request = axios.get(url);
   
   request.then(console.log("hi!!!"));
@@ -26,7 +26,7 @@ export function setCurrentEvent(id) {
 }
 
 export function getConversations(currentEvent) {
-  const url = `/events/${currentEvent}`;
+  const url = `/api/events/${currentEvent}`;
   const request = axios.get(url);
 
   request.then(console.log(`Conversations requested for ${currentEvent}`));
@@ -38,7 +38,7 @@ export function getConversations(currentEvent) {
 }
 
 export function login(eventID, userName, role) {
-  const url = `/users/${eventID}`
+  const url = `/api/users/${eventID}`
  
   const request = axios({
     method: "post",

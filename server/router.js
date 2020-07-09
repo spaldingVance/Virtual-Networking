@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 
 //possible route example:
 module.exports = function (router) {
-  router.get("/events", (request, response, next) => {
+  router.get("/api/events", (request, response, next) => {
     //get all available events
     Event.find({}).exec((error, event) => {
       //send error
@@ -24,7 +24,7 @@ module.exports = function (router) {
 
   //This endpoint adds a user to mongo DB, and adds a user to a selected event
   //Requirements: UserName (in body), Role (in body), Event ID (in Path)
-  router.post("/users/:eventId", (request, response, next) => {
+  router.post("/api/users/:eventId", (request, response, next) => {
     // find user to see if user already exists
     if (request.body.userName === "" || !request.body.userName) {
       response.writeHead(400, "Invalid Username");
@@ -77,7 +77,7 @@ module.exports = function (router) {
 
     //This endpoint returns an array of conversations for a selected event
     //Requirements: Event ID (in path)
-  router.get("/events/:eventId", (request, response, next) => {
+  router.get("/api/events/:eventId", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
       // if event id is not in the correct format, return an error
       response.writeHead(400, "Invalid Event ID Format");
@@ -102,7 +102,7 @@ module.exports = function (router) {
 
     //This endpoint removes user from event array and from user collection  
     //Requirements: User ID (in path), Event ID (in path)
-  router.delete("/events/:eventId/users/:userId", (request, response, next) => {
+  router.delete("/api/events/:eventId/users/:userId", (request, response, next) => {
     //check if eventId and userId are valid
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
       // if event id is not in the correct format, return an error
@@ -167,7 +167,7 @@ module.exports = function (router) {
 
   //This endpoint Disables conversation by toggling "active" from true to false (still present in database)
   //Requirements: Conversation ID (in body), Event ID (in path)
-  router.put("/conversations/:convoId", (request, response, next) => {
+  router.put("/api/conversations/:convoId", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.convoId)) {
       // if event id is not in the correct format, return an error
       response.writeHead(400, "Invalid Conversation ID Format");
@@ -204,7 +204,7 @@ module.exports = function (router) {
 
   //This endpoint creates a conversation and adds it to the database
   //Requirements: Conversation ID (in body), Event ID (in path)
-  router.post("/events/:eventId/conversation", (request, response, next) => {
+  router.post("/api/events/:eventId/conversation", (request, response, next) => {
     if (!mongoose.Types.ObjectId.isValid(request.params.eventId)) {
       // if event id is not in the correct format, return an error
       response.writeHead(400, "Invalid Event ID Format");
@@ -261,7 +261,7 @@ module.exports = function (router) {
 
   //This endpoint creates a conversation and adds it to the database
   //Requirements: Event Name (in body)
-  router.post("/events", (request, response, next) => {
+  router.post("/api/events", (request, response, next) => {
     let newEvent = new Event({ eventName: request.body.eventName });
     Event.findOne({ eventName: request.body.eventName }).exec((err, event) => {
       console.log(event);
