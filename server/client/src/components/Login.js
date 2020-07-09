@@ -4,7 +4,7 @@ import "../styles/login.css";
 import yellowc from "../assets/circle-yellow.svg";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { login, setCurrentEvent } from "../actions/index";
+import { login, setCurrentEvent, getConversations } from "../actions/index";
 import { Redirect, Link } from "react-router-dom";
 
 class Login extends Component {
@@ -20,10 +20,15 @@ class Login extends Component {
 
   componentDidMount() {
     document.body.style.overflow = "hidden";
+    document.getElementById('user-info').style.display = "none"
+    document.getElementById('header').style.backgroundColor = "white"
     this.props.setCurrentEvent(this.props.match.params.eventId);
+    this.props.getConversations(this.props.match.params.eventId)
   }
 
   componentWillUnmount() {
+    document.getElementById('user-info').style.display = "block"
+    document.getElementById('header').style.backgroundColor = "var(--light)"
     document.body.style.overflow = "scroll";
   }
 
@@ -81,7 +86,9 @@ class Login extends Component {
                 onClick={this.loginSubmit.bind(this)}
                 id="tag-submit"
                 size="lg">
-                Join the Event
+                Join {this.props.conversations[0]
+            ? this.props.conversations[0].conversationName
+            : "this Event"}
               </Button>
             </Form>
             <p className="login-text">
@@ -105,11 +112,11 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { user: state.user };
+  return { user: state.user, conversations: state.conversations };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ login, setCurrentEvent }, dispatch);
+  return bindActionCreators({ login, setCurrentEvent, getConversations }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
