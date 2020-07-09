@@ -19,18 +19,13 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
     console.log("inside chatbox constructor, props is=", this.props);
-    const roomId = this.props.conversationId;
-    const roomName = this.props.conversationName;
+
     console.log("THE USER IS ", this.props.user);
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
     //need to get the name of the user, userid and message history from more mapStateToProps
     this.state = {
-      room: roomName,
-      username: "Danielle",
-      role: "Student",
-      userId: "",
       message: "",
       messages: [],
     };
@@ -41,10 +36,6 @@ class ChatBox extends Component {
 
     //this starts up the room socket connection when the component is initialized
     this.socket.on("connect", () => {
-      console.log(
-        "inside this.socket.on connect, this.state.room=",
-        this.state.room
-      );
       
       this.socket.emit("JOIN_CONVERSATION", {
         conversationId: this.props.conversationId,
@@ -133,7 +124,7 @@ class ChatBox extends Component {
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
                 <Card.Title>
-                  {this.state.room}
+                  {this.props.conversationName}
                   <Badge
                     pill
                     variant="danger"

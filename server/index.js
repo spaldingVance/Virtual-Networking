@@ -178,10 +178,10 @@ let conversation3 = new Conversation({
 
 conversation1.users.push(user1);
 
-// conversation1.save();
+conversation1.save();
 
-// conversation2.save();
-// conversation3.save();
+conversation2.save();
+conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
@@ -190,9 +190,9 @@ event1.conversations.push(conversation3);
 
 user1.conversations.push(conversation1);
 
-// event1.save();
+event1.save();
 
-// user1.save();
+user1.save();
 
 server.listen(port);
 console.log("Server listening on:", port);
