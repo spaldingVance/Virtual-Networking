@@ -14,29 +14,31 @@ class ConversationList extends Component {
 
     //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
     this.state = {
-      conversations: [{ conversationName: "JavaScript", _id: 100 }, { conversationName: "HTML", _id: 200 }],
+      conversations: [
+        { conversationName: "JavaScript", _id: 100 },
+        { conversationName: "HTML", _id: 200 },
+      ],
       joinedConversations: [], // by id
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
     this.handleJoinConversation = this.handleJoinConversation.bind(this);
-
   }
 
   componentDidMount() {
-    this.props.getConversations(this.props.currentEvent);
+    // grab from URL
+    this.props.getConversations("5f04d4837cb5f423746916bd");
   }
 
   handleJoinConversation(conversation) {
-
-    console.log('conversation button clicked, conversation is =', conversation)
-    const newJoinedConversations = this.state.joinedConversations.concat(conversation)
+    console.log("conversation button clicked, conversation is =", conversation);
+    const newJoinedConversations = this.state.joinedConversations.concat(
+      conversation
+    );
     this.setState({ joinedConversations: newJoinedConversations }, () => {
-      this.props.getJoinedConversations(this.state.joinedConversations)
-      console.log('state inside handleJoinConversation', this.state)
+      this.props.getJoinedConversations(this.state.joinedConversations);
+      console.log("state inside handleJoinConversation", this.state);
     });
-
-
   }
 
   checkJoinedStatus(conversation) {
@@ -49,17 +51,25 @@ class ConversationList extends Component {
   }
 
   renderConversationList() {
-    return this.props.conversations.map((conversation) => {
-      return (
-        <a
-          href="#2"
-          key={`ConversationLink${conversation._id}`}
+    console.log("This.props.event are ", this.props.event);
 
-          className={this.checkJoinedStatus(conversation)}>
-          <li onClick={event => { this.handleJoinConversation(conversation) }}>{conversation.conversationName}</li>
-        </a>
-      );
-    });
+    if (this.props.event.conversations) {
+      return this.props.event.conversations.map((conversation) => {
+        return (
+          <a
+            href="#2"
+            key={`ConversationLink${conversation._id}`}
+            className={this.checkJoinedStatus(conversation)}>
+            <li
+              onClick={(event) => {
+                this.handleJoinConversation(conversation);
+              }}>
+              {conversation.conversationName}
+            </li>
+          </a>
+        );
+      });
+    }
   }
 
   render() {
@@ -85,14 +95,19 @@ class ConversationList extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    conversations: state.conversations,
-    currentEvent: state.currentEvent,
-  };
+  if (state.event) {
+    return {
+      event: state.event,
+      currentEvent: state.currentEvent,
+    };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getConversations, getJoinedConversations }, dispatch);
+  return bindActionCreators(
+    { getConversations, getJoinedConversations },
+    dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConversationList);

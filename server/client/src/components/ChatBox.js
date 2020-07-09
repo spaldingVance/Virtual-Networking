@@ -10,16 +10,16 @@ import {
   InputGroup,
   FormControl,
   Button,
-  Badge
+  Badge,
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
 
 class ChatBox extends Component {
   constructor(props) {
     super(props);
-    console.log('inside chatbox constructor, props is=', this.props)
-    const roomName = this.props.conversation[0].conversationName;
-    const roomId = this.props.conversation[0]._id;
+    console.log("inside chatbox constructor, props is=", this.props);
+    const roomName = this.props.conversations[0].conversationName;
+    const roomId = this.props.conversations[0]._id;
 
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
@@ -27,10 +27,10 @@ class ChatBox extends Component {
     //need to get the name of the user, userid and message history from more mapStateToProps
     this.state = {
       room: roomName,
-      username: 'Danielle',
-      role: 'Student',
-      userId: '',
-      message: '',
+      username: "Danielle",
+      role: "Student",
+      userId: "",
+      message: "",
       messages: [],
     };
 
@@ -39,14 +39,23 @@ class ChatBox extends Component {
     this.socket = io();
 
     //this starts up the room socket connection when the component is initialized
-    this.socket.on('connect', () => {
-      console.log('inside this.socket.on connect, this.state.room=', this.state.room)
-      this.socket.emit('room', {conversationName: this.state.room, id: this.socket.id})
-    } )
+    this.socket.on("connect", () => {
+      console.log(
+        "inside this.socket.on connect, this.state.room=",
+        this.state.room
+      );
+      this.socket.emit("room", {
+        conversationName: this.state.room,
+        id: this.socket.id,
+      });
+    });
 
-    //this receives back the message from server/index.js 
+    //this receives back the message from server/index.js
     this.socket.on(`MESSAGE_TO_${this.state.room}`, function (data) {
-      console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
+      console.log(
+        "Chatbox receiving back message to add message to messages array. Data= ",
+        data
+      );
       addMessage(data);
     });
 
@@ -57,37 +66,32 @@ class ChatBox extends Component {
       console.log(this.state.messages);
     };
 
-   
     // the message will be in the local state?
     this.sendMessage = (ev) => {
       console.log("Send button clicked, send message invoked");
-      console.log('The sent message is:', this.state.message)
+      console.log("The sent message is:", this.state.message);
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
         username: this.state.username,
         message: this.state.message,
         room: this.state.room,
-        userId: this.state.userId, 
-        role: this.state.role
+        userId: this.state.userId,
+        role: this.state.role,
       });
       this.setState({ message: "" });
     };
 
     //this will send invoke the send message function if the enter key is pressed
     this.handleKeyPress = (event) => {
-      if (event.charCode === 13){
-        console.log('inside if statement')
+      if (event.charCode === 13) {
+        console.log("inside if statement");
         this.sendMessage(event);
       }
-    }
+    };
 
-    //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox 
-    this.exitConversation = () => {
-
-    }
-  
+    //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
+    this.exitConversation = () => {};
   }
-
 
   render() {
     return (
@@ -96,13 +100,28 @@ class ChatBox extends Component {
           <Col className="m-0 p-0">
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
-                <Card.Title>{this.state.room}<Badge pill variant="danger" className="close-button ml-4" onClick={this.exitConversation}>X</Badge></Card.Title>
+                <Card.Title>
+                  {this.state.room}
+                  <Badge
+                    pill
+                    variant="danger"
+                    className="close-button ml-4"
+                    onClick={this.exitConversation}>
+                    X
+                  </Badge>
+                </Card.Title>
                 <hr />
                 <div className="messages">
                   {this.state.messages.map((message) => {
                     return (
                       <div>
-                        <div><strong className="mr-1">{message.username} ({message.role})</strong><strong></strong><span>{message.time}</span></div>
+                        <div>
+                          <strong className="mr-1">
+                            {message.username} ({message.role})
+                          </strong>
+                          <strong></strong>
+                          <span>{message.time}</span>
+                        </div>
                         <div>{message.message}</div>
                       </div>
                     );
@@ -117,7 +136,9 @@ class ChatBox extends Component {
                     aria-describedby="basic-addon2"
                     value={this.state.message}
                     onKeyPress={this.handleKeyPress}
-                    onChange={event => {this.setState({message: event.target.value})}}
+                    onChange={(event) => {
+                      this.setState({ message: event.target.value });
+                    }}
                   />
                   <InputGroup.Append>
                     <Button
@@ -134,14 +155,12 @@ class ChatBox extends Component {
         </Row>
       </Container>
     );
-  };
+  }
 }
 
-
 function mapStateToProps(state) {
-  console.log('inside mapstatetoprops chatbox, state=', state)
-  return { conversations: state.conversations, 
-          user: state.user };
+  console.log("inside mapstatetoprops chatbox, state=", state);
+  return { conversations: state.conversations, user: state.user };
 }
 
 export default connect(mapStateToProps)(ChatBox);

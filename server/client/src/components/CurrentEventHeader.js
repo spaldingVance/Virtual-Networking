@@ -11,9 +11,9 @@ const CurrentEventHeader = (props) => {
       <div id="current-event-tile">
         <h2>You are attending</h2>
         <h1>
-          {props.conversations[0]
+          {/* {props.conversations[0]
             ? props.conversations[0].conversationName
-            : "Event"}
+            : "Event"} */}
         </h1>
       </div>
     </div>
@@ -21,9 +21,11 @@ const CurrentEventHeader = (props) => {
 };
 
 function mapStateToProps(state) {
-  return {
-    conversations: state.conversations,
-  };
+  if (state.conversations) {
+    return {
+      conversations: state.event.conversations,
+    };
+  }
 }
 
 export default connect(mapStateToProps)(CurrentEventHeader);
