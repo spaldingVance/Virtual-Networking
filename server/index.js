@@ -115,27 +115,34 @@ io.on("connect", (socket) => {
 
 
   // Runs when client disconnects
-//   socket.on("disconnect", () => {
-//     // const user = userLeave(socket.id);
-   
-//     //broadcast to room that user left
+  socket.on("LEAVE_CONVERSATION", (data) => {
+    //leave room
+    socket.leave(data.room)
 
-//     //update the conversation in database to remove user from it
+    //broadcast to room that user left
+    socket.in(data.room)
+    .broadcast
+    .emit("MESSAGE", {
+      username: bot.username,
+      role: bot.role,
+      message: `${data.username} has left ${data.conversationName}`,
+      time: moment().format("h:mm a")
+    });
+    
+    //remove conversation from user
+    User
+      .findOneAndUpdate({ _id: data.userId }, { $pull: { conversations: { _id: data.conversationId }}})  
+      .exec((error, updatedUser) => {
+        if (error) throw error;
+      });
 
-
-//     if (user) {
-//       io.to(/*conversation*/).emit(
-//         "message",
-//         formatMessage(botName, `${user.username} has left the chat`)
-//       );
-
-//       // Send users and room info
-//       io.to(user.room).emit("roomUsers", {
-//         room: user.room,
-//         users: getRoomUsers(user.room),
-//       });
-//     }
-//   });
+    //remove user from conversation
+    Conversation
+    .findOneAndUpdate({ _id: data.conversationId }, { $pull: { users: { _id: data.userId }}})  
+    .exec((error, updatedUser) => {
+      if (error) throw error;
+    });
+  });
 
 });
 
