@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const app = express();
 const mongoose = require("mongoose");
-const mainRoutes = require("./routes/main");
+const router = require("./router.js");
 const keys = require("./config/keys");
 const socketio = require("socket.io");
 const moment = require("moment");
@@ -19,6 +19,14 @@ mongoose.connect(keys.MONGODB_URI, {
 });
 
 app.use(cors());
+
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+router(app);
 
 if (process.env.NODE_ENV === "production") {
   // Express will serve up production assets
@@ -37,30 +45,30 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-
-mainRoutes(app);
-
-//for formatting responses?
-const formatMessage = (username, text) => {
-  return {
-    username,
-    text,
-    time: moment().format("h:mm a"),
-  };
-};
+// //for formatting responses?
+// const formatMessage = (username, text) => {
+//   return {
+//     username,
+//     text,
+//     time: moment().format("h:mm a"),
+//   };
+// };
 //for auto messages
 const botName = "Muze Bot";
+const conversation = "The Best Conversation"
 
 // Run when client connects
-io.on("connection", (socket) => {
+io.on("connect", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
+    
+//new
+    socket.emit("MESSAGE", {
+      username: botName,
+      message: `Welcome to ${conversation}!`,
+      time: moment().format("h:mm a"),
+    });
+
     Conversation.findOneAndUpdate(
       { conversationName: room.conversationName },
       { socketId: room.id }
@@ -68,9 +76,10 @@ io.on("connection", (socket) => {
       if (error) {
         console.log(error);
       }
-
+     
       console.log(updatedConversation);
     });
+    console.log('connect')
     socket.join(room.id);
   });
 
@@ -96,31 +105,32 @@ io.on("connection", (socket) => {
       socketid: socket.id,
       username: data.username || "Anonymous",
       message: data.message,
+      role: data.role,
       time: moment().format("h:mm a"),
     });
 
-    //add to messages in conversation db
-    Conversation.findOneAndUpdate(
-      { socketId: socket.id },
-      { $push: { messages: { user: data.userId, text: data.message } } }
-    ).exec((error, messageAdded) => {
-      if (error) throw error;
-    });
+  //   //add to messages in conversation db
+  //   Conversation.findOneAndUpdate(
+  //     { socketId: socket.id },
+  //     { $push: { messages: { user: data.userId, text: data.message } } }
+  //   ).exec((error, messageAdded) => {
+  //     if (error) throw error;
+  //   });
   });
 
-  socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
-    //not sure about variables
-    //add user to users array in conversation mongodb collection
-    //query mongo for username and conversation name
-    // const username;
-    // const conversationName;
-    // const usersInConversation;
-    // Welcome current user
-    socket.emit("MESSAGE", {
-      username: botName,
-      text: `Welcome to ${conversation}!`,
-      time: moment().format("h:mm a"),
-    });
+  // socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
+  //   //not sure about variables
+  //   //add user to users array in conversation mongodb collection
+  //   //query mongo for username and conversation name
+  //   // const username;
+  //   // const conversationName;
+  //   // const usersInConversation;
+  //   // Welcome current user
+  //   socket.emit("MESSAGE", {
+  //     username: botName,
+  //     text: `Welcome to ${conversation}!`,
+  //     time: moment().format("h:mm a"),
+  //   });
 
     // Broadcast when a user connects
     socket.broadcast.to(conversationId).emit("MESSAGE", {
@@ -135,7 +145,7 @@ io.on("connection", (socket) => {
       users: usersInConversation,
     });
   });
-});
+// });
 
 // Runs when client disconnects
 // socket.on("disconnect", () => {
@@ -197,19 +207,19 @@ let conversation3 = new Conversation({
 
 conversation1.users.push(user1);
 
-conversation1.save();
+// conversation1.save();
 
-conversation2.save();
-conversation3.save();
+// conversation2.save();
+// conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
 
 user1.conversations.push(conversation1);
 
-event1.save();
+// event1.save();
 
-user1.save();
+// user1.save();
 
 server.listen(port);
 console.log("Server listening on:", port);

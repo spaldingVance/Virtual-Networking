@@ -1,18 +1,17 @@
 //might not need these routes with socket
 
-const router = require("express").Router();
-const User = require("../models/userSchema");
-const Event = require("../models/eventSchema");
-const Conversation = require("../models/conversationSchema");
-const Message = require("../models/messageSchema");
+// const router = require("express").Router();
+const User = require("./models/userSchema");
+const Event = require("./models/eventSchema");
+const Conversation = require("./models/conversationSchema");
+const Message = require("./models/messageSchema");
 const { request } = require("express");
 const mongoose = require("mongoose");
 
 //Set up routes
 
-//This endpoint returns all events
-//Requirements: None
-module.exports = function (app) {
+//possible route example:
+module.exports = function (router) {
   router.get("/events", (request, response, next) => {
     //get all available events
     Event.find({}).exec((error, event) => {

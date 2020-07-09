@@ -11,6 +11,7 @@ import {
   Badge
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
+import { connect } from "react-redux";
 
 class ChatBox extends Component {
   constructor(props) {
@@ -20,8 +21,8 @@ class ChatBox extends Component {
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
     this.state = {
       room: this.props.room,
-      username: 'Danielle',
-      role: 'Student',
+      username: '',
+      role: '',
       userId: '',
       message: '',
       messages: [],
@@ -35,6 +36,8 @@ class ChatBox extends Component {
       this.socket.emit('room', {conversationName: this.props.room, id: this.socket.id})
     } )
 
+    this.socket.on('JOIN_CONVERSATION')
+
     this.socket.on("MESSAGE", function (data) {
       console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
       addMessage(data);
@@ -43,7 +46,7 @@ class ChatBox extends Component {
     const addMessage = (data) => {
       console.log(data);
       this.setState({ messages: [...this.state.messages, data] });
-      console.log(this.state.messages);
+      console.log(this.state);
     };
 
     //this should eventually be this.props.username bc it's coming from redux store.
@@ -51,13 +54,17 @@ class ChatBox extends Component {
     this.sendMessage = (ev) => {
       console.log("Send button clicked, send message invoked");
       console.log('The sent message is:', this.state.message)
+      console.log('props', this.props.user.role)
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
-        username: this.state.username,
+        //new
+        username: this.props.user.userName,
         message: this.state.message,
         room: this.state.room,
-        userId: this.state.userId, 
-        role: this.state.role
+        //new
+        userId: this.props.user.userId, 
+        //new
+        role: this.props.user.role
       });
       this.setState({ message: "" });
     };
@@ -121,4 +128,10 @@ class ChatBox extends Component {
   };
 }
 
-export default ChatBox;
+//new
+function mapStateToProps(state) {
+  return { user: state.user };
+}
+//new
+export default connect(mapStateToProps)(ChatBox);
+// export default (ChatBox);
