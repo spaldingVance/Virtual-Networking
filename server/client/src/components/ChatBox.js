@@ -44,7 +44,9 @@ class ChatBox extends Component {
         "inside this.socket.on connect, this.state.room=",
         this.state.room
       );
-      this.socket.emit("room", { conversationId: this.props.conversationId });
+      this.socket.emit("JOIN_CONVERSATION", { 
+        conversationId: this.props.conversation._id,
+        userId:  this.props.user._id});
     });
 
     //this receives back the message from server/index.js
