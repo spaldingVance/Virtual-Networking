@@ -70,13 +70,13 @@ export function logout(eventId, userId) {
  
   const request = axios({
     method: "delete",
-    url: url,
+    url: url
   });
 
   request.then(console.log("logout attempted"));
 
   return {
     type: LOGOUT,
-    payload: request,
+    payload: request
   };
 }
