@@ -5,7 +5,7 @@ export default function (state = [], action) {
     case GET_CONVERSATIONS:
       console.log("Action payload for GET_CONVERSATIONS is", action.payload);
       if (action.payload.data) {
-        return action.payload.data.conversations;
+        return action.payload.data;
       } else {
         return state;
       }
