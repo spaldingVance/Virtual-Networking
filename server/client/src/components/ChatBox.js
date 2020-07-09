@@ -18,8 +18,8 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
     console.log("inside chatbox constructor, props is=", this.props);
-    const roomName = this.props.event.conversations[0].conversationName;
-    const roomId = this.props.event.conversations[0]._id;
+    const roomId = this.props.conversationId;
+    const roomName = this.props.conversationName;
 
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
@@ -44,7 +44,9 @@ class ChatBox extends Component {
         "inside this.socket.on connect, this.state.room=",
         this.state.room
       );
-      this.socket.emit("room", { conversationId: this.props.conversation._id });
+      this.socket.emit("JOIN_CONVERSATION", { 
+        conversationId: this.props.conversation._id,
+        userId:  this.props.user._id});
     });
 
     //this receives back the message from server/index.js
@@ -71,7 +73,7 @@ class ChatBox extends Component {
       this.socket.emit("SEND_MESSAGE", {
         username: this.props.user.userName,
         message: this.state.message,
-        room: this.props.conversation._id,
+        room: this.props.conversationId,
         userId: this.props.user._id,
         role: this.props.user.role,
       });
@@ -109,9 +111,9 @@ class ChatBox extends Component {
                 </Card.Title>
                 <hr />
                 <div className="messages">
-                  {this.state.messages.map((message) => {
+                  {this.state.messages.map((message, index) => {
                     return (
-                      <div>
+                      <div key={index}>
                         <div>
                           <strong className="mr-1">
                             {message.username} ({message.role})
