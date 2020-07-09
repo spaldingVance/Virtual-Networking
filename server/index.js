@@ -67,12 +67,21 @@ io.on("connect", (socket) => {
     socket.emit("MESSAGE", {
       username: bot.username,
       role: bot.role,
-      message: `Welcome to ${conversation}!`,
+      message: `Welcome to ${data.conversationName}!`,
       time: moment().format("h:mm a"),
     });
 
     //join socket to room
     socket.join(data.conversationId);
+
+    socket.in(data.conversationId)
+      .broadcast
+      .emit("MESSAGE", {
+        username: bot.username,
+        role: bot.role,
+        message: `${data.username} has joined ${data.conversationName}`,
+        time: moment().format("h:mm a")
+      })
 
     //add user id to conversation in database
     Conversation
