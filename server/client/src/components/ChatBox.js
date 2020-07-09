@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { user } from "../actions/index";
+import { leaveOneConversation } from "../actions/index";
 import {
   Row,
   Col,
@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 class ChatBox extends Component {
   constructor(props) {
@@ -120,6 +121,7 @@ class ChatBox extends Component {
         conversationName: this.props.conversationName
       })
     //TODO: get chatbox to disappear
+      this.props.leaveOneConversation(this.props.conversationId)
     };
   }
 
@@ -188,9 +190,17 @@ class ChatBox extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  console.log("inside mapstatetoprops chatbox, state=", state);
-  return { event: state.event, user: state.user };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({leaveOneConversation}, dispatch)
 }
 
-export default connect(mapStateToProps)(ChatBox);
+
+function mapStateToProps(state) {
+  console.log("inside mapstatetoprops chatbox, state=", state);
+  return { 
+    event: state.event, 
+    user: state.user };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
+
