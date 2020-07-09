@@ -3,14 +3,14 @@ import eventsReducer from "./eventsReducer";
 import setCurrentEvent from "./setCurrentEvent";
 import conversationsReducer from "./conversationsReducer";
 import loginReducer from "./loginReducer";
-import joinConversationsReducer from './joinConversationReducer'
+import joinConversationsReducer from "./joinConversationReducer";
 
 const rootReducer = combineReducers({
   events: eventsReducer,
-  conversations: conversationsReducer,
+  event: conversationsReducer,
   user: loginReducer,
   currentConversations: joinConversationsReducer,
-  currentEvent: setCurrentEvent
+  currentEvent: setCurrentEvent,
 });
 
 export default rootReducer;
