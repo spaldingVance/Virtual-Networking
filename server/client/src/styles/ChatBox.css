@@ -10,9 +10,19 @@
 
 .card-footer {
   /* border-radius: 20px; */
-  overflow: hidden;
+ /* overflow: hidden; */
 }
 
 .close-button {
   
+}
+
+.messages {
+  height: 90%;
+  overflow: scroll;
+  overflow-anchor: auto;
+}
+
+.card-body {
+  padding-bottom: 0px;
 }
