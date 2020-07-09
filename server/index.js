@@ -20,6 +20,19 @@ mongoose.connect(keys.MONGODB_URI, {
 
 app.use(cors());
 
+if (process.env.NODE_ENV === "production") {
+  // Express will serve up production assets
+  // like our main.js file, or main.css file!
+  app.use(express.static("client/build"));
+
+  // Express will serve up the index.html file
+  // if it doesn't recognize the route
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
@@ -31,7 +44,7 @@ app.use(
   })
 );
 
-app.use(mainRoutes);
+mainRoutes(app);
 
 //for formatting responses?
 const formatMessage = (username, text) => {
@@ -46,78 +59,106 @@ const botName = "Muze Bot";
 
 // Run when client connects
 io.on("connection", (socket) => {
+  //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
+  socket.on("room", function (room) {
+    Conversation.findOneAndUpdate(
+      { conversationName: room.conversationName },
+      { socketId: room.id }
+    ).exec((error, updatedConversation) => {
+      if (error) {
+        console.log(error);
+      }
 
-  socket.on("test", (data) => {
-    console.log(data.testMessage);
-    console.log("SERVER ROOM NAME", data.room)
+      console.log(updatedConversation);
+    });
+    socket.join(room.id);
+  });
+
+  socket.on("SEND_MESSAGE", (data) => {
+    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
+    console.log("Next step will be io.emit RECEIVE_MESSAGE");
+    //do we need the functionality to store the message and user here?
+    //what is RECEIVE_MESSAGE doing?
     io.emit(`MESSAGE_TO_${data.room}`, {
-      username: botName,
-      text: `${data.testMessage}`,
+      socketid: socket.id,
+      username: data.username,
+      message: data.message,
+      role: data.role,
       time: moment().format("h:mm a"),
     });
   });
 
+  //listen for chat messages
+  socket.on("SEND_MESSAGE", (data) => {
+    console.log("SENT MESSAGE DATA", data);
+    //when chat messages sent, display to room
+    io.sockets.in(socket.id).emit("MESSAGE", {
+      socketid: socket.id,
+      username: data.username || "Anonymous",
+      message: data.message,
+      time: moment().format("h:mm a"),
+    });
 
+    //add to messages in conversation db
+    Conversation.findOneAndUpdate(
+      { socketId: socket.id },
+      { $push: { messages: { user: data.userId, text: data.message } } }
+    ).exec((error, messageAdded) => {
+      if (error) throw error;
+    });
+  });
 
-  socket.on("joinConversation", ({ username, conversation }) => {
+  socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
     //not sure about variables
     //add user to users array in conversation mongodb collection
-
+    //query mongo for username and conversation name
+    // const username;
+    // const conversationName;
+    // const usersInConversation;
     // Welcome current user
-    socket.emit("message", {
+    socket.emit("MESSAGE", {
       username: botName,
       text: `Welcome to ${conversation}!`,
       time: moment().format("h:mm a"),
     });
 
     // Broadcast when a user connects
-    socket.broadcast
-      .to(conversation) //id? name?
-      .emit("message", {
-        username: botName,
-        text: `${user.username} has joined the chat`,
-        time: moment().format("h:mm a"),
-      });
-
-    // Send users and room info
-    // io.to(conversation).emit('roomUsers', {
-    //   room: user.room,
-    //   users: getRoomUsers(user.room)
-    // });
-  });
-
-  // Listen for chatMessage
-  socket.on("chatMessage", (msg) => {
-    //find user
-    //add message to conversation in mongodb
-
-    //diplay message in chat window
-    io.to(/*userConversation*/).emit(
-      "message",
-      formatMessage(user.username, msg)
-    );
-  });
-
-  // Runs when client disconnects
-  socket.on("disconnect", () => {
-    // const user = userLeave(socket.id);
-    //find user and remove from conversation in mongodb
-
-    // if (user) {
-    io.to(/*conversation*/).emit(
-      "message",
-      formatMessage(botName, `${user.username} has left the chat`)
-    );
-
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
+    socket.broadcast.to(conversationId).emit("MESSAGE", {
+      username: botName,
+      text: `${username} has joined the chat`,
+      time: moment().format("h:mm a"),
     });
-    // }
+
+    // Send users and room info
+    io.to(conversationId).emit("CONVERSATION_PARTICIPANTS", {
+      room: conversationName,
+      users: usersInConversation,
+    });
   });
 });
 
+// Runs when client disconnects
+// socket.on("disconnect", () => {
+//   // const user = userLeave(socket.id);
+//   //find user and remove from conversation in mongodb
+//   //remove socketid
+
+//   if (user) {
+//   io.to(/*conversation*/).emit(
+//     "message",
+//     formatMessage(botName, `${user.username} has left the chat`)
+//   );
+
+//   // Send users and room info
+//   io.to(user.room).emit("roomUsers", {
+//     room: user.room,
+//     users: getRoomUsers(user.room),
+//   });
+//    }
+// });
+// });
+
+////////////////////////////////////////////////////////////
 // GENERATE FAKE DATA
 // uncomment the .save() lines to add this data to the database
 // you can use this format to create new fake data and save it as well
@@ -130,12 +171,12 @@ let event1 = new Event({
 
 let conversation1 = new Conversation({
   conversationName: "Neat Conversation 3",
-  active: true
+  active: true,
 });
 
 let user1 = new User({
   userName: "Robert",
-  byLine: "Socket.io Wizard",
+  role: "Socket.io Wizard",
   event: event1._id,
 });
 
@@ -144,18 +185,31 @@ conversation1.messages.push({
   text: "Hellooooo",
 });
 
+let conversation2 = new Conversation({
+  conversationName: "room1",
+  active: true,
+});
+
+let conversation3 = new Conversation({
+  conversationName: "room2",
+  active: true,
+});
+
 conversation1.users.push(user1);
 
-// conversation1.save();
+conversation1.save();
+
+conversation2.save();
+conversation3.save();
 
 event1.users.push(user1);
 event1.conversations.push(conversation1);
 
 user1.conversations.push(conversation1);
 
-// event1.save();
+event1.save();
 
-// user1.save();
+user1.save();
 
 server.listen(port);
 console.log("Server listening on:", port);

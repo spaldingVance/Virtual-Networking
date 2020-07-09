@@ -2,46 +2,85 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { getConversations } from "../actions/index";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 // styling imports
 import "../styles/ConversationList.css";
 
 class ConversationList extends Component {
-  componentDidMount() {
-    this.props.getConversations();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      joinedConversations: [], // by id
+    };
+
+    this.renderConversationList = this.renderConversationList.bind(this);
+    this.handleJoinConversation = this.handleJoinConversation.bind(this);
+    this.handleJoinConversation = this.handleJoinConversation.bind(this);
   }
 
-  // TODO
+  componentDidMount() {
+    this.props.getConversations(this.props.currentEvent);
+  }
+
+  handleJoinConversation(event) {
+    // send the conversation id and which room to the chatboxescontainer
+    console.log(event);
+    // this.setState({joinedConversations.push()})
+  }
+
+  checkJoinedStatus(conversation) {
+    // this is where we check if the user is joined in the conversation
+    // if joinedConversations in local state has an ID that matches the conversation
+    console.log("conversation is", conversation);
+    if (this.state.joinedConversations.includes(conversation._id)) {
+      return ".joined";
+    }
+  }
+
+  renderConversationList() {
+    return this.props.conversations.map((conversation) => {
+      return (
+        <a
+          href="#2"
+          key={`ConversationLink${conversation._id}`}
+          onClick={this.handleJoinConversation}
+          className={this.checkJoinedStatus(conversation)}>
+          <li>{conversation.conversationName}</li>
+        </a>
+      );
+    });
+  }
+
   render() {
+    console.log("The props for ConversationList is", this.props);
+
     return (
       <div id="conversation-column">
-        <h3>Join a Chat</h3>
         <ul className="conversation-list">
-          <a href="#1">
-            <li>Java Chat</li>
-          </a>
-  
-          <a href="#2">
-            <li>HTML Conversation</li>
-          </a>
-  
-          <a href="#3">
-            <li>JavaScript Room</li>
-          </a>
-          <a href="#4">
-            <li>HTML Chat</li>
-          </a>
-          <a href="#1">
-            <li>Random Convo whose name is really long and tedious jeez</li>
+          <a href="#">
+            <li>Start your own convo!</li>
           </a>
         </ul>
+        <Link to="/">
+          <Button variant="outline-danger" id="leave-event">
+            Leave Event
+          </Button>
+        </Link>
+        <h3>Join a Chat</h3>
+        <ul className="conversation-list">{this.renderConversationList()}</ul>
       </div>
-    )
+    );
   }
-};
+}
 
 function mapStateToProps(state) {
-  return { conversations: state.conversations };
+  return {
+    conversations: state.conversations,
+    currentEvent: state.currentEvent,
+  };
 }
 
 function mapDispatchToProps(dispatch) {

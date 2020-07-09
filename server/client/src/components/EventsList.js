@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getEvents, selectEvent } from "../actions/index";
+import { getEvents } from "../actions/index";
 import "../styles/EventsList.css";
 import { Row, Col, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,36 +15,41 @@ class EventsList extends Component {
 
   componentDidMount() {
     this.props.getEvents();
+    document.getElementById('user-info').style.display = "none"
   }
 
-  renderEvents() {
+  componentWillUnmount() {
+    document.getElementById('user-info').style.display = "block"
+  }
+
+  renderEvents(data) {
     return (
-      <Col lg={3} md={4} sm={6} xs={12} className="mb-4">
-        <Container className="event-tile px-3">
-          <Row className="align-items-baseline">
-            <Col className="d-inline-flex justify-content-start align-items-baseline">
-              <div className="event-users">
-                {/* For each participant, reduce to a number */}
-                <FontAwesomeIcon icon={faUsers} />{" "}
-                <p className="event-tile-numbers">23</p>
-              </div>
-            </Col>
-            <Col className="d-inline-flex justify-content-end align-items-baseline">
-              <div className="event-comments">
-                {/* For each conversation, reduce to a number */}
-                <FontAwesomeIcon icon={faComments} />{" "}
-                <p className="event-tile-numbers ">2</p>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="pt-3">
-              {/* events.eventName */}
-              {/* 900 Roboto for All Sans Serif */}
-              <h3>THIS IS A LONG, VERY LONG EVENT NAME</h3>
-            </Col>
-          </Row>
-        </Container>
+      <Col lg={3} md={4} sm={6} xs={12} className="event-tile-column mb-4">
+        <Link to={`/events/${data._id}/login`}>
+          <Container className="event-tile px-3">
+            <Row className="align-items-baseline">
+              <Col className="d-inline-flex justify-content-start align-items-baseline">
+                <div className="event-users">
+                  <FontAwesomeIcon icon={faUsers} />{" "}
+                  <p className="event-tile-numbers">{data.users.length}</p>
+                </div>
+              </Col>
+              <Col className="d-inline-flex justify-content-end align-items-baseline">
+                <div className="event-comments">
+                  <FontAwesomeIcon icon={faComments} />{" "}
+                  <p className="event-tile-numbers ">
+                    {data.conversations.length}
+                  </p>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="pt-3">
+                <h3>{data.eventName}</h3>
+              </Col>
+            </Row>
+          </Container>
+        </Link>
       </Col>
     );
   }
@@ -58,22 +64,9 @@ class EventsList extends Component {
       <div>
         <Container>
           <Row className="mb-4 justify-content-md-center">
-            {" "}
             <h1 id="attend-event">Attend an Event</h1>
           </Row>
-
-          {/* {this.props.events.map(this.renderEvents)} */}
-          {/* Did this 8 times */}
-          <Row>
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-            {this.renderEvents()}
-          </Row>
+          <Row>{this.props.events.map(this.renderEvents)}</Row>
         </Container>
       </div>
     );
@@ -85,7 +78,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getEvents, selectEvent }, dispatch);
+  return bindActionCreators({ getEvents }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
