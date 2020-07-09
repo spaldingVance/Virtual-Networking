@@ -18,8 +18,8 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
     console.log("inside chatbox constructor, props is=", this.props);
-    const roomName = this.props.conversations[0].conversationName;
-    const roomId = this.props.conversations[0]._id;
+    const roomName = this.props.event.conversations[0].conversationName;
+    const roomId = this.props.event.conversations[0]._id;
 
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
@@ -157,7 +157,7 @@ class ChatBox extends Component {
 
 function mapStateToProps(state) {
   console.log("inside mapstatetoprops chatbox, state=", state);
-  return { conversations: state.conversations, user: state.user };
+  return { event: state.event, user: state.user };
 }
 
 export default connect(mapStateToProps)(ChatBox);
