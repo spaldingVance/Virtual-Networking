@@ -4,7 +4,7 @@ export default function (state = [], action) {
   switch (action.type) {
     case JOIN_CONVERSATION:
       console.log("Action payload for JOIN_CONVERSATIONS is", action.payload);
-     return [action.payload, ...state];
+      return action.payload;
     default:
       return state;
   }
