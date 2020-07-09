@@ -10,7 +10,7 @@ export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
 
 export function getEvents() {
-  const url = `/events`;
+  const url = `${ROOT_URL}/events`;
   const request = axios.get(url);
   
   request.then(console.log("hi!!!"));
