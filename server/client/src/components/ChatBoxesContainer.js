@@ -8,44 +8,42 @@ import { Row, Col, Container } from "react-bootstrap";
 import "../styles/ChatBoxesContainer.css";
 
 class ChatBoxesContainer extends Component {
-  // TODO
   constructor(props) {
-    super(props)
-    console.log('chatbox container constructor props=', props)
+    super(props);
+    console.log("chatbox container constructor props=", props);
     this.setState = {
-      conversations: this.props.conversations
-    }
+      conversations: this.props.conversations,
+    };
 
-    this.renderChatBoxes = this.renderChatBoxes.bind(this)
-
+    this.renderChatBoxes = this.renderChatBoxes.bind(this);
   }
 
   renderChatBoxes() {
-    console.log('inside render chatbox, this.props= ', this.props)
-    return this.props.conversations.map(conversation => {
+    console.log("inside render chatbox, this.props= ", this.props);
+    return this.props.conversations.map((conversation) => {
       return (
         <Col key={conversation._id} md={6}>
-          <ChatBox conversation={conversation} />
+          <ChatBox
+            conversationId={conversation._id}
+            conversationName={conversation.conversationName}
+          />
         </Col>
-      )
-    })
+      );
+    });
   }
 
-// this component is the container for the chatboxes. The redux store state of current conversations is mapped to this component so that the correct chat box(es) will display
+  // this component is the container for the chatboxes. The redux store state of current conversations is mapped to this component so that the correct chat box(es) will display
   render() {
     return (
       <Container>
-        <Row>
-          {this.renderChatBoxes()}
-        </Row>
+        <Row>{this.renderChatBoxes()}</Row>
       </Container>
     );
-  };
+  }
 }
 
-
 function mapStateToProps(state) {
-  console.log('inside chatboxcontainer mapstate to props, state=', state)
+  console.log("inside chatboxcontainer mapstate to props, state=", state);
   return { conversations: state.currentConversations };
 }
 
