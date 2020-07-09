@@ -12,6 +12,7 @@ class ConversationList extends Component {
   constructor(props) {
     super(props);
     
+    //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
      this.state = {
       conversations: [{conversationName: "JavaScript", _id: 100}, {conversationName: "HTML", _id: 200}],
       joinedConversations: [], // by id
@@ -22,15 +23,12 @@ class ConversationList extends Component {
 
   }
 
-  // componentDidMount() {
-  //   this.props.getConversations();
-  // }
+  componentDidMount() {
+    this.props.getConversations();
+  }
 
   handleJoinConversation(conversation) {
-    // send the conversation id and which room to the chatboxescontainer
-    // const newState = this.state.joinedConversations.push(conversation);
-    // this.setState((
-    //   {joinedConversations: newState}))
+    
     console.log('conversation button clicked, conversation is =', conversation)
     const newJoinedConversations = this.state.joinedConversations.concat(conversation)
     this.setState({joinedConversations: newJoinedConversations}, () => {
@@ -65,7 +63,7 @@ class ConversationList extends Component {
   }
 
   render() {
-    console.log("The props for ConversationList is", this.props);
+    console.log("Inside render of Conversation List, this.props= ", this.props);
 
     return (
       <div id="conversation-column">

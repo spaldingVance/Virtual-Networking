@@ -20,10 +20,6 @@ class ChatBoxesContainer extends Component {
 
   }
 
-
-
-
-
   renderChatBoxes() {
     console.log('inside render chatbox, this.props= ', this.props)
     return this.props.conversations.map(conversation => {
@@ -35,6 +31,7 @@ class ChatBoxesContainer extends Component {
     })
   }
 
+// this component is the container for the chatboxes. The redux store state of current conversations is mapped to this component so that the correct chat box(es) will display
   render() {
     return (
       <Container>
@@ -52,7 +49,7 @@ function mapStateToProps(state) {
   return { conversations: state.currentConversations };
 }
 
-
+//may not need this action creator in this component
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getJoinedConversations }, dispatch);
 }

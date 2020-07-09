@@ -44,18 +44,20 @@ class ChatBox extends Component {
       this.socket.emit('room', {conversationName: this.state.room, id: this.socket.id})
     } )
 
+    //this receives back the message from server/index.js 
     this.socket.on(`MESSAGE_TO_${this.state.room}`, function (data) {
       console.log('Chatbox receiving back message to add message to messages array. Data= ', data)
       addMessage(data);
     });
 
+    //this adds the message received back from server/index.js to this state's messages array
     const addMessage = (data) => {
       console.log(data);
       this.setState({ messages: [...this.state.messages, data] });
       console.log(this.state.messages);
     };
 
-    //this should eventually be this.props.username bc it's coming from redux store.
+   
     // the message will be in the local state?
     this.sendMessage = (ev) => {
       console.log("Send button clicked, send message invoked");
@@ -71,7 +73,7 @@ class ChatBox extends Component {
       this.setState({ message: "" });
     };
 
-
+    //this will send invoke the send message function if the enter key is pressed
     this.handleKeyPress = (event) => {
       if (event.charCode === 13){
         console.log('inside if statement')
@@ -79,6 +81,7 @@ class ChatBox extends Component {
       }
     }
 
+    //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox 
     this.exitConversation = () => {
 
     }
