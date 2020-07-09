@@ -47,6 +47,8 @@ class ChatBox extends Component {
       this.socket.emit("JOIN_CONVERSATION", {
         conversationId: this.props.conversationId,
         userId: this.props.user._id,
+        username: this.props.user.userName,
+        conversationName: this.props.conversationName,
       });
     });
     console.log(
