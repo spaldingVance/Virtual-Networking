@@ -27,6 +27,7 @@ class ConversationList extends Component {
         { conversationName: "HTML", _id: 200 },
       ],
       joinedConversations: [], // by id
+      active: false
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
@@ -70,7 +71,9 @@ class ConversationList extends Component {
   }
 
   popUpAppears() {
-    
+    this.setState({
+      active: !this.state.active
+  });
   }
 
   renderConversationList() {
@@ -105,7 +108,7 @@ class ConversationList extends Component {
     } else {
       return (
         <div id="conversation-column">
-            <PopUp />
+            {this.state.active && <PopUp />}
             <Button onClick={this.popUpAppears.bind(this)} variant="outline-primary" id="create-event">
               Create a Conversation
             </Button>
