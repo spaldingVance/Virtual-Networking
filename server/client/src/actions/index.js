@@ -4,11 +4,12 @@ export const GET_EVENTS = "GET_EVENTS";
 export const SET_CURRENT_EVENT = "SET_CURRENT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
+export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 
 export function getEvents() {
   const url = `/events`;
   const request = axios.get(url);
-
+  
   request.then(console.log("hi!!!"));
 
   return {
@@ -38,7 +39,8 @@ export function getConversations(currentEvent) {
 }
 
 export function login(eventID, userName, role) {
-  const url = `/users/${eventID}`;
+  const url = `/users/${eventID}`
+ 
   const request = axios({
     method: "post",
     url: url,
@@ -53,5 +55,14 @@ export function login(eventID, userName, role) {
   return {
     type: LOGIN,
     payload: request,
+  };
+}
+
+
+export function getJoinedConversations(joinedConversations) {
+
+  return {
+    type: JOIN_CONVERSATION,
+    payload: joinedConversations
   };
 }
