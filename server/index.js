@@ -113,13 +113,13 @@ io.on("connect", (socket) => {
 
     //broadcast to room that user left
     socket.in(data.room)
-    .broadcast
-    .emit("MESSAGE", {
-      username: bot.username,
-      role: bot.role,
-      message: `${data.username} has left ${data.conversationName}`,
-      time: moment().format("h:mm a")
-    });
+      .broadcast
+      .emit("MESSAGE", {
+        username: bot.username,
+        role: bot.role,
+        message: `${data.username} has left ${data.conversationName}`,
+        time: moment().format("h:mm a")
+      });
     
     //remove conversation from user
     User
@@ -130,10 +130,10 @@ io.on("connect", (socket) => {
 
     //remove user from conversation
     Conversation
-    .findOneAndUpdate({ _id: data.conversationId }, { $pull: { users: { _id: data.userId }}})  
-    .exec((error, updatedUser) => {
-      if (error) throw error;
-    });
+      .findOneAndUpdate({ _id: data.conversationId }, { $pull: { users: { _id: data.userId }}})  
+      .exec((error, updatedUser) => {
+        if (error) throw error;
+      });
   });
 
 });
