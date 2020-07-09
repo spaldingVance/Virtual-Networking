@@ -40,7 +40,7 @@ ul.conversation-list {
 }
 
 .joined {
-  background: var(--hover-yellow);
+  background: var(--hover-yellow) !important;
 }
 
 #leave-event {
