@@ -18,6 +18,7 @@ mongoose.connect(keys.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
+
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -60,80 +61,62 @@ const botName = "Muze Bot";
 io.on("connection", (socket) => {
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("room", function (room) {
-    Conversation.findOneAndUpdate(
-      { conversationName: room.conversationName },
-      { socketId: room.id }
-    ).exec((error, updatedConversation) => {
-      if (error) {
-        console.log(error);
-      }
-
-      console.log(updatedConversation);
-    });
-    socket.join(room.id);
-  });
-
-  socket.on("SEND_MESSAGE", (data) => {
-    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
-    console.log("Next step will be io.emit RECEIVE_MESSAGE");
-    //do we need the functionality to store the message and user here?
-    //what is RECEIVE_MESSAGE doing?
-    io.emit(`MESSAGE_TO_${data.room}`, {
-      socketid: socket.id,
-      username: data.username,
-      message: data.message,
-      role: data.role,
-      time: moment().format("h:mm a"),
-    });
+    
+    socket.join(room.conversationId);
   });
 
   //listen for chat messages
-  // socket.on("SEND_MESSAGE", (data) => {
-  //   console.log("SENT MESSAGE DATA", data);
-  //   //when chat messages sent, display to room
-  //   io.sockets.in(socket.id).emit("MESSAGE", {
-  //     socketid: socket.id,
-  //     username: data.username || "Anonymous",
-  //     message: data.message,
+  socket.on("SEND_MESSAGE", (data) => {
+    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
+    console.log("Next step will be io.emit RECEIVE_MESSAGE");
+    //when chat messages sent, display to room
+    io.sockets
+      .in(data.room)
+      .emit("MESSAGE", {
+        username: data.username,
+        message: data.message,
+        role: data.role,
+        time: moment().format("h:mm a")
+    });
+
+    //add to messages in conversation db
+    Conversation
+      .findOneAndUpdate(
+        { _id: data.room },
+        { $push: { messages: { user: data.userId, text: data.message }}})
+      .exec((error, messageAdded) => {
+        if (error) throw error;
+    });
+  });
+
+  // socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
+  //   //not sure about variables
+  //   //add user to users array in conversation mongodb collection
+  //   //query mongo for username and conversation name
+  //   // const username;
+  //   // const conversationName;
+  //   // const usersInConversation;
+  //   // Welcome current user
+  //   socket.emit("MESSAGE", {
+  //     username: botName,
+  //     text: `Welcome to ${conversation}!`,
   //     time: moment().format("h:mm a"),
   //   });
 
-  //   //add to messages in conversation db
-  //   Conversation.findOneAndUpdate(
-  //     { socketId: socket.id },
-  //     { $push: { messages: { user: data.userId, text: data.message } } }
-  //   ).exec((error, messageAdded) => {
-  //     if (error) throw error;
+  //   // Broadcast when a user connects
+  //   socket.broadcast.to(conversationId).emit("MESSAGE", {
+  //     username: botName,
+  //     text: `${username} has joined the chat`,
+  //     time: moment().format("h:mm a"),
+  //   });
+
+  //   // Send users and room info
+  //   io.to(conversationId).emit("CONVERSATION_PARTICIPANTS", {
+  //     room: conversationName,
+  //     users: usersInConversation,
   //   });
   // });
-
-  socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
-    //not sure about variables
-    //add user to users array in conversation mongodb collection
-    //query mongo for username and conversation name
-    // const username;
-    // const conversationName;
-    // const usersInConversation;
-    // Welcome current user
-    socket.emit("MESSAGE", {
-      username: botName,
-      text: `Welcome to ${conversation}!`,
-      time: moment().format("h:mm a"),
-    });
-
-    // Broadcast when a user connects
-    socket.broadcast.to(conversationId).emit("MESSAGE", {
-      username: botName,
-      text: `${username} has joined the chat`,
-      time: moment().format("h:mm a"),
-    });
-
-    // Send users and room info
-    io.to(conversationId).emit("CONVERSATION_PARTICIPANTS", {
-      room: conversationName,
-      users: usersInConversation,
-    });
-  });
+  
 });
 
 // Runs when client disconnects

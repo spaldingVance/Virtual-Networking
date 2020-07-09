@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { getConversations, getJoinedConversations, logout } from "../actions/index";
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -14,25 +16,30 @@ class ConversationList extends Component {
 
     //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
     this.state = {
-      conversations: [{ conversationName: "JavaScript", _id: 100 }, { conversationName: "HTML", _id: 200 }],
+      conversations: [
+        { conversationName: "JavaScript", _id: 100 },
+        { conversationName: "HTML", _id: 200 },
+      ],
       joinedConversations: [], // by id
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
     this.handleJoinConversation = this.handleJoinConversation.bind(this);
-
   }
 
   componentDidMount() {
-    this.props.getConversations(this.props.currentEvent);
+    // grab from URL
+    this.props.getConversations(this.props.match.params.eventId);
   }
 
   handleJoinConversation(conversation) {
-    console.log('conversation button clicked, conversation is =', conversation)
-    const newJoinedConversations = this.state.joinedConversations.concat(conversation)
+    console.log("conversation button clicked, conversation is =", conversation);
+    const newJoinedConversations = this.state.joinedConversations.concat(
+      conversation
+    );
     this.setState({ joinedConversations: newJoinedConversations }, () => {
-      this.props.getJoinedConversations(this.state.joinedConversations)
-      console.log('state inside handleJoinConversation', this.state)
+      this.props.getJoinedConversations(this.state.joinedConversations);
+      console.log("state inside handleJoinConversation", this.state);
     });
   }
 
@@ -51,17 +58,25 @@ class ConversationList extends Component {
   }
 
   renderConversationList() {
-    return this.props.conversations.map((conversation) => {
-      return (
-        <a
-          href="#2"
-          key={`ConversationLink${conversation._id}`}
+    console.log("This.props.event are ", this.props.event);
 
-          className={this.checkJoinedStatus(conversation)}>
-          <li onClick={event => { this.handleJoinConversation(conversation) }}>{conversation.conversationName}</li>
-        </a>
-      );
-    });
+    if (this.props.event.conversations) {
+      return this.props.event.conversations.map((conversation) => {
+        return (
+          <a
+            href="#2"
+            key={`ConversationLink${conversation._id}`}
+            className={this.checkJoinedStatus(conversation)}>
+            <li
+              onClick={(event) => {
+                this.handleJoinConversation(conversation);
+              }}>
+              {conversation.conversationName}
+            </li>
+          </a>
+        );
+      });
+    }
   }
 
   render() {
@@ -102,4 +117,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getConversations, getJoinedConversations, logout }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConversationList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ConversationList)
+);

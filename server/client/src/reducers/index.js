@@ -8,7 +8,7 @@ import logoutReducer from './logoutReducer'
 
 const rootReducer = combineReducers({
   events: eventsReducer,
-  conversations: conversationsReducer,
+  event: conversationsReducer,
   user: loginReducer,
   currentConversations: joinConversationsReducer,
   currentEvent: setCurrentEvent,

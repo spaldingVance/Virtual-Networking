@@ -10,7 +10,7 @@ export const LOGOUT = "LOGOUT";
 export function getEvents() {
   const url = `/events`;
   const request = axios.get(url);
-
+  
   request.then(console.log("hi!!!"));
 
   return {
@@ -27,7 +27,6 @@ export function setCurrentEvent(id) {
 }
 
 export function getConversations(currentEvent) {
-  // hard coding convo ID for testing
   const url = `/events/${currentEvent}`;
   const request = axios.get(url);
 
@@ -40,7 +39,8 @@ export function getConversations(currentEvent) {
 }
 
 export function login(eventID, userName, role) {
-  const url = `/users/${eventID}`;
+  const url = `/users/${eventID}`
+ 
   const request = axios({
     method: "post",
     url: url,
@@ -58,12 +58,10 @@ export function login(eventID, userName, role) {
   };
 }
 
-
 export function getJoinedConversations(joinedConversations) {
-
   return {
     type: JOIN_CONVERSATION,
-    payload: joinedConversations
+    payload: joinedConversations,
   };
 }
 
