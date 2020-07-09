@@ -20,7 +20,10 @@ class ChatBoxesContainer extends Component {
 
   renderChatBoxes() {
     console.log("inside render chatbox, this.props= ", this.props);
-    return this.props.conversations.map((conversation) => {
+
+    let shortenedConversations = this.props.conversations.slice(0, 2);
+
+    return shortenedConversations.map((conversation) => {
       return (
         <Col key={conversation._id} md={6}>
           <ChatBox
