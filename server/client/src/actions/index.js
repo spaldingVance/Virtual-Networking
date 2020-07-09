@@ -2,7 +2,7 @@ import axios from "axios";
 
 const ROOT_URL = `http://localhost:5000`;
 
-const ROOT_URL = ``
+//const ROOT_URL = ``
 
 export const GET_EVENTS = "GET_EVENTS";
 export const SET_CURRENT_EVENT = "SET_CURRENT_EVENT";
