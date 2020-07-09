@@ -4,6 +4,7 @@ export const GET_EVENTS = "GET_EVENTS";
 export const SET_CURRENT_EVENT = "SET_CURRENT_EVENT";
 export const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 export const LOGIN = "LOGIN";
+export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 
 export function getEvents() {
   const url = `/events`;
@@ -53,5 +54,14 @@ export function login(eventID, userName, role) {
   return {
     type: LOGIN,
     payload: request,
+  };
+}
+
+
+export function getJoinedConversations(joinedConversations) {
+
+  return {
+    type: JOIN_CONVERSATION,
+    payload: joinedConversations
   };
 }

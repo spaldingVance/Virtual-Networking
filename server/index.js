@@ -88,24 +88,24 @@ io.on("connection", (socket) => {
   });
 
   //listen for chat messages
-  socket.on("SEND_MESSAGE", (data) => {
-    console.log("SENT MESSAGE DATA", data);
-    //when chat messages sent, display to room
-    io.sockets.in(socket.id).emit("MESSAGE", {
-      socketid: socket.id,
-      username: data.username || "Anonymous",
-      message: data.message,
-      time: moment().format("h:mm a"),
-    });
+  // socket.on("SEND_MESSAGE", (data) => {
+  //   console.log("SENT MESSAGE DATA", data);
+  //   //when chat messages sent, display to room
+  //   io.sockets.in(socket.id).emit("MESSAGE", {
+  //     socketid: socket.id,
+  //     username: data.username || "Anonymous",
+  //     message: data.message,
+  //     time: moment().format("h:mm a"),
+  //   });
 
-    //add to messages in conversation db
-    Conversation.findOneAndUpdate(
-      { socketId: socket.id },
-      { $push: { messages: { user: data.userId, text: data.message } } }
-    ).exec((error, messageAdded) => {
-      if (error) throw error;
-    });
-  });
+  //   //add to messages in conversation db
+  //   Conversation.findOneAndUpdate(
+  //     { socketId: socket.id },
+  //     { $push: { messages: { user: data.userId, text: data.message } } }
+  //   ).exec((error, messageAdded) => {
+  //     if (error) throw error;
+  //   });
+  // });
 
   socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
     //not sure about variables
