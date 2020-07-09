@@ -50,6 +50,7 @@ console.log("THE USER IS ", this.props.user)
       });
       console.log("CONVERSATION ID BEING SENT TO SOCKET ON JOINING ROOM:", this.props.conversationId)
       console.log("USER ID BEING SENT TO SOCKET ON JOINING ROOM:", this.props.user._id)
+      
     //this receives back the message from server/index.js
     this.socket.on("MESSAGE", function (data) {
       console.log(
