@@ -9,7 +9,7 @@ export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 export function getEvents() {
   const url = `/events`;
   const request = axios.get(url);
-  
+
   request.then(console.log("hi!!!"));
 
   return {
@@ -39,8 +39,7 @@ export function getConversations(currentEvent) {
 }
 
 export function login(eventID, userName, role) {
-  const url = `/users/${eventID}`
- 
+  const url = `/users/${eventID}`;
   const request = axios({
     method: "post",
     url: url,
