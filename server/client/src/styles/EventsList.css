@@ -3,10 +3,18 @@
 }
 
 .event-tile {
-  background: var(--main);
+  background: rgba(48,41,179,.5);
+  
   height: 250px;
   color: white;
   border-radius: 1em;
+}
+
+.tile-container {
+  background: url(../assets/tile-image.jpg);
+  border-radius: 1em;
+  background-size: cover;
+  background-position: center;
 }
 
 /* .event-tile-column a {
