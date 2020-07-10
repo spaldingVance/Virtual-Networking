@@ -14,7 +14,7 @@
 }
 
 .close-button {
-  
+  cursor: pointer;
 }
 
 .messages {
