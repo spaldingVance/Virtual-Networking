@@ -16,7 +16,7 @@ class PopUp extends Component {
   }
 
   conversationSubmit() {
-    console.log(this.props.currentEvent._id);
+    // console.log(this.props.currentEvent._id);
     if (this.state.conversationName && this.props.currentEvent) {
       // if there's a convo name, create conversation with that name
       this.props.createConversation(
@@ -31,7 +31,7 @@ class PopUp extends Component {
 
   updateConversationName(event) {
     this.setState({ conversationName: event.target.value }, () => {
-      console.log(`convoName changed to ${this.state.conversationName}`);
+      // console.log(`convoName changed to ${this.state.conversationName}`);
     });
   }
 
