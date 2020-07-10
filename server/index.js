@@ -146,31 +146,38 @@ io.on("connect", (socket) => {
 
   // Runs when client disconnects
   socket.on("LEAVE_CONVERSATION", (data) => {
+    console.log("LEAVING CONVERSATION")
     //leave room
-    socket.leave(data.room);
+    socket.leave(data.room)
 
     //broadcast to room that user left
-    socket.in(data.room).broadcast.emit("MESSAGE", {
-      username: bot.username,
-      role: bot.role,
-      message: `${data.username} has left ${data.conversationName}`,
-      time: moment().format("h:mm a"),
-    });
+    socket.in(data.room)
+      .broadcast
+      .emit("MESSAGE", {
+        username: bot.username,
+        role: bot.role,
+        message: `${data.username} has left ${data.conversationName}`,
+        time: moment().format("h:mm a")
+      });
 
     //remove conversation from user
-    User.findOneAndUpdate(
+    User.updateOne(
       { _id: data.userId },
-      { $pull: { conversations: { _id: data.conversationId } } }
-    ).exec((error, updatedUser) => {
-      if (error) throw error;
+      { $pullAll: { users: [data.room] } }
+    ).exec((err, updatedUser) => {
+      console.log(updatedUser)
+      if (err) return next(err);
     });
 
     //remove user from conversation
-    Conversation.findOneAndUpdate(
-      { _id: data.conversationId },
-      { $pull: { users: { _id: data.userId } } }
-    ).exec((error, updatedUser) => {
-      if (error) throw error;
+    console.log(data.room)
+    console.log(data.userId)
+    Conversation.updateOne(
+      { _id: data.room },
+      { $pullAll: { users: [data.userId] } }
+    ).exec((err, updatedConvo) => {
+      console.log(updatedConvo)
+      if (err) return next(err);
     });
   });
 });
