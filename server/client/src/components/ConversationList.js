@@ -35,21 +35,28 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
+  componentDidMount() {
+    // Activate the event listener
+    this.setupBeforeUnloadListener();
+  }
+
   componentDidUpdate() {
     // grab from URL
     this.props.getConversations(this.props.match.params.eventId);
     
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   if (
-  //     this.props.event.conversations.length !==
-  //     nextProps.event.conversations.length
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  // Setup the `beforeunload` event listener
+  setupBeforeUnloadListener = () => {
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      return this.logoutUser();
+    });
+  };
+
+  componentWillUnmount() {
+    this.logoutUser();
+  }
 
   handleJoinConversation(conversation) {
     this.props.getJoinedConversations(conversation);
