@@ -8,10 +8,18 @@
   overflow: hidden;
 }
 
-.card-footer {
-  /* border-radius: 20px; */
- /* overflow: hidden; */
+ .card-footer {
+  /* border-radius: 20px;
+ overflow: hidden; */
  padding-top: 5px;
+} 
+
+.chatbox-title {
+  width: 80%;
+}
+
+.number-of-users {
+  font-weight: 100;
 }
 
 .close-button {
