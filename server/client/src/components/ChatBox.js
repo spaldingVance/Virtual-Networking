@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { user } from "../actions/index";
+import { leaveOneConversation } from "../actions/index";
 import {
   Row,
   Col,
@@ -13,23 +13,19 @@ import {
 } from "react-bootstrap";
 import "../styles/ChatBox.css";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 class ChatBox extends Component {
   constructor(props) {
     super(props);
     console.log("inside chatbox constructor, props is=", this.props);
-    const roomId = this.props.conversationId;
-    const roomName = this.props.conversationName;
+
     console.log("THE USER IS ", this.props.user);
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
     //need to get the name of the user, userid and message history from more mapStateToProps
     this.state = {
-      room: roomName,
-      username: "Danielle",
-      role: "Student",
-      userId: "",
       message: "",
       messages: [],
       usersTyping: []
@@ -41,11 +37,7 @@ class ChatBox extends Component {
 
     //this starts up the room socket connection when the component is initialized
     this.socket.on("connect", () => {
-      console.log(
-        "inside this.socket.on connect, this.state.room=",
-        this.state.room
-      );
-
+      
       this.socket.emit("JOIN_CONVERSATION", {
         conversationId: this.props.conversationId,
         userId: this.props.user._id,
@@ -188,26 +180,31 @@ class ChatBox extends Component {
     }
 
     //when user disconnects from conversation (socket)
-    this.socket.on('disconnect', () => {
-      this.socket.emit('disconnect', {
+    this.socket.on("disconnect", () => {
+      this.socket.emit("disconnect", {
         userId: this.props.user._id,
         room: this.props.conversationId,
-        username: this.props.user.userName
-      })
+        username: this.props.user.userName,
+      });
     });
 
-    //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
+    // exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
     this.exitConversation = () => {
       //disconnect from socket
-      this.socket.emit('LEAVE_CONVERSATION', {
+      this.socket.emit("LEAVE_CONVERSATION", {
         room: this.props.conversationId,
         userId: this.props.user._id,
         role: this.props.user.role,
         username: this.props.user.userName,
         conversationName: this.props.conversationName
       })
-      //TODO: get chatbox to disappear
+    // get chatbox to disappear
+      this.props.leaveOneConversation(this.props.conversationId)
     };
+  }
+
+  componentDidUpdate() {
+    // this.newMessage.scrollIntoView({ behavior: "smooth" });
   }
 
   render() {
@@ -218,7 +215,7 @@ class ChatBox extends Component {
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
                 <Card.Title>
-                  {this.state.room}
+                  {this.props.conversationName}
                   <Badge
                     pill
                     variant="danger"
@@ -231,7 +228,7 @@ class ChatBox extends Component {
                 <div className="messages">
                   {this.state.messages.map((message, index) => {
                     return (
-                      <div key={index}>
+                      <div key={index} ref={(ref) => (this.newMessage = ref)}>
                         <div>
                           <strong className="mr-1">
                             {message.username} ({message.role})
@@ -280,9 +277,17 @@ class ChatBox extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  console.log("inside mapstatetoprops chatbox, state=", state);
-  return { event: state.event, user: state.user };
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({leaveOneConversation}, dispatch)
 }
 
-export default connect(mapStateToProps)(ChatBox);
+
+function mapStateToProps(state) {
+  console.log("inside mapstatetoprops chatbox, state=", state);
+  return { 
+    event: state.event, 
+    user: state.user };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
+

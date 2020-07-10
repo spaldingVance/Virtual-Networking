@@ -1,5 +1,6 @@
 import React from "react";
 
+
 // components
 import CurrentEventHeader from "./CurrentEventHeader";
 import ConversationList from "./ConversationList";
