@@ -18,7 +18,7 @@ import { bindActionCreators } from "redux";
 class ChatBox extends Component {
   constructor(props) {
     super(props);
-    
+
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
@@ -26,14 +26,13 @@ class ChatBox extends Component {
     this.state = {
       message: "",
       messages: [],
-      usersTyping: []
+      usersTyping: [],
     };
 
     this.socket = io();
 
     //this starts up the room socket connection when the component is initialized
     this.socket.on("connect", () => {
-
       this.socket.emit("JOIN_CONVERSATION", {
         conversationId: this.props.conversationId,
         userId: this.props.user._id,
@@ -49,40 +48,40 @@ class ChatBox extends Component {
 
     //socket to receive information about other users typing
     this.socket.on("OTHER_USERS_TYPING", function (data) {
-      setTyping(data)
-    })
+      setTyping(data);
+    });
 
     //socket to receive information about when other users stop typing
     this.socket.on("OTHER_USERS_STOP_TYPING", function (data) {
-      removeTyping(data)
-    })
+      removeTyping(data);
+    });
 
     //add typing user to state
     const setTyping = (data) => {
-      let currentUsersTyping = this.state.usersTyping
+      let currentUsersTyping = this.state.usersTyping;
       if (!currentUsersTyping.includes(data.username)) {
-        currentUsersTyping.push(data.username)
-        this.setState({ usersTyping: currentUsersTyping })
+        currentUsersTyping.push(data.username);
+        this.setState({ usersTyping: currentUsersTyping });
       }
-    }
+    };
 
     //remove typing user from state
     const removeTyping = (data) => {
       //users typing in state
-      let currentUsersTyping = this.state.usersTyping
+      let currentUsersTyping = this.state.usersTyping;
 
-      let userExists = currentUsersTyping.includes(data.username)
+      let userExists = currentUsersTyping.includes(data.username);
 
       if (userExists) {
         //remove user from typing in state
-        let userIndex = currentUsersTyping.findIndex(user => {
-          return user === data.username
+        let userIndex = currentUsersTyping.findIndex((user) => {
+          return user === data.username;
         });
 
         currentUsersTyping.splice(userIndex, 1);
-        this.setState({ usersTyping: currentUsersTyping })
+        this.setState({ usersTyping: currentUsersTyping });
       }
-    }
+    };
 
     //this adds the message received back from server/index.js to this state's messages array
     const addMessage = (data) => {
@@ -112,10 +111,9 @@ class ChatBox extends Component {
         //telling others that user has stopped typing
         this.socket.emit("USER_STOP_TYPING", {
           username: this.props.user.userName,
-          room: this.props.conversationId
-        })
+          room: this.props.conversationId,
+        });
       } else {
-
         //send socket to announce user is typing
         let typing = false;
         let timeout = undefined;
@@ -125,17 +123,17 @@ class ChatBox extends Component {
           typing = false;
           this.socket.emit("USER_STOP_TYPING", {
             username: this.props.user.userName,
-            room: this.props.conversationId
-          })
-        }
+            room: this.props.conversationId,
+          });
+        };
 
         if (typing == false) {
           typing = true;
           //socket to broadcast current user to other users
           this.socket.emit("USER_TYPING", {
             username: this.props.user.userName,
-            room: this.props.conversationId
-          })
+            room: this.props.conversationId,
+          });
 
           //set timeout
           timeout = setTimeout(timeoutFunction, 3000);
@@ -144,7 +142,7 @@ class ChatBox extends Component {
           timeout = setTimeout(timeoutFunction, 3000);
         }
       }
-    }
+    };
 
     //map users to typing div
     this.currentlyTypingUsers = () => {
@@ -153,17 +151,17 @@ class ChatBox extends Component {
 
       //map users in typing array to div
       if (typingUsers.length === 1) {
-        return (
-          <p>{typingUsers[0]} is typing...</p>
-        )
+        return <p>{typingUsers[0]} is typing...</p>;
       } else if (typingUsers.length === 2) {
         return (
-          <p>{typingUsers[0]} and {typingUsers[1]} are typing...</p>
-        )
+          <p>
+            {typingUsers[0]} and {typingUsers[1]} are typing...
+          </p>
+        );
       } else if (typingUsers.length > 2) {
-        return <p>several users are typing...</p>
+        return <p>several users are typing...</p>;
       }
-    }
+    };
 
     // exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
     this.exitConversation = () => {
@@ -173,21 +171,36 @@ class ChatBox extends Component {
         userId: this.props.user._id,
         role: this.props.user.role,
         username: this.props.user.userName,
-        conversationName: this.props.conversationName
-      })
+        conversationName: this.props.conversationName,
+      });
       // get chatbox to disappear
-      this.props.leaveOneConversation(this.props.conversationId)
+      this.props.leaveOneConversation(this.props.conversationId);
     };
 
     this.scrollToBottom = this.scrollToBottom.bind(this);
-    this.loadMessages = this.loadMessages.bind(this)
-    
+    this.loadMessages = this.loadMessages.bind(this);
 
     this.findSizeOfConversation = (conversationName) => {
-       let joinedConvo = this.props.event.conversations.find((convo) => convo.conversationName === conversationName)
-       return joinedConvo.users.length;
-    }
+      let joinedConvo = this.props.event.conversations.find(
+        (convo) => convo.conversationName === conversationName
+      );
+      return joinedConvo.users.length;
+    };
   }
+
+  componentDidMount() {
+    // Activate the event listener
+    this.setupBeforeUnloadListener();
+  }
+
+  // Setup the `beforeunload` event listener
+  setupBeforeUnloadListener = () => {
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      return this.exitConversation();
+    });
+  };
+
   scrollToBottom() {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
@@ -195,23 +208,29 @@ class ChatBox extends Component {
   loadMessages() {
     if (this.state.messages) {
       return this.state.messages.map((message, index, array) => {
-          return (
-            <div key={index} ref={index === array.length -1 ? event => { this.messagesEnd = event } : ""}>
-              <div>
-                <strong className="mr-1">
-                  {message.username} ({message.role})
-                </strong>
-                <strong></strong>
-                <span>{message.time}</span>
-              </div>
-              <div>{message.message}</div>
+        return (
+          <div
+            key={index}
+            ref={
+              index === array.length - 1
+                ? (event) => {
+                    this.messagesEnd = event;
+                  }
+                : ""
+            }>
+            <div>
+              <strong className="mr-1">
+                {message.username} ({message.role})
+              </strong>
+              <strong></strong>
+              <span>{message.time}</span>
             </div>
-          )
+            <div>{message.message}</div>
+          </div>
+        );
       });
     }
   }
-
-  
 
   render() {
     return (
@@ -222,7 +241,8 @@ class ChatBox extends Component {
               <Card.Body>
                 <Card.Title>
                   {this.props.conversationName}
-                  {"  Users: " + this.findSizeOfConversation(this.props.conversationName)}
+                  {"  Users: " +
+                    this.findSizeOfConversation(this.props.conversationName)}
                   <Badge
                     pill
                     variant="danger"
@@ -232,9 +252,7 @@ class ChatBox extends Component {
                   </Badge>
                 </Card.Title>
                 <hr />
-                <div className="messages">
-            {this.loadMessages()}
-                </div >
+                <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
               <div className="card-footer">
                 <InputGroup>
@@ -256,12 +274,9 @@ class ChatBox extends Component {
                       Send
                     </Button>
                   </InputGroup.Append>
-
                 </InputGroup>
                 {/* show users typing  */}
-                <div className="user-typing">
-                  {this.currentlyTypingUsers()}
-                </div>
+                <div className="user-typing">{this.currentlyTypingUsers()}</div>
               </div>
             </Card>
           </Col>
@@ -272,16 +287,14 @@ class ChatBox extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ leaveOneConversation }, dispatch)
+  return bindActionCreators({ leaveOneConversation }, dispatch);
 }
-
 
 function mapStateToProps(state) {
   return {
     event: state.event,
-    user: state.user
+    user: state.user,
   };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
-
