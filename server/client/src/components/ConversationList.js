@@ -40,15 +40,15 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (
-      this.props.event.conversations.length !==
-      nextProps.event.conversations.length
-    ) {
-      return true;
-    }
-    return false;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   if (
+  //     this.props.event.conversations.length !==
+  //     nextProps.event.conversations.length
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   handleJoinConversation(conversation) {
     this.props.getJoinedConversations(conversation);
