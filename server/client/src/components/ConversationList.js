@@ -50,6 +50,10 @@ class ConversationList extends Component {
   //   return false;
   // }
 
+  componentWillUnmount() {
+    this.logoutUser();
+  }
+
   handleJoinConversation(conversation) {
     this.props.getJoinedConversations(conversation);
   }
