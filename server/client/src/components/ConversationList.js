@@ -38,6 +38,7 @@ class ConversationList extends Component {
   componentDidUpdate() {
     // grab from URL
     this.props.getConversations(this.props.match.params.eventId);
+    
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -77,6 +78,11 @@ class ConversationList extends Component {
   }
 
   popUpAppears() {
+    // in case popup doesn't exist yet
+    if (this.state.active) {
+      // make convo popup div visible
+      document.getElementById('convo-popup').style.display = "block"
+    }
     this.setState({
       active: !this.state.active,
     });
@@ -87,6 +93,8 @@ class ConversationList extends Component {
       "In Render Conversation List, this.props.event are ",
       this.props.event
     );
+
+    
 
     if (this.props.event.conversations) {
       // need to sort the conversations by number of participants

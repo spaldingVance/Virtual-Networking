@@ -26,7 +26,10 @@ class PopUp extends Component {
 
       // reset conversation name to be nothing
       this.setState({ conversationName: "" });
+      // then disappear
+      document.getElementById("convo-popup").style.display = "none"
     } else alert("Please fill out a conversation title");
+
   }
 
   updateConversationName(event) {
