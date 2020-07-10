@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { leaveOneConversation } from "../actions/index";
+import { leaveOneConversation, logout } from "../actions/index";
 import {
   Row,
   Col,
@@ -187,6 +187,8 @@ class ChatBox extends Component {
       );
       return joinedConvo.users.length;
     };
+
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   componentDidMount() {
@@ -198,12 +200,22 @@ class ChatBox extends Component {
   setupBeforeUnloadListener = () => {
     window.addEventListener("beforeunload", (ev) => {
       ev.preventDefault();
+      this.logoutUser();
       return this.exitConversation();
     });
   };
 
   scrollToBottom() {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
+  logoutUser() {
+    // console.log("User ID = " + this.props.user._id);
+    this.props.logout(this.props.event._id, this.props.user._id);
+    if (this.props.logoutUser) {
+      // console.log(this.props.logoutUser);
+    }
+    this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
 
   loadMessages() {
@@ -244,17 +256,20 @@ class ChatBox extends Component {
                   <div className="chatbox-title">
                     {this.props.conversationName}
                     <span className="number-of-users">
-                      {"  Users: " + this.findSizeOfConversation(this.props.conversationName)}
+                      {"  Users: " +
+                        this.findSizeOfConversation(
+                          this.props.conversationName
+                        )}
                     </span>
                   </div>
                 </Card.Title>
                 <Badge
-                    pill
-                    variant="danger"
-                    className="close-button ml-4"
-                    onClick={this.exitConversation}>
-                    X
-                  </Badge>
+                  pill
+                  variant="danger"
+                  className="close-button ml-4"
+                  onClick={this.exitConversation}>
+                  X
+                </Badge>
                 <hr />
                 <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
@@ -291,7 +306,7 @@ class ChatBox extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ leaveOneConversation }, dispatch);
+  return bindActionCreators({ leaveOneConversation, logout }, dispatch);
 }
 
 function mapStateToProps(state) {
