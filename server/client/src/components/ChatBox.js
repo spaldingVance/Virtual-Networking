@@ -240,17 +240,20 @@ class ChatBox extends Component {
             <Card className="m-0 p-0 shadow-sm">
               <Card.Body>
                 <Card.Title>
-                  {this.props.conversationName}
-                  {"  Users: " +
-                    this.findSizeOfConversation(this.props.conversationName)}
-                  <Badge
+                  <div className="chatbox-title">
+                    {this.props.conversationName}
+                    <span className="number-of-users">
+                      {"  Users: " + this.findSizeOfConversation(this.props.conversationName)}
+                    </span>
+                  </div>
+                </Card.Title>
+                <Badge
                     pill
                     variant="danger"
                     className="close-button ml-4"
                     onClick={this.exitConversation}>
                     X
                   </Badge>
-                </Card.Title>
                 <hr />
                 <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
