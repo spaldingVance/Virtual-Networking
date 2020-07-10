@@ -100,7 +100,7 @@ class ConversationList extends Component {
     if (this.props.logoutUser) {
       // console.log(this.props.logoutUser);
     }
-    
+
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
 
@@ -166,8 +166,9 @@ class ConversationList extends Component {
           </Button>
           <h3 id="join-convo">Join a Conversation</h3>
           <div className="conversation-list-container">
-
-          <ul className="conversation-list">{this.renderConversationList()}</ul>
+            <ul className="conversation-list">
+              {this.renderConversationList()}
+            </ul>
           </div>
         </div>
       );

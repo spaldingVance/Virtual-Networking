@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { leaveOneConversation } from "../actions/index";
+import { leaveOneConversation, logout } from "../actions/index";
 import {
   Row,
   Col,
@@ -250,17 +250,20 @@ class ChatBox extends Component {
                   <div className="chatbox-title">
                     {this.props.conversationName}
                     <span className="number-of-users">
-                      {"  Users: " + this.findSizeOfConversation(this.props.conversationName)}
+                      {"  Users: " +
+                        this.findSizeOfConversation(
+                          this.props.conversationName
+                        )}
                     </span>
                   </div>
                 </Card.Title>
                 <Badge
-                    pill
-                    variant="danger"
-                    className="close-button ml-4"
-                    onClick={this.exitConversation}>
-                    X
-                  </Badge>
+                  pill
+                  variant="danger"
+                  className="close-button ml-4"
+                  onClick={this.exitConversation}>
+                  X
+                </Badge>
                 <hr />
                 <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
@@ -297,7 +300,7 @@ class ChatBox extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ leaveOneConversation }, dispatch);
+  return bindActionCreators({ leaveOneConversation, logout }, dispatch);
 }
 
 function mapStateToProps(state) {
