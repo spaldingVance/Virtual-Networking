@@ -10,6 +10,7 @@ import {
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
+import PopUp from "./PopUp";
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -25,15 +26,28 @@ class ConversationList extends Component {
         { conversationName: "HTML", _id: 200 },
       ],
       joinedConversations: [], // by id
+      active: false,
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
     this.handleJoinConversation = this.handleJoinConversation.bind(this);
+
+    this.props.getConversations(this.props.match.params.eventId);
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     // grab from URL
     this.props.getConversations(this.props.match.params.eventId);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (
+      this.props.event.conversations.length !==
+      nextProps.event.conversations.length
+    ) {
+      return true;
+    }
+    return false;
   }
 
   handleJoinConversation(conversation) {
@@ -62,6 +76,12 @@ class ConversationList extends Component {
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
 
+  popUpAppears() {
+    this.setState({
+      active: !this.state.active,
+    });
+  }
+
   renderConversationList() {
     console.log(
       "In Render Conversation List, this.props.event are ",
@@ -69,41 +89,49 @@ class ConversationList extends Component {
     );
 
     if (this.props.event.conversations) {
-      return this.props.event.conversations.map((conversation) => {
-        return (
-          <a href="#2" key={`ConversationLink${conversation._id}`}>
-            <li
-              className={this.checkJoinedStatus(conversation)}
-              onClick={(event) => {
-                this.handleJoinConversation(conversation);
-              }}>
-              {conversation.conversationName}
-            </li>
-          </a>
-        );
-      });
+      // need to sort the conversations by number of participants
+
+      return this.props.event.conversations
+        .sort((a, b) => b.users.length - a.users.length)
+        .map((conversation) => {
+          return (
+            <a href="#2" key={`ConversationLink${conversation._id}`}>
+              <li
+                className={this.checkJoinedStatus(conversation)}
+                onClick={(event) => {
+                  this.handleJoinConversation(conversation);
+                }}>
+                {conversation.conversationName} ({conversation.users.length}{" "}
+                users)
+              </li>
+            </a>
+          );
+        });
     }
   }
 
   render() {
     console.log("Inside render of Conversation List, this.props= ", this.props);
+
     if (!this.props.user.hasOwnProperty("userName")) {
       return <Redirect to={`/`} />;
     } else {
       return (
         <div id="conversation-column">
-          <ul className="conversation-list">
-            <a href="#">
-              <li>Start your own convo!</li>
-            </a>
-          </ul>
+          {this.state.active && <PopUp />}
+          <Button
+            onClick={this.popUpAppears.bind(this)}
+            variant="outline-primary"
+            id="create-event">
+            Create a Conversation
+          </Button>
           <Button
             onClick={this.logoutUser.bind(this)}
             variant="outline-danger"
             id="leave-event">
             Leave Event
           </Button>
-          <h3>Join a Chat</h3>
+          <h3 id="join-convo">Join a Conversation</h3>
           <ul className="conversation-list">{this.renderConversationList()}</ul>
         </div>
       );

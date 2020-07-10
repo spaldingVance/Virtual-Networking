@@ -45,25 +45,18 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = socketio(server);
 
-// //for formatting responses?
-// const formatMessage = (username, text) => {
-//   return {
-//     username,
-//     text,
-//     time: moment().format("h:mm a"),
-//   };
-// };
 //for auto messages
 const bot = {
   username: "Muze",
   role: "Bot",
 };
-const conversation = "The Best Conversation";
 
 // Run when client connects
 io.on("connect", (socket) => {
+
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("JOIN_CONVERSATION", function (data) {
+    //send welcome message to user 
     socket.emit("MESSAGE", {
       username: bot.username,
       role: bot.role,
@@ -74,6 +67,7 @@ io.on("connect", (socket) => {
     //join socket to room
     socket.join(data.conversationId);
 
+    //Let other users know that current user entered the conversation
     socket.in(data.conversationId)
       .broadcast
       .emit("MESSAGE", {
@@ -84,13 +78,20 @@ io.on("connect", (socket) => {
       })
 
     //add user id to conversation in database
-    Conversation.findOneAndUpdate(
-      { _id: data.conversationId },
-      { $push: { users: data.userId } }
-    ).exec((error, conversationUpdated) => {
-      if (error) throw error;
-      console.log(conversationUpdated);
-    });
+    Conversation
+      .findOneAndUpdate({ _id: data.conversationId }, { $push: { users: data.userId } })
+      .exec((error, conversationUpdated) => {
+        if (error) throw error;
+        console.log(conversationUpdated)
+      })
+    
+    //add conversation id to user in database
+    User
+      .findOneAndUpdate({ _id: data.userId }, { $push: { conversations: data.conversationId } })
+      .exec((error, userUpdated) => {
+        if (error) throw error;
+        console.log(userUpdated)
+      })
   });
 
   //listen for chat messages
@@ -106,63 +107,79 @@ io.on("connect", (socket) => {
     });
 
     //add to messages in conversation db
-    Conversation.findOneAndUpdate(
-      { _id: data.room },
-      { $push: { messages: { user: data.userId, text: data.message } } }
-    ).exec((error, messageAdded) => {
-      if (error) throw error;
-    });
+    Conversation
+      .findOneAndUpdate({ _id: data.room }, { $push: { messages: { user: data.userId, text: data.message } } })
+      .exec((error, messageAdded) => {
+        if (error) throw error;
+      });
   });
 
-  // socket.on("JOIN_CONVERSATION", ({ userId, conversationId }) => {
-  //   //not sure about variables
-  //   //add user to users array in conversation mongodb collection
-  //   //query mongo for username and conversation name
-  //   // const username;
-  //   // const conversationName;
-  //   // const usersInConversation;
-  //   // Welcome current user
-  //   socket.emit("MESSAGE", {
-  //     username: botName,
-  //     text: `Welcome to ${conversation}!`,
-  //     time: moment().format("h:mm a"),
-  //   });
+  //handle user typing
+  socket.on("USER_TYPING", (data) => {
+    socket.in(data.room)
+      .broadcast
+      .emit("OTHER_USERS_TYPING", {
+        username: data.username
+      })
+  })
 
-  //   // Broadcast when a user connects
-  //   socket.broadcast.to(conversationId).emit("MESSAGE", {
-  //     username: botName,
-  //     text: `${username} has joined the chat`,
-  //     time: moment().format("h:mm a"),
-  //   });
+  // //test socket
+  //   socket.on("USER_TYPING", (data) => {
+  //   io.in(data.room)
+  //     .emit("OTHER_USERS_TYPING", {
+  //       username: data.username
+  //     })
+  // })
 
-  //   // Send users and room info
-  //   io.to(conversationId).emit("CONVERSATION_PARTICIPANTS", {
-  //     room: conversationName,
-  //     users: usersInConversation,
-  //   });
-  // });
+  //handle user stop typing
+  socket.on("USER_STOP_TYPING", (data) => {
+    socket.in(data.room)
+      .broadcast
+      .emit("OTHER_USERS_STOP_TYPING", {
+        username: data.username
+      })
+  })
+
+  //test socket
+  // socket.on("USER_STOP_TYPING", (data) => {
+  //   io.in(data.room)
+  //     .emit("OTHER_USERS_STOP_TYPING", {
+  //       username: data.username
+  //     })
+  // })
+
+  // Runs when client disconnects
+  socket.on("LEAVE_CONVERSATION", (data) => {
+    //leave room
+    socket.leave(data.room)
+
+    //broadcast to room that user left
+    socket.in(data.room)
+      .broadcast
+      .emit("MESSAGE", {
+        username: bot.username,
+        role: bot.role,
+        message: `${data.username} has left ${data.conversationName}`,
+        time: moment().format("h:mm a")
+      });
+    
+    //remove conversation from user
+    User
+      .findOneAndUpdate({ _id: data.userId }, { $pull: { conversations: { _id: data.conversationId }}})  
+      .exec((error, updatedUser) => {
+        if (error) throw error;
+      });
+
+    //remove user from conversation
+    Conversation
+      .findOneAndUpdate({ _id: data.conversationId }, { $pull: { users: { _id: data.userId }}})  
+      .exec((error, updatedUser) => {
+        if (error) throw error;
+      });
+  });
+
 });
 
-// Runs when client disconnects
-// socket.on("disconnect", () => {
-//   // const user = userLeave(socket.id);
-//   //find user and remove from conversation in mongodb
-//   //remove socketid
-
-//   if (user) {
-//   io.to(/*conversation*/).emit(
-//     "message",
-//     formatMessage(botName, `${user.username} has left the chat`)
-//   );
-
-//   // Send users and room info
-//   io.to(user.room).emit("roomUsers", {
-//     room: user.room,
-//     users: getRoomUsers(user.room),
-//   });
-//    }
-// });
-// });
 
 ////////////////////////////////////////////////////////////
 // GENERATE FAKE DATA
@@ -218,6 +235,9 @@ user1.conversations.push(conversation1);
 // event1.save();
 
 // user1.save();
+
+/////////////////////////////////////////////////////////////////////////////////////
+
 
 server.listen(port);
 console.log("Server listening on:", port);

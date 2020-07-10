@@ -2,19 +2,38 @@
   width: 100%;
 }
 
-ul.conversation-list {
+#create-event {
+  width: 100%;
+  border-radius: 15px;
+  margin: 20px auto;
+  height: 50px;
+  text-align: left;
+  color: var(--main);
+  border-color: var(--main);
+}
+
+#create-event:hover {
+  background-color: var(--main);
+  color: white;
+}
+
+.conversation-list {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow: hidden;
-  /* overflow-y: auto; */
+  height: 200px;
+  overflow: scroll; 
+  margin-bottom: 50px;
+  border: 1px solid var(--main);
+  border-radius: 20px;
 }
+
 
 .conversation-list li {
   background: var(--light);
   color: var(--main);
   list-style-type: none;
-  margin: 10px 0;
+  margin: 0 0 10px 0;
   width: 100%;
   border-radius: 20px;
   padding: 20px;
@@ -28,10 +47,19 @@ ul.conversation-list {
   background: var(--hover-yellow) !important;
 }
 
+
 #leave-event {
   width: 100%;
   border-radius: 15px;
   margin-bottom: 20px;
   height: 50px;
   text-align: left;
+}
+
+#join-convo {
+  font-family: "Playfair Display", serif;
+  font-weight: 800;
+  text-align: center;
+  color: var(--main);
+  margin: 0 0 20px 0;
 }
