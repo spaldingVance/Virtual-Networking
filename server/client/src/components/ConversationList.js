@@ -21,11 +21,6 @@ class ConversationList extends Component {
 
     //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
     this.state = {
-      conversations: [
-        { conversationName: "JavaScript", _id: 100 },
-        { conversationName: "HTML", _id: 200 },
-      ],
-      joinedConversations: [], // by id
       active: false,
     };
 
@@ -35,10 +30,10 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
-  componentDidUpdate() {
-    // grab from URL
-    this.props.getConversations(this.props.match.params.eventId);
-  }
+  // componentDidUpdate() {
+  //   // grab from URL
+  //   this.props.getConversations(this.props.match.params.eventId);
+  // }
 
   // shouldComponentUpdate(nextProps) {
   //   if (
@@ -51,7 +46,31 @@ class ConversationList extends Component {
   // }
 
   handleJoinConversation(conversation) {
+
+    const foundConversationIndex = this.props.conversations.findIndex(convo => convo._id === conversation._id)
+
+    // const foundConversationName = this.props.conversations[foundConversationIndex].conversationName;
+
+    console.log('inside HANDLE JOIN CONVERSATION, this.props.conversations=', this.props.conversations)
+    // console.log('inside HANDLE JOIN CONVERSATION, foundConversationname = ', foundConversationName)
+
+    if (foundConversationIndex >= 0) {
+      //show that they've already joined this conversation
+      return window.alert(`You already joined this conversation`)
+
+      // return window.alert(`You already joined ${this.props.conversations[foundConversationIndex].conversationName}`)
+    }
+
+    if (this.props.conversations.length === 2) {
+      //handle showing that they can't join another conversation without leaving another
+
+      return window.alert(`You have already joined 2 conversations, please close a chatbox to join another conversation`)
+    }
+
+    if (foundConversationIndex === -1) {
     this.props.getJoinedConversations(conversation);
+    }
+    
   }
 
   checkJoinedStatus(conversationFromList) {
