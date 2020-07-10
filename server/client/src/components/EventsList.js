@@ -32,6 +32,7 @@ class EventsList extends Component {
         className="event-tile-column mb-4"
         key={data._id}>
         <Link to={`/events/${data._id}/login`}>
+          <div className='tile-container'>
           <Container className="event-tile px-3">
             <Row className="align-items-baseline">
               <Col className="d-inline-flex justify-content-start align-items-baseline">
@@ -55,6 +56,7 @@ class EventsList extends Component {
               </Col>
             </Row>
           </Container>
+          </div>
         </Link>
       </Col>
     );

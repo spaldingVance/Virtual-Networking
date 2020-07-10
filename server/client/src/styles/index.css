@@ -23,3 +23,8 @@ h1 {
 h2 {
   font-weight: 200;
 }
+
+h3 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+}

@@ -53,10 +53,9 @@ const bot = {
 
 // Run when client connects
 io.on("connect", (socket) => {
-
   //on socket connection to chatbox, add socket id to conversation in db, set room to socket id
   socket.on("JOIN_CONVERSATION", function (data) {
-    //send welcome message to user 
+    //send welcome message to user
     socket.emit("MESSAGE", {
       username: bot.username,
       role: bot.role,
@@ -68,14 +67,12 @@ io.on("connect", (socket) => {
     socket.join(data.conversationId);
 
     //Let other users know that current user entered the conversation
-    socket.in(data.conversationId)
-      .broadcast
-      .emit("MESSAGE", {
-        username: bot.username,
-        role: bot.role,
-        message: `${data.username} has joined ${data.conversationName}`,
-        time: moment().format("h:mm a")
-      })
+    socket.in(data.conversationId).broadcast.emit("MESSAGE", {
+      username: bot.username,
+      role: bot.role,
+      message: `${data.username} has joined ${data.conversationName}`,
+      time: moment().format("h:mm a"),
+    });
 
     //add user id to conversation in database
     Conversation
@@ -103,21 +100,20 @@ io.on("connect", (socket) => {
     });
 
     //add to messages in conversation db
-    Conversation
-      .findOneAndUpdate({ _id: data.room }, { $push: { messages: { user: data.userId, text: data.message } } })
-      .exec((error, messageAdded) => {
-        if (error) throw error;
-      });
+    Conversation.findOneAndUpdate(
+      { _id: data.room },
+      { $push: { messages: { user: data.userId, text: data.message } } }
+    ).exec((error, messageAdded) => {
+      if (error) throw error;
+    });
   });
 
   //handle user typing
   socket.on("USER_TYPING", (data) => {
-    socket.in(data.room)
-      .broadcast
-      .emit("OTHER_USERS_TYPING", {
-        username: data.username
-      })
-  })
+    socket.in(data.room).broadcast.emit("OTHER_USERS_TYPING", {
+      username: data.username,
+    });
+  });
 
   // //test socket
   //   socket.on("USER_TYPING", (data) => {
@@ -129,12 +125,10 @@ io.on("connect", (socket) => {
 
   //handle user stop typing
   socket.on("USER_STOP_TYPING", (data) => {
-    socket.in(data.room)
-      .broadcast
-      .emit("OTHER_USERS_STOP_TYPING", {
-        username: data.username
-      })
-  })
+    socket.in(data.room).broadcast.emit("OTHER_USERS_STOP_TYPING", {
+      username: data.username,
+    });
+  });
 
   //test socket
   // socket.on("USER_STOP_TYPING", (data) => {
@@ -146,6 +140,7 @@ io.on("connect", (socket) => {
 
   // Runs when client disconnects
   socket.on("LEAVE_CONVERSATION", (data) => {
+    console.log("LEAVING CONVERSATION")
     //leave room
     socket.leave(data.room)
 
@@ -158,24 +153,28 @@ io.on("connect", (socket) => {
         message: `${data.username} has left ${data.conversationName}`,
         time: moment().format("h:mm a")
       });
-    
+
     //remove conversation from user
-    User
-      .findOneAndUpdate({ _id: data.userId }, { $pull: { conversations: { _id: data.conversationId }}})  
-      .exec((error, updatedUser) => {
-        if (error) throw error;
-      });
+    User.updateOne(
+      { _id: data.userId },
+      { $pullAll: { users: [data.room] } }
+    ).exec((err, updatedUser) => {
+      console.log(updatedUser)
+      if (err) return next(err);
+    });
 
     //remove user from conversation
-    Conversation
-      .findOneAndUpdate({ _id: data.conversationId }, { $pull: { users: { _id: data.userId }}})  
-      .exec((error, updatedUser) => {
-        if (error) throw error;
-      });
+    console.log(data.room)
+    console.log(data.userId)
+    Conversation.updateOne(
+      { _id: data.room },
+      { $pullAll: { users: [data.userId] } }
+    ).exec((err, updatedConvo) => {
+      console.log(updatedConvo)
+      if (err) return next(err);
+    });
   });
-
 });
-
 
 ////////////////////////////////////////////////////////////
 // GENERATE FAKE DATA
@@ -233,7 +232,6 @@ user1.conversations.push(conversation1);
 // user1.save();
 
 /////////////////////////////////////////////////////////////////////////////////////
-
 
 server.listen(port);
 console.log("Server listening on:", port);
