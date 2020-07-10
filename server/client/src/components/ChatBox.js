@@ -191,15 +191,6 @@ this.currentlyTypingUsers = () => {
   }
 }
 
-//when user disconnects from conversation (socket)
-this.socket.on("disconnect", () => {
-  this.socket.emit("disconnect", {
-    userId: this.props.user._id,
-    room: this.props.conversationId,
-    username: this.props.user.userName,
-  });
-});
-
 // exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
 this.exitConversation = () => {
   //disconnect from socket
