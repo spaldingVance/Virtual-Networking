@@ -34,8 +34,12 @@ class PopUp extends Component {
 
   updateConversationName(event) {
     this.setState({ conversationName: event.target.value }, () => {
-      // console.log(`convoName changed to ${this.state.conversationName}`);
+      console.log(`convoName changed to ${this.state.conversationName}`);
     });
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      this.conversationSubmit()
+    }
   }
 
   render() {
@@ -51,8 +55,10 @@ class PopUp extends Component {
                 size="lg"
                 type="text"
                 placeholder="Conversation Name"
-                value={this.state.conversationName}
+                value = {this.state.conversationName}
+                onKeyDown={this.updateConversationName.bind(this)}
                 onChange={this.updateConversationName.bind(this)}
+
               />
               <br />
               <Button
