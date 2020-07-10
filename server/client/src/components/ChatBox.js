@@ -19,6 +19,8 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
 
+    console.log(props)
+
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
@@ -197,6 +199,11 @@ class ChatBox extends Component {
     this.scrollToBottom = () => {
       this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
+
+    this.findSizeOfConversation = (conversationName) => {
+       let joinedConvo = this.props.event.conversations.find((convo) => convo.conversationName === conversationName)
+       return joinedConvo.users.length;
+    }
   }
 
   componentDidMount() {
@@ -207,6 +214,8 @@ class ChatBox extends Component {
     this.scrollToBottom();
   }
 
+  
+
   render() {
     return (
       <Container className="m-0 p-0">
@@ -216,6 +225,7 @@ class ChatBox extends Component {
               <Card.Body>
                 <Card.Title>
                   {this.props.conversationName}
+                  {"  Users: " + this.findSizeOfConversation(this.props.conversationName)}
                   <Badge
                     pill
                     variant="danger"

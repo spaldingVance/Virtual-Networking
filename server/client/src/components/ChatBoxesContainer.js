@@ -29,6 +29,7 @@ class ChatBoxesContainer extends Component {
           <ChatBox
             conversationId={conversation._id}
             conversationName={conversation.conversationName}
+            conversationUsers={conversation.users.length}
           />
         </Col>
       );
