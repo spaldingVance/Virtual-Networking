@@ -75,28 +75,22 @@ io.on("connect", (socket) => {
     });
 
     //add user id to conversation in database
-    Conversation.findOneAndUpdate(
-      { _id: data.conversationId },
-      { $push: { users: data.userId } }
-    ).exec((error, conversationUpdated) => {
-      if (error) throw error;
-      console.log(conversationUpdated);
-    });
-
+    Conversation
+      .findOneAndUpdate({ _id: data.conversationId }, { $push: { users: data.userId } })
+      .exec((error, conversationUpdated) => {
+        if (error) throw error;
+      })
+    
     //add conversation id to user in database
-    User.findOneAndUpdate(
-      { _id: data.userId },
-      { $push: { conversations: data.conversationId } }
-    ).exec((error, userUpdated) => {
-      if (error) throw error;
-      console.log(userUpdated);
-    });
+    User
+      .findOneAndUpdate({ _id: data.userId }, { $push: { conversations: data.conversationId } })
+      .exec((error, userUpdated) => {
+        if (error) throw error;
+      })
   });
 
   //listen for chat messages
   socket.on("SEND_MESSAGE", (data) => {
-    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
-    console.log("Next step will be io.emit RECEIVE_MESSAGE");
     //when chat messages sent, display to room
     io.sockets.in(data.room).emit("MESSAGE", {
       username: data.username,

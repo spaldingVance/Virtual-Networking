@@ -84,16 +84,12 @@ class ChatBox extends Component {
 
     //remove typing user from state
     const removeTyping = (data) => {
-      // console.log("remove typing")
       //users typing in state
       let currentUsersTyping = this.state.usersTyping
-      // console.log("USER TO REMOVE", data.username)
-      // console.log("USERS TYPING BEFORE REMOVAL", currentUsersTyping)
 
       let userExists = currentUsersTyping.includes(data.username)
 
       if (userExists) {
-        // console.log("USER EXISTS, REMOVE")
         //remove user from typing in state
         let userIndex = currentUsersTyping.findIndex(user => {
           return user === data.username
@@ -101,181 +97,185 @@ class ChatBox extends Component {
 
         currentUsersTyping.splice(userIndex, 1);
         this.setState({ usersTyping: currentUsersTyping })
-        // console.log("CURRENT USERS TYPING", currentUsersTyping)
       }
     }
 
-//this adds the message received back from server/index.js to this state's messages array
-const addMessage = (data) => {
-  // console.log(data);
-  this.setState({ messages: [...this.state.messages, data] });
-  // console.log(this.state);
-};
+    //this adds the message received back from server/index.js to this state's messages array
+    const addMessage = (data) => {
+      this.setState({ messages: [...this.state.messages, data] });
+    };
 
-// the message will be in the local state?
-this.sendMessage = (ev) => {
-  // console.log("Send button clicked, send message invoked");
-  // console.log("The sent message is:", this.state.message);
-  ev.preventDefault();
-  this.socket.emit("SEND_MESSAGE", {
-    username: this.props.user.userName,
-    message: this.state.message,
-    room: this.props.conversationId,
-    userId: this.props.user._id,
-    role: this.props.user.role,
-  });
-  this.setState({ message: "" });
-};
-
-//this will send invoke the send message function if the enter key is pressed
-this.handleKeyPress = (event) => {
-  if (event.charCode === 13) {
-    //sending message
-    this.sendMessage(event);
-
-    //telling others that user has stopped typing
-    this.socket.emit("USER_STOP_TYPING", {
-      username: this.props.user.userName,
-      room: this.props.conversationId
-    })
-  } else {
-
-    //send socket to announce user is typing
-    let typing = false;
-    let timeout = undefined;
-
-    //timeout for typing
-    const timeoutFunction = () => {
-      typing = false;
-      this.socket.emit("USER_STOP_TYPING", {
+    // the message will be in the local state?
+    this.sendMessage = (ev) => {
+      ev.preventDefault();
+      this.socket.emit("SEND_MESSAGE", {
         username: this.props.user.userName,
-        room: this.props.conversationId
-      })
+        message: this.state.message,
+        room: this.props.conversationId,
+        userId: this.props.user._id,
+        role: this.props.user.role,
+      });
+      this.setState({ message: "" });
+    };
+
+    //this will send invoke the send message function if the enter key is pressed
+    this.handleKeyPress = (event) => {
+      if (event.charCode === 13) {
+        //sending message
+        this.sendMessage(event);
+
+        //telling others that user has stopped typing
+        this.socket.emit("USER_STOP_TYPING", {
+          username: this.props.user.userName,
+          room: this.props.conversationId
+        })
+      } else {
+
+        //send socket to announce user is typing
+        let typing = false;
+        let timeout = undefined;
+
+        //timeout for typing
+        const timeoutFunction = () => {
+          typing = false;
+          this.socket.emit("USER_STOP_TYPING", {
+            username: this.props.user.userName,
+            room: this.props.conversationId
+          })
+        }
+
+        if (typing == false) {
+          typing = true;
+          //socket to broadcast current user to other users
+          this.socket.emit("USER_TYPING", {
+            username: this.props.user.userName,
+            room: this.props.conversationId
+          })
+
+          //set timeout
+          timeout = setTimeout(timeoutFunction, 3000);
+        } else {
+          clearTimeout(timeout);
+          timeout = setTimeout(timeoutFunction, 3000);
+        }
+      }
     }
 
-    if (typing == false) {
-      typing = true;
-      //socket to broadcast current user to other users
-      this.socket.emit("USER_TYPING", {
-        username: this.props.user.userName,
-        room: this.props.conversationId
-      })
+    //map users to typing div
+    this.currentlyTypingUsers = () => {
+      //users currently typing
+      const typingUsers = this.state.usersTyping;
 
-      //set timeout
-      timeout = setTimeout(timeoutFunction, 2000);
-    } else {
-      clearTimeout(timeout);
-      timeout = setTimeout(timeoutFunction, 2000);
+      //map users in typing array to div
+      if (typingUsers.length === 1) {
+        return (
+          <p>{typingUsers[0]} is typing...</p>
+        )
+      } else if (typingUsers.length === 2) {
+        return (
+          <p>{typingUsers[0]} and {typingUsers[1]} are typing...</p>
+        )
+      } else if (typingUsers.length > 2) {
+        return <p>several users are typing...</p>
+      }
+    }
+
+    // exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
+    this.exitConversation = () => {
+      //disconnect from socket
+      this.socket.emit("LEAVE_CONVERSATION", {
+        room: this.props.conversationId,
+        userId: this.props.user._id,
+        role: this.props.user.role,
+        username: this.props.user.userName,
+        conversationName: this.props.conversationName
+      })
+      // get chatbox to disappear
+      this.props.leaveOneConversation(this.props.conversationId)
+    };
+
+    this.scrollToBottom = () => {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
   }
-}
 
-//map users to typing div
-this.currentlyTypingUsers = () => {
-  //users currently typing
-  const typingUsers = this.state.usersTyping;
-
-  //map users in typing array to div
-  if (typingUsers.length === 1) {
-    return (
-      <p>{typingUsers[0]} is typing...</p>
-    )
-  } else if (typingUsers.length === 2) {
-    return (
-      <p>{typingUsers[0]} and {typingUsers[1]} are typing...</p>
-    )
-  } else if (typingUsers.length > 2) {
-    return <p>several users are typing...</p>
-  }
-}
-
-// exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
-this.exitConversation = () => {
-  //disconnect from socket
-  this.socket.emit("LEAVE_CONVERSATION", {
-    room: this.props.conversationId,
-    userId: this.props.user._id,
-    role: this.props.user.role,
-    username: this.props.user.userName,
-    conversationName: this.props.conversationName
-  })
-  // get chatbox to disappear
-  this.props.leaveOneConversation(this.props.conversationId)
-};
+  componentDidMount() {
+    this.scrollToBottom();
   }
 
-componentDidUpdate() {
-  // this.newMessage.scrollIntoView({ behavior: "smooth" });
-}
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
 
-render() {
-  return (
-    <Container className="m-0 p-0">
-      <Row className="m-0 p-0">
-        <Col className="m-0 p-0">
-          <Card className="m-0 p-0 shadow-sm">
-            <Card.Body>
-              <Card.Title>
-                {this.props.conversationName}
-                <Badge
-                  pill
-                  variant="danger"
-                  className="close-button ml-4"
-                  onClick={this.exitConversation}>
-                  X
+  render() {
+    return (
+      <Container className="m-0 p-0">
+        <Row className="m-0 p-0">
+          <Col className="m-0 p-0">
+            <Card className="m-0 p-0 shadow-sm">
+              <Card.Body>
+                <Card.Title>
+                  {this.props.conversationName}
+                  <Badge
+                    pill
+                    variant="danger"
+                    className="close-button ml-4"
+                    onClick={this.exitConversation}>
+                    X
                   </Badge>
-              </Card.Title>
-              <hr />
-              <div className="messages">
-                {this.state.messages.map((message, index) => {
-                  return (
-                    <div key={index} ref={(ref) => (this.newMessage = ref)}>
-                      <div>
-                        <strong className="mr-1">
-                          {message.username} ({message.role})
+                </Card.Title>
+                <hr />
+                <div className="messages">
+                  {this.state.messages.map((message, index) => {
+                    return (
+                      <div key={index} ref={(ref) => (this.newMessage = ref)}>
+                        <div>
+                          <strong className="mr-1">
+                            {message.username} ({message.role})
                           </strong>
-                        <strong></strong>
-                        <span>{message.time}</span>
+                          <strong></strong>
+                          <span>{message.time}</span>
+                        </div>
+                        <div>{message.message}</div>
                       </div>
-                      <div>{message.message}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </Card.Body>
-            <div className="card-footer">
-              <InputGroup>
-                <FormControl
-                  placeholder="Message"
-                  aria-label="Message"
-                  aria-describedby="basic-addon2"
-                  value={this.state.message}
-                  onKeyPress={this.handleKeyPress}
-                  onChange={(event) => {
-                    this.setState({ message: event.target.value });
-                  }}
-                />
-                <InputGroup.Append>
-                  <Button
-                    className="ml-2"
-                    variant="outline-secondary"
-                    onClick={this.sendMessage}>
-                    Send
+                    );
+                  })}
+                  <div ref={(el) => { this.messagesEnd = el; }}></div>
+                </div >
+              </Card.Body>
+              <div className="card-footer">
+                <InputGroup>
+                  <FormControl
+                    placeholder="Message"
+                    aria-label="Message"
+                    aria-describedby="basic-addon2"
+                    value={this.state.message}
+                    onKeyPress={this.handleKeyPress}
+                    onChange={(event) => {
+                      this.setState({ message: event.target.value });
+                    }}
+                  />
+                  <InputGroup.Append>
+                    <Button
+                      className="ml-2"
+                      variant="outline-secondary"
+                      onClick={this.sendMessage}>
+                      Send
                     </Button>
-                </InputGroup.Append>
+                  </InputGroup.Append>
 
-              </InputGroup>
-              {/* show users typing  */}
-              <div className="user-typing">
-                {this.currentlyTypingUsers()}
+                </InputGroup>
+                {/* show users typing  */}
+                <div className="user-typing">
+                  {this.currentlyTypingUsers()}
+                </div>
               </div>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  );
-}
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 }
 
 function mapDispatchToProps(dispatch) {
