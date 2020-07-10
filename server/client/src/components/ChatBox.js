@@ -117,7 +117,7 @@ class ChatBox extends Component {
   }
 
   componentDidUpdate() {
-    this.newMessage.scrollIntoView({ behavior: "smooth" });
+    // this.newMessage.scrollIntoView({ behavior: "smooth" });
   }
 
   render() {

@@ -10,6 +10,8 @@ import {
 import { Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
+import PopUp from "./PopUp"
+
 
 // styling imports
 import "../styles/ConversationList.css";
@@ -25,6 +27,7 @@ class ConversationList extends Component {
         { conversationName: "HTML", _id: 200 },
       ],
       joinedConversations: [], // by id
+      active: false
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
@@ -32,6 +35,11 @@ class ConversationList extends Component {
   }
 
   componentDidMount() {
+    // grab from URL
+    this.props.getConversations(this.props.match.params.eventId);
+  }
+
+  componentDidUpdate() {
     // grab from URL
     this.props.getConversations(this.props.match.params.eventId);
   }
@@ -60,6 +68,12 @@ class ConversationList extends Component {
       console.log(this.props.logoutUser);
     }
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
+  }
+
+  popUpAppears() {
+    this.setState({
+      active: !this.state.active
+  });
   }
 
   renderConversationList() {
@@ -92,17 +106,13 @@ class ConversationList extends Component {
     } else {
       return (
         <div id="conversation-column">
-          <ul className="conversation-list">
-            <a href="#">
-              <li>Start your own convo!</li>
-            </a>
-          </ul>
-          <Button
-            onClick={this.logoutUser.bind(this)}
-            variant="outline-danger"
-            id="leave-event">
-            Leave Event
-          </Button>
+            {this.state.active && <PopUp />}
+            <Button onClick={this.popUpAppears.bind(this)} variant="outline-primary" id="create-event">
+              Create a Conversation
+            </Button>
+            <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
+              Leave Event
+            </Button>
           <h3>Join a Chat</h3>
           <ul className="conversation-list">{this.renderConversationList()}</ul>
         </div>
