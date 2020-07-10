@@ -8,6 +8,7 @@ export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 export const LEAVE_ALL_CONVERSATIONS = "LEAVE_ALL_CONVERSATIONS";
 export const LOGOUT = "LOGOUT";
 export const CREATE_CONVERSATION = "CREATE_CONVERSATION"
+export const LEAVE_ONE_CONVERSATION = "LEAVE_ONE_CONVERSATION";
 
 export function getEvents() {
   const url = `/api/events`;
@@ -72,6 +73,13 @@ export function leaveAllConversations() {
     type: LEAVE_ALL_CONVERSATIONS,
     payload: [],
   };
+}
+
+export function leaveOneConversation(conversationId) {
+  return {
+    type: LEAVE_ONE_CONVERSATION,
+    payload: conversationId
+  }
 }
 
 export function logout(eventId, userId) {
