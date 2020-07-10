@@ -1,9 +1,16 @@
 #current-event-tile {
-  background: var(--main);
+  background: rgba(48,41,179,.5);  
   min-height: 250px;
   width: 100%;
   border-radius: 20px;
   padding: 20px;
   margin: 0 auto;
   color: white;
+}
+
+.current-tile-container {
+  background: url(../assets/tile-image.jpg);
+  border-radius: 1em;
+  background-size: cover;
+  background-position: center;
 }
