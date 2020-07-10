@@ -28,6 +28,7 @@ class ChatBox extends Component {
     this.state = {
       message: "",
       messages: [],
+      usersTyping: []
     };
 
     //how are we getting the name of the room? incoming props from parent component?
@@ -62,6 +63,45 @@ class ChatBox extends Component {
       addMessage(data);
     });
 
+    //socket to receive information about other users typing
+    this.socket.on("OTHER_USERS_TYPING", function (data) {
+      console.log("OTHER USERS ARE TYPING")
+      setTyping(data)
+    })
+
+    //socket to receive information about when other users stop typing
+    this.socket.on("OTHER_USERS_STOP_TYPING", function (data) {
+      console.log("OTHER USERS HAVE STOPPED TYPING")
+      removeTyping(data)
+    })
+
+    //add typing user to state
+    const setTyping = (data) => {
+      let currentUsersTyping = this.state.usersTyping
+      if (!currentUsersTyping.includes(data.username)) {
+        currentUsersTyping.push(data.username)
+        this.setState({ usersTyping: currentUsersTyping })
+      }
+    }
+
+    //remove typing user from state
+    const removeTyping = (data) => {
+      console.log("remove typing")
+      //users typing in state
+      let currentUsersTyping = this.state.usersTyping
+
+        //remove user from typing in state
+        let userIndex = currentUsersTyping.findIndex(user => {
+          return user === data.username
+        });
+        if (userIndex) {
+
+          currentUsersTyping.splice(userIndex, 1);
+          this.setState({ usersTyping: currentUsersTyping })
+          console.log("CURRENT USERS TYPING", currentUsersTyping)
+      }
+    }
+
     //this adds the message received back from server/index.js to this state's messages array
     const addMessage = (data) => {
       console.log(data);
@@ -89,8 +129,55 @@ class ChatBox extends Component {
       if (event.charCode === 13) {
         console.log("inside if statement");
         this.sendMessage(event);
+      } else {
+
+        //send socket to announce user is typing
+        let typing = false;
+        let timeout = undefined;
+
+        const timeoutFunction = () => {
+          typing = false;
+          this.socket.emit("USER_STOP_TYPING", {
+            username: this.props.user.userName,
+            room: this.props.conversationId
+          })
+        }
+
+        if (typing == false) {
+          typing = true;
+          //socket to broadcast current user to other users
+          this.socket.emit("USER_TYPING", {
+            username: this.props.user.userName,
+            room: this.props.conversationId
+          })
+
+          //set timeout
+          timeout = setTimeout(timeoutFunction, 3000);
+        } else {
+          clearTimeout(timeout);
+          timeout = setTimeout(timeoutFunction, 3000);
+        }
       }
-    };
+    }
+
+    //map users to typing div
+    this.currentlyTypingUsers = () => {
+      //users currently typing
+      const typingUsers = this.state.usersTyping;
+
+      //map users in typing array to div
+      if (typingUsers.length === 1) {
+        return (
+          <p>{typingUsers[0]} is typing...</p>
+        )
+      } else if (typingUsers.length === 2) {
+        return (
+          <p>{typingUsers[0]} and {typingUsers[1]} are typing...</p>
+        )
+      } else if (typingUsers.length > 2) {
+        return <p>several users are typing...</p>
+      }
+    }
 
     //when user disconnects from conversation (socket)
     this.socket.on("disconnect", () => {
@@ -101,7 +188,7 @@ class ChatBox extends Component {
       });
     });
 
-    //TO DO: exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
+    // exit conversation when the red X button is clicked. The conversation should be removed from the current conversations redux store and then the page should re-render and remove the clicked chatbox
     this.exitConversation = () => {
       //disconnect from socket
       this.socket.emit("LEAVE_CONVERSATION", {
@@ -111,7 +198,7 @@ class ChatBox extends Component {
         username: this.props.user.userName,
         conversationName: this.props.conversationName
       })
-    //TODO: get chatbox to disappear
+    // get chatbox to disappear
       this.props.leaveOneConversation(this.props.conversationId)
     };
   }
@@ -175,7 +262,12 @@ class ChatBox extends Component {
                       Send
                     </Button>
                   </InputGroup.Append>
+
                 </InputGroup>
+                {/* show users typing  */}
+                <div className="user-typing">
+                  {this.currentlyTypingUsers()}
+                </div>
               </div>
             </Card>
           </Col>
