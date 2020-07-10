@@ -44,13 +44,13 @@ class Login extends Component {
 
   updateName(event) {
     this.setState({ userName: event.target.value }, () => {
-      console.log(`userName changed to ${this.state.userName}`);
+      // console.log(`userName changed to ${this.state.userName}`);
     });
   }
 
   updateRole(event) {
     this.setState({ userRole: event.target.value }, () => {
-      console.log(`userRole changed to ${this.state.userRole}`);
+      // console.log(`userRole changed to ${this.state.userRole}`);
     });
   }
 

@@ -10,7 +10,7 @@ import "../styles/ChatBoxesContainer.css";
 class ChatBoxesContainer extends Component {
   constructor(props) {
     super(props);
-    console.log("chatbox container constructor props=", props);
+    // console.log("chatbox container constructor props=", props);
     this.setState = {
       conversations: this.props.conversations,
     };
@@ -19,7 +19,7 @@ class ChatBoxesContainer extends Component {
   }
 
   renderChatBoxes() {
-    console.log("inside render chatbox, this.props= ", this.props);
+    // console.log("inside render chatbox, this.props= ", this.props);
 
     let shortenedConversations = this.props.conversations.slice(0, 2);
 
@@ -46,7 +46,7 @@ class ChatBoxesContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("inside chatboxcontainer mapstate to props, state=", state);
+  // console.log("inside chatboxcontainer mapstate to props, state=", state);
   return { conversations: state.currentConversations };
 }
 
