@@ -19,8 +19,9 @@
 
 .messages {
   height: 90%;
-  overflow: scroll;
-  overflow-anchor: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-anchor: none !important;
 }
 
 .card-body {

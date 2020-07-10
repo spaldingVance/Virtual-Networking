@@ -157,7 +157,7 @@ io.on("connect", (socket) => {
     //remove conversation from user
     User.updateOne(
       { _id: data.userId },
-      { $pullAll: { users: [data.room] } }
+      { $pullAll: { conversations: [data.room] } }
     ).exec((err, updatedUser) => {
       console.log(updatedUser)
       if (err) return next(err);
