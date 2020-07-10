@@ -132,14 +132,21 @@ this.sendMessage = (ev) => {
 //this will send invoke the send message function if the enter key is pressed
 this.handleKeyPress = (event) => {
   if (event.charCode === 13) {
-    console.log("inside if statement");
+    //sending message
     this.sendMessage(event);
+
+    //telling others that user has stopped typing
+    this.socket.emit("USER_STOP_TYPING", {
+      username: this.props.user.userName,
+      room: this.props.conversationId
+    })
   } else {
 
     //send socket to announce user is typing
     let typing = false;
     let timeout = undefined;
 
+    //timeout for typing
     const timeoutFunction = () => {
       typing = false;
       this.socket.emit("USER_STOP_TYPING", {
@@ -157,10 +164,10 @@ this.handleKeyPress = (event) => {
       })
 
       //set timeout
-      timeout = setTimeout(timeoutFunction, 3000);
+      timeout = setTimeout(timeoutFunction, 2000);
     } else {
       clearTimeout(timeout);
-      timeout = setTimeout(timeoutFunction, 3000);
+      timeout = setTimeout(timeoutFunction, 2000);
     }
   }
 }
