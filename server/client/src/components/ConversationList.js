@@ -165,7 +165,10 @@ class ConversationList extends Component {
             Leave Event
           </Button>
           <h3 id="join-convo">Join a Conversation</h3>
+          <div className="conversation-list-container">
+
           <ul className="conversation-list">{this.renderConversationList()}</ul>
+          </div>
         </div>
       );
     }

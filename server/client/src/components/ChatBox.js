@@ -19,9 +19,6 @@ class ChatBox extends Component {
   constructor(props) {
     super(props);
 
-    //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
-    //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
-
     //need to get the name of the user, userid and message history from more mapStateToProps
     this.state = {
       message: "",
