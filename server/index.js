@@ -75,18 +75,20 @@ io.on("connect", (socket) => {
     });
 
     //add user id to conversation in database
-    Conversation
-      .findOneAndUpdate({ _id: data.conversationId }, { $push: { users: data.userId } })
-      .exec((error, conversationUpdated) => {
-        if (error) throw error;
-      })
-    
+    Conversation.findOneAndUpdate(
+      { _id: data.conversationId },
+      { $push: { users: data.userId } }
+    ).exec((error, conversationUpdated) => {
+      if (error) throw error;
+    });
+
     //add conversation id to user in database
-    User
-      .findOneAndUpdate({ _id: data.userId }, { $push: { conversations: data.conversationId } })
-      .exec((error, userUpdated) => {
-        if (error) throw error;
-      })
+    User.findOneAndUpdate(
+      { _id: data.userId },
+      { $push: { conversations: data.conversationId } }
+    ).exec((error, userUpdated) => {
+      if (error) throw error;
+    });
   });
 
   //listen for chat messages
@@ -140,37 +142,35 @@ io.on("connect", (socket) => {
 
   // Runs when client disconnects
   socket.on("LEAVE_CONVERSATION", (data) => {
-    console.log("LEAVING CONVERSATION")
+    console.log("LEAVING CONVERSATION");
     //leave room
-    socket.leave(data.room)
+    socket.leave(data.room);
 
     //broadcast to room that user left
-    socket.in(data.room)
-      .broadcast
-      .emit("MESSAGE", {
-        username: bot.username,
-        role: bot.role,
-        message: `${data.username} has left ${data.conversationName}`,
-        time: moment().format("h:mm a")
-      });
+    socket.in(data.room).broadcast.emit("MESSAGE", {
+      username: bot.username,
+      role: bot.role,
+      message: `${data.username} has left ${data.conversationName}`,
+      time: moment().format("h:mm a"),
+    });
 
     //remove conversation from user
     User.updateOne(
       { _id: data.userId },
-      { $pullAll: { users: [data.room] } }
+      { $pullAll: { conversations: [data.room] } }
     ).exec((err, updatedUser) => {
-      console.log(updatedUser)
+      console.log(updatedUser);
       if (err) return next(err);
     });
 
     //remove user from conversation
-    console.log(data.room)
-    console.log(data.userId)
+    console.log(data.room);
+    console.log(data.userId);
     Conversation.updateOne(
       { _id: data.room },
       { $pullAll: { users: [data.userId] } }
     ).exec((err, updatedConvo) => {
-      console.log(updatedConvo)
+      console.log(updatedConvo);
       if (err) return next(err);
     });
   });
@@ -182,8 +182,6 @@ io.on("connect", (socket) => {
 // you can use this format to create new fake data and save it as well
 // make sure to comment out the .save() lines when running the server multiple times
 // to avoid duplicate data
-
-
 
 // let event1 = new Event({
 //   eventName: "Programmers of NC",
