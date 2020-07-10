@@ -82,7 +82,6 @@ io.on("connect", (socket) => {
       .findOneAndUpdate({ _id: data.conversationId }, { $push: { users: data.userId } })
       .exec((error, conversationUpdated) => {
         if (error) throw error;
-        console.log(conversationUpdated)
       })
     
     //add conversation id to user in database
@@ -90,14 +89,11 @@ io.on("connect", (socket) => {
       .findOneAndUpdate({ _id: data.userId }, { $push: { conversations: data.conversationId } })
       .exec((error, userUpdated) => {
         if (error) throw error;
-        console.log(userUpdated)
       })
   });
 
   //listen for chat messages
   socket.on("SEND_MESSAGE", (data) => {
-    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
-    console.log("Next step will be io.emit RECEIVE_MESSAGE");
     //when chat messages sent, display to room
     io.sockets.in(data.room).emit("MESSAGE", {
       username: data.username,
