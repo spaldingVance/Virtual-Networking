@@ -18,9 +18,7 @@ import { bindActionCreators } from "redux";
 class ChatBox extends Component {
   constructor(props) {
     super(props);
-    console.log("inside chatbox constructor, props is=", this.props);
 
-    console.log("THE USER IS ", this.props.user);
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
@@ -45,33 +43,33 @@ class ChatBox extends Component {
         conversationName: this.props.conversationName,
       });
     });
-    console.log(
-      "CONVERSATION ID BEING SENT TO SOCKET ON JOINING ROOM:",
-      this.props.conversationId
-    );
-    console.log(
-      "USER ID BEING SENT TO SOCKET ON JOINING ROOM:",
-      this.props.user._id
-    );
+    // console.log(
+    //   "CONVERSATION ID BEING SENT TO SOCKET ON JOINING ROOM:",
+    //   this.props.conversationId
+    // );
+    // console.log(
+    //   "USER ID BEING SENT TO SOCKET ON JOINING ROOM:",
+    //   this.props.user._id
+    // );
 
     //this receives back the message from server/index.js
     this.socket.on("MESSAGE", function (data) {
-      console.log(
-        "Chatbox receiving back message to add message to messages array. Data= ",
-        data
-      );
+      // console.log(
+      //   "Chatbox receiving back message to add message to messages array. Data= ",
+      //   data
+      // );
       addMessage(data);
     });
 
     //socket to receive information about other users typing
     this.socket.on("OTHER_USERS_TYPING", function (data) {
-      console.log("OTHER USERS ARE TYPING")
+      // console.log("OTHER USERS ARE TYPING")
       setTyping(data)
     })
 
     //socket to receive information about when other users stop typing
     this.socket.on("OTHER_USERS_STOP_TYPING", function (data) {
-      console.log("OTHER USERS HAVE STOPPED TYPING")
+      // console.log("OTHER USERS HAVE STOPPED TYPING")
       removeTyping(data)
     })
 
@@ -86,16 +84,16 @@ class ChatBox extends Component {
 
     //remove typing user from state
     const removeTyping = (data) => {
-      console.log("remove typing")
+      // console.log("remove typing")
       //users typing in state
       let currentUsersTyping = this.state.usersTyping
-      console.log("USER TO REMOVE", data.username)
-      console.log("USERS TYPING BEFORE REMOVAL", currentUsersTyping)
+      // console.log("USER TO REMOVE", data.username)
+      // console.log("USERS TYPING BEFORE REMOVAL", currentUsersTyping)
 
       let userExists = currentUsersTyping.includes(data.username)
 
       if (userExists) {
-        console.log("USER EXISTS, REMOVE")
+        // console.log("USER EXISTS, REMOVE")
         //remove user from typing in state
         let userIndex = currentUsersTyping.findIndex(user => {
           return user === data.username
@@ -103,21 +101,21 @@ class ChatBox extends Component {
 
         currentUsersTyping.splice(userIndex, 1);
         this.setState({ usersTyping: currentUsersTyping })
-        console.log("CURRENT USERS TYPING", currentUsersTyping)
+        // console.log("CURRENT USERS TYPING", currentUsersTyping)
       }
     }
 
 //this adds the message received back from server/index.js to this state's messages array
 const addMessage = (data) => {
-  console.log(data);
+  // console.log(data);
   this.setState({ messages: [...this.state.messages, data] });
-  console.log(this.state);
+  // console.log(this.state);
 };
 
 // the message will be in the local state?
 this.sendMessage = (ev) => {
-  console.log("Send button clicked, send message invoked");
-  console.log("The sent message is:", this.state.message);
+  // console.log("Send button clicked, send message invoked");
+  // console.log("The sent message is:", this.state.message);
   ev.preventDefault();
   this.socket.emit("SEND_MESSAGE", {
     username: this.props.user.userName,
@@ -286,7 +284,6 @@ function mapDispatchToProps(dispatch) {
 
 
 function mapStateToProps(state) {
-  console.log("inside mapstatetoprops chatbox, state=", state);
   return {
     event: state.event,
     user: state.user

@@ -61,10 +61,10 @@ class EventsList extends Component {
   }
 
   render() {
-    console.log(
-      "The state that has been mapped to the EventsList component props is ",
-      this.props
-    );
+    // console.log(
+    //   "The state that has been mapped to the EventsList component props is ",
+    //   this.props
+    // );
 
     return (
       <div>

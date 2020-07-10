@@ -40,14 +40,18 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (
-      this.props.event.conversations.length !==
-      nextProps.event.conversations.length
-    ) {
-      return true;
-    }
-    return false;
+  // shouldComponentUpdate(nextProps) {
+  //   if (
+  //     this.props.event.conversations.length !==
+  //     nextProps.event.conversations.length
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
+  componentWillUnmount() {
+    this.logoutUser();
   }
 
   handleJoinConversation(conversation) {
@@ -68,10 +72,10 @@ class ConversationList extends Component {
   }
 
   logoutUser() {
-    console.log("User ID = " + this.props.user._id);
+    // console.log("User ID = " + this.props.user._id);
     this.props.logout(this.props.event._id, this.props.user._id);
     if (this.props.logoutUser) {
-      console.log(this.props.logoutUser);
+      // console.log(this.props.logoutUser);
     }
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
@@ -83,10 +87,10 @@ class ConversationList extends Component {
   }
 
   renderConversationList() {
-    console.log(
-      "In Render Conversation List, this.props.event are ",
-      this.props.event
-    );
+    // console.log(
+    //   "In Render Conversation List, this.props.event are ",
+    //   this.props.event
+    // );
 
     if (this.props.event.conversations) {
       // need to sort the conversations by number of participants
@@ -111,7 +115,7 @@ class ConversationList extends Component {
   }
 
   render() {
-    console.log("Inside render of Conversation List, this.props= ", this.props);
+    // console.log("Inside render of Conversation List, this.props= ", this.props);
 
     if (!this.props.user.hasOwnProperty("userName")) {
       return <Redirect to={`/`} />;

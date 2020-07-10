@@ -14,8 +14,6 @@ export function getEvents() {
   const url = `/api/events`;
   const request = axios.get(url);
 
-  request.then(console.log("hi!!!"));
-
   return {
     type: GET_EVENTS,
     payload: request,
@@ -33,7 +31,7 @@ export function getConversations(currentEvent) {
   const url = `/api/events/${currentEvent}`;
   const request = axios.get(url);
 
-  request.then(console.log(`Conversations requested for ${currentEvent}`));
+  // request.then(console.log(`Conversations requested for ${currentEvent}`));
 
   return {
     type: GET_CONVERSATIONS,
@@ -53,7 +51,7 @@ export function login(eventID, userName, role) {
     },
   });
 
-  request.then(console.log("login attempted"));
+  // request.then(console.log("login attempted"));
 
   return {
     type: LOGIN,
@@ -90,7 +88,7 @@ export function logout(eventId, userId) {
     url: url,
   });
 
-  request.then(console.log("logout attempted"));
+  // request.then(console.log("logout attempted"));
 
   return {
     type: LOGOUT,
@@ -109,7 +107,7 @@ export function createConversation(eventId, conversationName) {
     }
   });
 
-  request.then(console.log("create conversation attempted"));
+  // request.then(console.log("create conversation attempted"));
 
   return {
     type: CREATE_CONVERSATION,
