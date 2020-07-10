@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import muzeLogo from "../assets/muze-logo.svg";
 import "../styles/header.css";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   constructor(props) {
@@ -12,7 +13,9 @@ class Header extends Component {
     if (this.props.user) {
     return (
       <div id="header">
-        <img id="muze" src={muzeLogo} alt="Muze Logo" />
+        <Link to="/">
+          <img id="muze" src={muzeLogo} alt="Muze Logo" />
+        </Link>
         <div id="user-info">
           <div id="user-words">
             <p id="user-name">{this.props.user.userName}</p>
