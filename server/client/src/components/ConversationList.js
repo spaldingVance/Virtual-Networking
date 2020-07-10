@@ -39,6 +39,11 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
+  componentDidUpdate() {
+    // grab from URL
+    this.props.getConversations(this.props.match.params.eventId);
+  }
+
   handleJoinConversation(conversation) {
     this.props.getJoinedConversations(conversation);
   }

@@ -10,6 +10,7 @@ export default function (state = [], action) {
         return state;
       }
     case CREATE_CONVERSATION:
+       console.log(state)
       return state;
     default:
       return state;
