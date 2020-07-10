@@ -183,6 +183,8 @@ class ChatBox extends Component {
       );
       return joinedConvo.users.length;
     };
+
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   componentDidMount() {
@@ -194,7 +196,7 @@ class ChatBox extends Component {
   setupBeforeUnloadListener = () => {
     window.addEventListener("beforeunload", (ev) => {
       ev.preventDefault();
-      this.props.logout(this.props.event._id, this.props.user._id);
+      this.logoutUser();
       return this.exitConversation();
     });
   };
