@@ -89,14 +89,18 @@ class ChatBox extends Component {
     // the message will be in the local state?
     this.sendMessage = (ev) => {
       ev.preventDefault();
-      this.socket.emit("SEND_MESSAGE", {
-        username: this.props.user.userName,
-        message: this.state.message,
-        room: this.props.conversationId,
-        userId: this.props.user._id,
-        role: this.props.user.role,
-      });
-      this.setState({ message: "" });
+      if (this.state.message) {
+        this.socket.emit("SEND_MESSAGE", {
+          username: this.props.user.userName,
+          message: this.state.message,
+          room: this.props.conversationId,
+          userId: this.props.user._id,
+          role: this.props.user.role,
+        });
+        this.setState({ message: "" })
+      } else {
+        alert("You must enter a message")
+      }
     };
 
     //this will send invoke the send message function if the enter key is pressed
