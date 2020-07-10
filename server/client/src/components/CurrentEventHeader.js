@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import "../styles/CurrentEventHeader.css";
 
 const CurrentEventHeader = (props) => {
-  console.log("The current event is ", props);
+  // console.log("The current event is ", props);
   return (
       <div id="current-event-tile">
         <h2>You are attending</h2>
@@ -16,7 +16,7 @@ const CurrentEventHeader = (props) => {
 
 function mapStateToProps(state) {
   if (state.event) {
-    console.log("Inside currentEventHeader mapstatetoprops, state is", state);
+    // console.log("Inside currentEventHeader mapstatetoprops, state is", state);
     return {
       eventName: state.event.eventName || "Event",
     };

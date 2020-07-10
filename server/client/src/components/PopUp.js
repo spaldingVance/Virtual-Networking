@@ -16,7 +16,7 @@ class PopUp extends Component {
   }
 
   conversationSubmit() {
-    console.log(this.props.currentEvent._id);
+    // console.log(this.props.currentEvent._id);
     if (this.state.conversationName && this.props.currentEvent) {
       // if there's a convo name, create conversation with that name
       this.props.createConversation(
@@ -26,13 +26,20 @@ class PopUp extends Component {
 
       // reset conversation name to be nothing
       this.setState({ conversationName: "" });
+      // then disappear
+      document.getElementById("convo-popup").style.display = "none"
     } else alert("Please fill out a conversation title");
+
   }
 
   updateConversationName(event) {
     this.setState({ conversationName: event.target.value }, () => {
       console.log(`convoName changed to ${this.state.conversationName}`);
     });
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      this.conversationSubmit()
+    }
   }
 
   render() {
@@ -48,8 +55,10 @@ class PopUp extends Component {
                 size="lg"
                 type="text"
                 placeholder="Conversation Name"
-                value={this.state.conversationName}
+                value = {this.state.conversationName}
+                onKeyDown={this.updateConversationName.bind(this)}
                 onChange={this.updateConversationName.bind(this)}
+
               />
               <br />
               <Button

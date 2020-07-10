@@ -30,26 +30,33 @@ class ConversationList extends Component {
     this.props.getConversations(this.props.match.params.eventId);
   }
 
-  // componentDidUpdate() {
-  //   // grab from URL
-  //   this.props.getConversations(this.props.match.params.eventId);
-  // }
+  componentDidMount() {
+    // Activate the event listener
+    this.setupBeforeUnloadListener();
+  }
 
-  // shouldComponentUpdate(nextProps) {
-  //   if (
-  //     this.props.event.conversations.length !==
-  //     nextProps.event.conversations.length
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  componentDidUpdate() {
+    // grab from URL
+    this.props.getConversations(this.props.match.params.eventId);
+    
+  }
+
+  // Setup the `beforeunload` event listener
+  setupBeforeUnloadListener = () => {
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      return this.logoutUser();
+    });
+  };
+
+  componentWillUnmount() {
+    this.logoutUser();
+  }
 
   handleJoinConversation(conversation) {
 
     const foundConversationIndex = this.props.conversations.findIndex(convo => convo._id === conversation._id)
 
-    // const foundConversationName = this.props.conversations[foundConversationIndex].conversationName;
 
     console.log('inside HANDLE JOIN CONVERSATION, this.props.conversations=', this.props.conversations)
     // console.log('inside HANDLE JOIN CONVERSATION, foundConversationname = ', foundConversationName)
@@ -58,11 +65,10 @@ class ConversationList extends Component {
       //show that they've already joined this conversation
       return window.alert(`You already joined this conversation`)
 
-      // return window.alert(`You already joined ${this.props.conversations[foundConversationIndex].conversationName}`)
     }
 
     if (this.props.conversations.length === 2) {
-      //handle showing that they can't join another conversation without leaving another
+      //show that they can't join another conversation without leaving another
 
       return window.alert(`You have already joined 2 conversations, please close a chatbox to join another conversation`)
     }
@@ -87,25 +93,32 @@ class ConversationList extends Component {
   }
 
   logoutUser() {
-    console.log("User ID = " + this.props.user._id);
+    // console.log("User ID = " + this.props.user._id);
     this.props.logout(this.props.event._id, this.props.user._id);
     if (this.props.logoutUser) {
-      console.log(this.props.logoutUser);
+      // console.log(this.props.logoutUser);
     }
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
 
   popUpAppears() {
+    // in case popup doesn't exist yet
+    if (this.state.active) {
+      // make convo popup div visible
+      document.getElementById('convo-popup').style.display = "block"
+    }
     this.setState({
       active: !this.state.active,
     });
   }
 
   renderConversationList() {
-    console.log(
-      "In Render Conversation List, this.props.event are ",
-      this.props.event
-    );
+    // console.log(
+    //   "In Render Conversation List, this.props.event are ",
+    //   this.props.event
+    // );
+
+    
 
     if (this.props.event.conversations) {
       // need to sort the conversations by number of participants
@@ -130,7 +143,7 @@ class ConversationList extends Component {
   }
 
   render() {
-    console.log("Inside render of Conversation List, this.props= ", this.props);
+    // console.log("Inside render of Conversation List, this.props= ", this.props);
 
     if (!this.props.user.hasOwnProperty("userName")) {
       return <Redirect to={`/`} />;
