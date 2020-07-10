@@ -11,32 +11,35 @@ class PopUp extends Component {
     super(props);
 
     this.state = {
-      conversationName: ""
+      conversationName: "",
+    };
   }
-}
 
   conversationSubmit() {
-      console.log(this.props.currentEvent._id)
+    console.log(this.props.currentEvent._id);
     if (this.state.conversationName && this.props.currentEvent) {
-        // if there's a convo name, create conversation with that name
-        this.props.createConversation(this.props.currentEvent._id, this.state.conversationName);
-        
-        // reset conversation name to be nothing
-        this.setState({conversationName: ""})
-      } else alert("Please fill out a conversation title");
-  };
+      // if there's a convo name, create conversation with that name
+      this.props.createConversation(
+        this.props.currentEvent._id,
+        this.state.conversationName
+      );
+
+      // reset conversation name to be nothing
+      this.setState({ conversationName: "" });
+    } else alert("Please fill out a conversation title");
+  }
 
   updateConversationName(event) {
     this.setState({ conversationName: event.target.value }, () => {
       console.log(`convoName changed to ${this.state.conversationName}`);
     });
-  };
+  }
 
   render() {
-      return (
-        <div id="convo-popup">
+    return (
+      <div id="convo-popup">
         <Row>
-          <Col >
+          <Col>
             <h1 id="create-convo">Create a New Convo</h1>
             <Form>
               <Form.Control
@@ -58,9 +61,9 @@ class PopUp extends Component {
             </Form>
           </Col>
         </Row>
-        </div>
-      );
-    }   
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
