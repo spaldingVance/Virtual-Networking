@@ -10,8 +10,8 @@ export default function (state = [], action) {
         return state;
       }
     case CREATE_CONVERSATION:
-       console.log(state)
-      return state;
+      console.log(state);
+      return action.payload.data;
     default:
       return state;
   }
