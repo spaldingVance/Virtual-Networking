@@ -100,6 +100,7 @@ class ConversationList extends Component {
     if (this.props.logoutUser) {
       // console.log(this.props.logoutUser);
     }
+    
     this.props.leaveAllConversations(); // need to empty the conversations array in global store
   }
 
