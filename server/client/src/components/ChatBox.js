@@ -18,9 +18,7 @@ import { bindActionCreators } from "redux";
 class ChatBox extends Component {
   constructor(props) {
     super(props);
-
-    console.log(props)
-
+    
     //so the state of this component will be for the one user using this application, so it pertains to them, their conversation, their name, their id, their current message but, the message array will be all messages (and include all users? tbd)
     //at this point messages is an array looking like [{socketid: , username: , message: , time: }, ...]
 
@@ -31,8 +29,6 @@ class ChatBox extends Component {
       usersTyping: []
     };
 
-    //how are we getting the name of the room? incoming props from parent component?
-    //this.socket = io("localhost:5000");
     this.socket = io();
 
     //this starts up the room socket connection when the component is initialized
@@ -45,33 +41,19 @@ class ChatBox extends Component {
         conversationName: this.props.conversationName,
       });
     });
-    // console.log(
-    //   "CONVERSATION ID BEING SENT TO SOCKET ON JOINING ROOM:",
-    //   this.props.conversationId
-    // );
-    // console.log(
-    //   "USER ID BEING SENT TO SOCKET ON JOINING ROOM:",
-    //   this.props.user._id
-    // );
 
     //this receives back the message from server/index.js
     this.socket.on("MESSAGE", function (data) {
-      // console.log(
-      //   "Chatbox receiving back message to add message to messages array. Data= ",
-      //   data
-      // );
       addMessage(data);
     });
 
     //socket to receive information about other users typing
     this.socket.on("OTHER_USERS_TYPING", function (data) {
-      // console.log("OTHER USERS ARE TYPING")
       setTyping(data)
     })
 
     //socket to receive information about when other users stop typing
     this.socket.on("OTHER_USERS_STOP_TYPING", function (data) {
-      // console.log("OTHER USERS HAVE STOPPED TYPING")
       removeTyping(data)
     })
 
@@ -105,6 +87,7 @@ class ChatBox extends Component {
     //this adds the message received back from server/index.js to this state's messages array
     const addMessage = (data) => {
       this.setState({ messages: [...this.state.messages, data] });
+      this.scrollToBottom();
     };
 
     // the message will be in the local state?
@@ -196,22 +179,36 @@ class ChatBox extends Component {
       this.props.leaveOneConversation(this.props.conversationId)
     };
 
-    this.scrollToBottom = () => {
-      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-    }
+    this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.loadMessages = this.loadMessages.bind(this)
+    
 
     this.findSizeOfConversation = (conversationName) => {
        let joinedConvo = this.props.event.conversations.find((convo) => convo.conversationName === conversationName)
        return joinedConvo.users.length;
     }
   }
-
-  componentDidMount() {
-    this.scrollToBottom();
+  scrollToBottom() {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
-  componentDidUpdate() {
-    this.scrollToBottom();
+  loadMessages() {
+    if (this.state.messages) {
+      return this.state.messages.map((message, index, array) => {
+          return (
+            <div key={index} ref={index === array.length -1 ? event => { this.messagesEnd = event } : ""}>
+              <div>
+                <strong className="mr-1">
+                  {message.username} ({message.role})
+                </strong>
+                <strong></strong>
+                <span>{message.time}</span>
+              </div>
+              <div>{message.message}</div>
+            </div>
+          )
+      });
+    }
   }
 
   
@@ -236,21 +233,7 @@ class ChatBox extends Component {
                 </Card.Title>
                 <hr />
                 <div className="messages">
-                  {this.state.messages.map((message, index) => {
-                    return (
-                      <div key={index} ref={(ref) => (this.newMessage = ref)}>
-                        <div>
-                          <strong className="mr-1">
-                            {message.username} ({message.role})
-                          </strong>
-                          <strong></strong>
-                          <span>{message.time}</span>
-                        </div>
-                        <div>{message.message}</div>
-                      </div>
-                    );
-                  })}
-                  <div ref={(el) => { this.messagesEnd = el; }}></div>
+            {this.loadMessages()}
                 </div >
               </Card.Body>
               <div className="card-footer">
