@@ -23,7 +23,7 @@
 }
 
 .messages {
-  height: 90%;
+  height: 89%;
   overflow-y: scroll;
   overflow-x: hidden;
   overflow-anchor: none;
