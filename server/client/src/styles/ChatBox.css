@@ -11,16 +11,22 @@
 .card-footer {
   /* border-radius: 20px; */
  /* overflow: hidden; */
+ padding-top: 5px;
 }
 
 .close-button {
   cursor: pointer;
+  float: right;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .messages {
-  height: 90%;
-  overflow: scroll;
-  overflow-anchor: auto;
+  height: 89%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-anchor: none;
 }
 
 .card-body {

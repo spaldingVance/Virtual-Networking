@@ -80,7 +80,6 @@ io.on("connect", (socket) => {
       { $push: { users: data.userId } }
     ).exec((error, conversationUpdated) => {
       if (error) throw error;
-      console.log(conversationUpdated);
     });
 
     //add conversation id to user in database
@@ -89,14 +88,11 @@ io.on("connect", (socket) => {
       { $push: { conversations: data.conversationId } }
     ).exec((error, userUpdated) => {
       if (error) throw error;
-      console.log(userUpdated);
     });
   });
 
   //listen for chat messages
   socket.on("SEND_MESSAGE", (data) => {
-    console.log("Inside SEND_MESSAGE on server index.js, data= ", data);
-    console.log("Next step will be io.emit RECEIVE_MESSAGE");
     //when chat messages sent, display to room
     io.sockets.in(data.room).emit("MESSAGE", {
       username: data.username,
@@ -146,92 +142,113 @@ io.on("connect", (socket) => {
 
   // Runs when client disconnects
   socket.on("LEAVE_CONVERSATION", (data) => {
-    console.log("LEAVING CONVERSATION")
+    console.log("LEAVING CONVERSATION");
     //leave room
-    socket.leave(data.room)
+    socket.leave(data.room);
 
     //broadcast to room that user left
-    socket.in(data.room)
-      .broadcast
-      .emit("MESSAGE", {
-        username: bot.username,
-        role: bot.role,
-        message: `${data.username} has left ${data.conversationName}`,
-        time: moment().format("h:mm a")
-      });
+    socket.in(data.room).broadcast.emit("MESSAGE", {
+      username: bot.username,
+      role: bot.role,
+      message: `${data.username} has left ${data.conversationName}`,
+      time: moment().format("h:mm a"),
+    });
 
     //remove conversation from user
     User.updateOne(
       { _id: data.userId },
-      { $pullAll: { users: [data.room] } }
+      { $pullAll: { conversations: [data.room] } }
     ).exec((err, updatedUser) => {
-      console.log(updatedUser)
+      console.log(updatedUser);
       if (err) return next(err);
     });
 
     //remove user from conversation
-    console.log(data.room)
-    console.log(data.userId)
+    console.log(data.room);
+    console.log(data.userId);
     Conversation.updateOne(
       { _id: data.room },
       { $pullAll: { users: [data.userId] } }
     ).exec((err, updatedConvo) => {
-      console.log(updatedConvo)
+      console.log(updatedConvo);
       if (err) return next(err);
     });
   });
 });
 
 ////////////////////////////////////////////////////////////
-// GENERATE FAKE DATA
+// GENERATE FAKE DATA FOR PRODUCTION
 // uncomment the .save() lines to add this data to the database
 // you can use this format to create new fake data and save it as well
 // make sure to comment out the .save() lines when running the server multiple times
 // to avoid duplicate data
 
 let event1 = new Event({
-  eventName: "Cool Generic Event 3",
+  eventName: "Programmers of NC",
+});
+
+let event2 = new Event({
+  eventName: "Project Shift Meetup",
+});
+
+let event3 = new Event({
+  eventName: "Let's Talk About Angular",
+});
+
+let event4 = new Event({
+  eventName: "Python Devs Meetup",
+});
+
+let event5 = new Event({
+  eventName: "Diversity in Tech",
 });
 
 let conversation1 = new Conversation({
-  conversationName: "Neat Conversation 3",
+  conversationName: "General",
   active: true,
 });
 
-let user1 = new User({
-  userName: "Robert",
-  role: "Socket.io Wizard",
-  event: event1._id,
-});
-
-conversation1.messages.push({
-  user: user1._id,
-  text: "Hellooooo",
-});
+conversation1.save();
 
 let conversation2 = new Conversation({
-  conversationName: "room1",
+  conversationName: "General",
   active: true,
 });
+
+conversation2.save();
 
 let conversation3 = new Conversation({
-  conversationName: "room2",
+  conversationName: "General",
   active: true,
 });
 
-conversation1.users.push(user1);
+conversation3.save();
 
-// conversation1.save();
+let conversation4 = new Conversation({
+  conversationName: "General",
+  active: true,
+});
 
-// conversation2.save();
-// conversation3.save();
+conversation4.save();
 
-event1.users.push(user1);
+let conversation5 = new Conversation({
+  conversationName: "General",
+  active: true,
+});
+
+conversation5.save();
+
 event1.conversations.push(conversation1);
-event1.conversations.push(conversation2);
-event1.conversations.push(conversation3);
+event2.conversations.push(conversation2);
+event3.conversations.push(conversation3);
+event4.conversations.push(conversation4);
+event5.conversations.push(conversation5);
 
-user1.conversations.push(conversation1);
+event1.save();
+event2.save();
+event3.save();
+event4.save();
+event5.save();
 
 // event1.save();
 

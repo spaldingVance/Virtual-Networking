@@ -21,11 +21,6 @@ class ConversationList extends Component {
 
     //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
     this.state = {
-      conversations: [
-        { conversationName: "JavaScript", _id: 100 },
-        { conversationName: "HTML", _id: 200 },
-      ],
-      joinedConversations: [], // by id
       active: false,
     };
 
@@ -43,7 +38,6 @@ class ConversationList extends Component {
   componentDidUpdate() {
     // grab from URL
     this.props.getConversations(this.props.match.params.eventId);
-    
   }
 
   // Setup the `beforeunload` event listener
@@ -59,7 +53,32 @@ class ConversationList extends Component {
   }
 
   handleJoinConversation(conversation) {
-    this.props.getJoinedConversations(conversation);
+    const foundConversationIndex = this.props.conversations.findIndex(
+      (convo) => convo._id === conversation._id
+    );
+
+    console.log(
+      "inside HANDLE JOIN CONVERSATION, this.props.conversations=",
+      this.props.conversations
+    );
+    // console.log('inside HANDLE JOIN CONVERSATION, foundConversationname = ', foundConversationName)
+
+    if (foundConversationIndex >= 0) {
+      //show that they've already joined this conversation
+      return window.alert(`You already joined this conversation`);
+    }
+
+    if (this.props.conversations.length === 2) {
+      //show that they can't join another conversation without leaving another
+
+      return window.alert(
+        `You have already joined 2 conversations, please close a chatbox to join another conversation`
+      );
+    }
+
+    if (foundConversationIndex === -1) {
+      this.props.getJoinedConversations(conversation);
+    }
   }
 
   checkJoinedStatus(conversationFromList) {
@@ -89,7 +108,7 @@ class ConversationList extends Component {
     // in case popup doesn't exist yet
     if (this.state.active) {
       // make convo popup div visible
-      document.getElementById('convo-popup').style.display = "block"
+      document.getElementById("convo-popup").style.display = "block";
     }
     this.setState({
       active: !this.state.active,
@@ -101,8 +120,6 @@ class ConversationList extends Component {
     //   "In Render Conversation List, this.props.event are ",
     //   this.props.event
     // );
-
-    
 
     if (this.props.event.conversations) {
       // need to sort the conversations by number of participants
