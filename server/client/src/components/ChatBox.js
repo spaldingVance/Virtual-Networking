@@ -164,10 +164,10 @@ this.handleKeyPress = (event) => {
       })
 
       //set timeout
-      timeout = setTimeout(timeoutFunction, 2000);
+      timeout = setTimeout(timeoutFunction, 3000);
     } else {
       clearTimeout(timeout);
-      timeout = setTimeout(timeoutFunction, 2000);
+      timeout = setTimeout(timeoutFunction, 3000);
     }
   }
 }
