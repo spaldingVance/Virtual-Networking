@@ -115,38 +115,38 @@ io.on("connect", (socket) => {
   });
 
   //handle user typing
-  socket.on("USER_TYPING", (data) => {
-    socket.in(data.room)
-      .broadcast
-      .emit("OTHER_USERS_TYPING", {
-        username: data.username
-      })
-  })
-
-  // //test socket
-  //   socket.on("USER_TYPING", (data) => {
-  //   io.in(data.room)
+  // socket.on("USER_TYPING", (data) => {
+  //   socket.in(data.room)
+  //     .broadcast
   //     .emit("OTHER_USERS_TYPING", {
   //       username: data.username
   //     })
   // })
 
-  //handle user stop typing
-  socket.on("USER_STOP_TYPING", (data) => {
-    socket.in(data.room)
-      .broadcast
-      .emit("OTHER_USERS_STOP_TYPING", {
+  // //test socket
+    socket.on("USER_TYPING", (data) => {
+    io.in(data.room)
+      .emit("OTHER_USERS_TYPING", {
         username: data.username
       })
   })
 
-  //test socket
+  //handle user stop typing
   // socket.on("USER_STOP_TYPING", (data) => {
-  //   io.in(data.room)
+  //   socket.in(data.room)
+  //     .broadcast
   //     .emit("OTHER_USERS_STOP_TYPING", {
   //       username: data.username
   //     })
   // })
+
+  //test socket
+  socket.on("USER_STOP_TYPING", (data) => {
+    io.in(data.room)
+      .emit("OTHER_USERS_STOP_TYPING", {
+        username: data.username
+      })
+  })
 
   // Runs when client disconnects
   socket.on("LEAVE_CONVERSATION", (data) => {
