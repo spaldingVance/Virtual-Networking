@@ -7,12 +7,10 @@ import "../styles/CurrentEventHeader.css";
 const CurrentEventHeader = (props) => {
   console.log("The current event is ", props);
   return (
-    <div>
       <div id="current-event-tile">
         <h2>You are attending</h2>
         <h1>{props.eventName}</h1>
       </div>
-    </div>
   );
 };
 
