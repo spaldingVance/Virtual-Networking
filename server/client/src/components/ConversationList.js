@@ -113,7 +113,7 @@ class ConversationList extends Component {
             <Button onClick={this.logoutUser.bind(this)} variant="outline-danger" id="leave-event">
               Leave Event
             </Button>
-          <h3>Join a Chat</h3>
+          <h3 id="join-convo">Join a Conversation</h3>
           <ul className="conversation-list">{this.renderConversationList()}</ul>
         </div>
       );
