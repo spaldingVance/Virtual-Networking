@@ -144,7 +144,7 @@ io.on("connect", (socket) => {
   // socket.on("USER_STOP_TYPING", (data) => {
   //   io.in(data.room)
   //     .emit("OTHER_USERS_STOP_TYPING", {
-  //       username: ""
+  //       username: data.username
   //     })
   // })
 
