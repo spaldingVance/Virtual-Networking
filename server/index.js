@@ -179,72 +179,72 @@ io.on("connect", (socket) => {
 // make sure to comment out the .save() lines when running the server multiple times
 // to avoid duplicate data
 
-let event1 = new Event({
-  eventName: "Programmers of NC",
-});
+// let event1 = new Event({
+//   eventName: "Programmers of NC",
+// });
 
-let event2 = new Event({
-  eventName: "Project Shift Meetup",
-});
+// let event2 = new Event({
+//   eventName: "Project Shift Meetup",
+// });
 
-let event3 = new Event({
-  eventName: "Let's Talk About Angular",
-});
+// let event3 = new Event({
+//   eventName: "Let's Talk About Angular",
+// });
 
-let event4 = new Event({
-  eventName: "Python Devs Meetup",
-});
+// let event4 = new Event({
+//   eventName: "Python Devs Meetup",
+// });
 
-let event5 = new Event({
-  eventName: "Diversity in Tech",
-});
+// let event5 = new Event({
+//   eventName: "Diversity in Tech",
+// });
 
-let conversation1 = new Conversation({
-  conversationName: "General",
-  active: true,
-});
+// let conversation1 = new Conversation({
+//   conversationName: "General",
+//   active: true,
+// });
 
-conversation1.save();
+// conversation1.save();
 
-let conversation2 = new Conversation({
-  conversationName: "General",
-  active: true,
-});
+// let conversation2 = new Conversation({
+//   conversationName: "General",
+//   active: true,
+// });
 
-conversation2.save();
+// conversation2.save();
 
-let conversation3 = new Conversation({
-  conversationName: "General",
-  active: true,
-});
+// let conversation3 = new Conversation({
+//   conversationName: "General",
+//   active: true,
+// });
 
-conversation3.save();
+// conversation3.save();
 
-let conversation4 = new Conversation({
-  conversationName: "General",
-  active: true,
-});
+// let conversation4 = new Conversation({
+//   conversationName: "General",
+//   active: true,
+// });
 
-conversation4.save();
+// conversation4.save();
 
-let conversation5 = new Conversation({
-  conversationName: "General",
-  active: true,
-});
+// let conversation5 = new Conversation({
+//   conversationName: "General",
+//   active: true,
+// });
 
-conversation5.save();
+// conversation5.save();
 
-event1.conversations.push(conversation1);
-event2.conversations.push(conversation2);
-event3.conversations.push(conversation3);
-event4.conversations.push(conversation4);
-event5.conversations.push(conversation5);
+// event1.conversations.push(conversation1);
+// event2.conversations.push(conversation2);
+// event3.conversations.push(conversation3);
+// event4.conversations.push(conversation4);
+// event5.conversations.push(conversation5);
 
-event1.save();
-event2.save();
-event3.save();
-event4.save();
-event5.save();
+// event1.save();
+// event2.save();
+// event3.save();
+// event4.save();
+// event5.save();
 
 // event1.save();
 
