@@ -2,18 +2,22 @@
   margin: 0;
 }
 
-
 .card {
   border-radius: 20px;
   height: 650px;
   overflow: hidden;
 }
 
- .card-footer {
+.card-footer {
   /* border-radius: 20px;
  overflow: hidden; */
- padding-top: 5px;
-} 
+  padding-top: 12px;
+  position: relative;
+}
+
+.card-body-container {
+  overflow: scroll;
+}
 
 .chatbox-title {
   width: 80%;
@@ -32,14 +36,12 @@
 }
 
 .messages {
-  height: 89%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   overflow-x: hidden;
-  overflow-anchor: none;
 }
 
 .card-body {
-  padding-bottom: 0px;
+  padding-bottom: 0px !important;
 }
 
 .user-typing {
@@ -50,5 +52,5 @@
 
 .user-typing p {
   padding: 3px 0 0;
-  margin: 0; 
+  margin: 0;
 }

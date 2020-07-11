@@ -115,7 +115,6 @@ class ChatBox extends Component {
         });
         //sending message
         this.sendMessage(event);
-
       } else {
         //send socket to announce user is typing
         let typing = false;
@@ -237,28 +236,26 @@ class ChatBox extends Component {
         <Row className="m-0 p-0">
           <Col className="m-0 p-0">
             <Card className="m-0 p-0 shadow-sm">
-              <Card.Body>
-                <Card.Title>
-                  <div className="chatbox-title">
-                    {this.props.conversationName}
-                    <br/>
-                    <span className="number-of-users">
-                    {" "}<FontAwesomeIcon icon={faUsers} />{" "}
-                      { this.findSizeOfConversation(
-                          this.props.conversationName
-                        )}
-                    </span>
-                  </div>
-                </Card.Title>
+              <Card.Header>
+                <div className="chatbox-title">
+                  {this.props.conversationName}
+                  <br />
+                  <span className="number-of-users">
+                    {" "}
+                    <FontAwesomeIcon icon={faUsers} />{" "}
+                    {this.findSizeOfConversation(this.props.conversationName)}
+                  </span>
+                </div>
                 <Button
                   pill
                   variant="outline-danger"
                   className="close-button ml-4"
                   onClick={this.exitConversation}
-                  style={{ cursor: "pointer" }}>
+                  size="sm">
                   X
                 </Button>
-                <hr />
+              </Card.Header>
+              <Card.Body className="card-body-container">
                 <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
               <div className="card-footer">
