@@ -192,31 +192,14 @@ class ChatBox extends Component {
     this.logoutUser = this.logoutUser.bind(this);
   }
 
-  componentDidMount() {
-    // Activate the event listener
-    this.setupBeforeUnloadListener();
-  }
-
-  // Setup the `beforeunload` event listener
-  setupBeforeUnloadListener = () => {
-    window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-
-      return this.exitConversation();
-    });
-  };
-
   scrollToBottom() {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   }
 
   logoutUser() {
-    // console.log("User ID = " + this.props.user._id);
     this.props.logout(this.props.event._id, this.props.user._id);
-    if (this.props.logoutUser) {
-      // console.log(this.props.logoutUser);
-    }
-    this.props.leaveAllConversations(); // need to empty the conversations array in global store
+    // need to empty the conversations array in global store
+    this.props.leaveAllConversations();
   }
 
   loadMessages() {
