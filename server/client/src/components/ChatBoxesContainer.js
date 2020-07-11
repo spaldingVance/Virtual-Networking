@@ -13,7 +13,7 @@ class ChatBoxesContainer extends Component {
     // console.log("chatbox container constructor props=", props);
     this.state = {
       conversations: this.props.conversations,
-      enteredConvo: false
+      enteredConvo: false,
     };
 
     this.renderChatBoxes = this.renderChatBoxes.bind(this);
@@ -34,42 +34,41 @@ class ChatBoxesContainer extends Component {
   // }
 
   renderGreyBoxes() {
-    
-      return (
-        <div className="grey-box-div" id="grey-box-id">
-          <Col key={1} md={6} className="column">
-            <Container className="m-0 p-0">
-              <Row className="m-0 p-0">
-                <Col className="m-0 p-0">
-                  <Card className="m-0 p-0 shadow-sm empty-chat-box">
-                    <Card.Body>
-                      <div className="empty-chat-div">Join a conversation to get started... or create your own!</div>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-            </Container>
-          </Col>
-          <Col key={2} md={6} className="column">
-            <Container className="m-0 p-0">
-              <Row className="m-0 p-0">
-                <Col className="m-0 p-0">
-                  <Card className="m-0 p-0 shadow-sm empty-chat-box">
-                    <Card.Body>
-                      <div className="empty-chat-div">...Why not two?</div>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
-            </Container>
-          </Col>
-        </div>
-      )
-    
+    return (
+      <div className="grey-box-div" id="grey-box-id">
+        <Col key={1} md={6} className="column">
+          <Container className="m-0 p-0">
+            <Row className="m-0 p-0">
+              <Col className="m-0 p-0">
+                <Card className="m-0 p-0 shadow-sm empty-chat-box">
+                  <Card.Body>
+                    <div className="empty-chat-div">
+                      Join a conversation to get started... or create your own!
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
+        <Col key={2} md={6} className="column">
+          <Container className="m-0 p-0">
+            <Row className="m-0 p-0">
+              <Col className="m-0 p-0">
+                <Card className="m-0 p-0 shadow-sm empty-chat-box">
+                  <Card.Body>
+                    <div className="empty-chat-div">...Why not two?</div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
+      </div>
+    );
   }
 
   renderChatBoxes() {
-   
     // console.log("inside render chatbox, this.props= ", this.props);
     let shortenedConversations = this.props.conversations.slice(0, 2);
 
@@ -86,24 +85,21 @@ class ChatBoxesContainer extends Component {
     });
   }
 
-
   // this component is the container for the chatboxes. The redux store state of current conversations is mapped to this component so that the correct chat box(es) will display
   render() {
-    if (this.props.conversations.length !== 0)  {
+    if (this.props.conversations.length !== 0) {
       return (
         <Container>
           <Row>{this.renderChatBoxes()}</Row>
         </Container>
       );
-
     } else {
       return (
         <Container>
           <Row>{this.renderGreyBoxes()}</Row>
         </Container>
-      )
+      );
     }
-   
   }
 }
 

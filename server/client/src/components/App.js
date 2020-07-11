@@ -9,7 +9,7 @@ import Header from "./Header";
 
 // styling imports
 import "../styles/App.css";
-import { Row, Col, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 const App = () => {
   return (
