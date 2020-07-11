@@ -14,6 +14,8 @@ import {
 import "../styles/ChatBox.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class ChatBox extends Component {
   constructor(props) {
@@ -106,14 +108,14 @@ class ChatBox extends Component {
     //this will send invoke the send message function if the enter key is pressed
     this.handleKeyPress = (event) => {
       if (event.charCode === 13) {
-        //sending message
-        this.sendMessage(event);
-
         //telling others that user has stopped typing
         this.socket.emit("USER_STOP_TYPING", {
           username: this.props.user.userName,
           room: this.props.conversationId,
         });
+        //sending message
+        this.sendMessage(event);
+
       } else {
         //send socket to announce user is typing
         let typing = false;
@@ -239,22 +241,23 @@ class ChatBox extends Component {
                 <Card.Title>
                   <div className="chatbox-title">
                     {this.props.conversationName}
+                    <br/>
                     <span className="number-of-users">
-                      {"  Users: " +
-                        this.findSizeOfConversation(
+                    {" "}<FontAwesomeIcon icon={faUsers} />{" "}
+                      { this.findSizeOfConversation(
                           this.props.conversationName
                         )}
                     </span>
                   </div>
                 </Card.Title>
-                <Badge
+                <Button
                   pill
-                  variant="danger"
+                  variant="outline-danger"
                   className="close-button ml-4"
                   onClick={this.exitConversation}
                   style={{ cursor: "pointer" }}>
                   X
-                </Badge>
+                </Button>
                 <hr />
                 <div className="messages">{this.loadMessages()}</div>
               </Card.Body>
