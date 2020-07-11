@@ -159,18 +159,14 @@ io.on("connect", (socket) => {
       { _id: data.userId },
       { $pullAll: { conversations: [data.room] } }
     ).exec((err, updatedUser) => {
-      console.log(updatedUser);
       if (err) return next(err);
     });
 
     //remove user from conversation
-    console.log(data.room);
-    console.log(data.userId);
     Conversation.updateOne(
       { _id: data.room },
       { $pullAll: { users: [data.userId] } }
     ).exec((err, updatedConvo) => {
-      console.log(updatedConvo);
       if (err) return next(err);
     });
   });
