@@ -45,14 +45,6 @@ class ConversationList extends Component {
     this.intervalID = setTimeout(this.getTheData.bind(this), 500);
   }
 
-  // Setup the `beforeunload` event listener
-  setupBeforeUnloadListener = () => {
-    window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-      return this.logoutUser();
-    });
-  };
-
   handleJoinConversation(conversation) {
     const foundConversationIndex = this.props.conversations.findIndex(
       (convo) => convo._id === conversation._id
