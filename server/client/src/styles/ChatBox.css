@@ -13,10 +13,12 @@
  overflow: hidden; */
   padding-top: 12px;
   position: relative;
+  margin-top: 2px;
 }
 
 .card-body-container {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .chatbox-title {
