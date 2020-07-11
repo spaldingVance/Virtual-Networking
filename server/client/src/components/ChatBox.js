@@ -97,9 +97,9 @@ class ChatBox extends Component {
           userId: this.props.user._id,
           role: this.props.user.role,
         });
-        this.setState({ message: "" })
+        this.setState({ message: "" });
       } else {
-        alert("You must enter a message")
+        alert("You must enter a message");
       }
     };
 
@@ -128,7 +128,7 @@ class ChatBox extends Component {
           });
         };
 
-        if (typing == false) {
+        if (typing === false) {
           typing = true;
           //socket to broadcast current user to other users
           this.socket.emit("USER_TYPING", {
@@ -175,6 +175,7 @@ class ChatBox extends Component {
         conversationName: this.props.conversationName,
       });
       // get chatbox to disappear
+
       this.props.leaveOneConversation(this.props.conversationId);
     };
 
@@ -200,7 +201,7 @@ class ChatBox extends Component {
   setupBeforeUnloadListener = () => {
     window.addEventListener("beforeunload", (ev) => {
       ev.preventDefault();
-      this.logoutUser();
+
       return this.exitConversation();
     });
   };
@@ -267,7 +268,8 @@ class ChatBox extends Component {
                   pill
                   variant="danger"
                   className="close-button ml-4"
-                  onClick={this.exitConversation}>
+                  onClick={this.exitConversation}
+                  style={{ cursor: "pointer" }}>
                   X
                 </Badge>
                 <hr />
@@ -289,7 +291,8 @@ class ChatBox extends Component {
                     <Button
                       className="ml-2"
                       variant="outline-secondary"
-                      onClick={this.sendMessage}>
+                      onClick={this.sendMessage}
+                      style={{ cursor: "pointer" }}>
                       Send
                     </Button>
                   </InputGroup.Append>

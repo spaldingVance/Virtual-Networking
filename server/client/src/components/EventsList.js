@@ -11,10 +11,10 @@ import { faComments, faUsers } from "@fortawesome/free-solid-svg-icons";
 class EventsList extends Component {
   constructor(props) {
     super(props);
+    this.props.getEvents();
   }
 
   componentDidMount() {
-    this.props.getEvents();
     document.getElementById("user-info").style.display = "none";
   }
 
@@ -32,30 +32,30 @@ class EventsList extends Component {
         className="event-tile-column mb-4"
         key={data._id}>
         <Link to={`/events/${data._id}/login`}>
-          <div className='tile-container'>
-          <Container className="event-tile px-3">
-            <Row className="align-items-baseline">
-              <Col className="d-inline-flex justify-content-start align-items-baseline">
-                <div className="event-users">
-                  <FontAwesomeIcon icon={faUsers} />{" "}
-                  <p className="event-tile-numbers">{data.users.length}</p>
-                </div>
-              </Col>
-              <Col className="d-inline-flex justify-content-end align-items-baseline">
-                <div className="event-comments">
-                  <FontAwesomeIcon icon={faComments} />{" "}
-                  <p className="event-tile-numbers ">
-                    {data.conversations.length}
-                  </p>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="pt-3">
-                <h3>{data.eventName}</h3>
-              </Col>
-            </Row>
-          </Container>
+          <div className="tile-container">
+            <Container className="event-tile px-3">
+              <Row className="align-items-baseline">
+                <Col className="d-inline-flex justify-content-start align-items-baseline">
+                  <div className="event-users">
+                    <FontAwesomeIcon icon={faUsers} />{" "}
+                    <p className="event-tile-numbers">{data.users.length}</p>
+                  </div>
+                </Col>
+                <Col className="d-inline-flex justify-content-end align-items-baseline">
+                  <div className="event-comments">
+                    <FontAwesomeIcon icon={faComments} />{" "}
+                    <p className="event-tile-numbers ">
+                      {data.conversations.length}
+                    </p>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="pt-3">
+                  <h3>{data.eventName}</h3>
+                </Col>
+              </Row>
+            </Container>
           </div>
         </Link>
       </Col>

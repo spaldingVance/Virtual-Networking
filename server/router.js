@@ -85,7 +85,7 @@ module.exports = function (router) {
     }
 
     Event.findById({ _id: request.params.eventId })
-      .populate("conversations")
+      .populate("conversations", "-messages")
       .exec((err, event) => {
         if (err) {
           return next(err);
@@ -95,6 +95,9 @@ module.exports = function (router) {
           response.writeHead(404, "Event Not Found");
           return response.end();
         }
+
+        // we want to send the event without the messages array on conversations
+        // to help w/ memory
 
         response.send(event);
       });

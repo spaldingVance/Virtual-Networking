@@ -7,7 +7,7 @@ export const LOGIN = "LOGIN";
 export const JOIN_CONVERSATION = "JOIN_CONVERSATION";
 export const LEAVE_ALL_CONVERSATIONS = "LEAVE_ALL_CONVERSATIONS";
 export const LOGOUT = "LOGOUT";
-export const CREATE_CONVERSATION = "CREATE_CONVERSATION"
+export const CREATE_CONVERSATION = "CREATE_CONVERSATION";
 export const LEAVE_ONE_CONVERSATION = "LEAVE_ONE_CONVERSATION";
 
 export function getEvents() {
@@ -31,7 +31,7 @@ export function getConversations(currentEvent) {
   const url = `/api/events/${currentEvent}`;
   const request = axios.get(url);
 
-  // request.then(console.log(`Conversations requested for ${currentEvent}`));
+  request.then(console.log(`Conversations requested for ${currentEvent}`));
 
   return {
     type: GET_CONVERSATIONS,
@@ -76,8 +76,8 @@ export function leaveAllConversations() {
 export function leaveOneConversation(conversationId) {
   return {
     type: LEAVE_ONE_CONVERSATION,
-    payload: conversationId
-  }
+    payload: conversationId,
+  };
 }
 
 export function logout(eventId, userId) {
@@ -97,20 +97,20 @@ export function logout(eventId, userId) {
 }
 
 export function createConversation(eventId, conversationName) {
-  const url = `/api/events/${eventId}/conversation`
- 
+  const url = `/api/events/${eventId}/conversation`;
+
   const request = axios({
     method: "post",
     url: url,
     data: {
-      conversationName: conversationName
-    }
+      conversationName: conversationName,
+    },
   });
 
   // request.then(console.log("create conversation attempted"));
 
   return {
     type: CREATE_CONVERSATION,
-    payload: request
+    payload: request,
   };
 }

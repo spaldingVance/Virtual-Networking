@@ -3,7 +3,7 @@
 }
 
 .event-tile {
-  background: rgba(48,41,179,.5);  
+  background: rgba(48, 41, 179, 0.5);
   height: 250px;
   color: white;
   border-radius: 1em;
@@ -28,12 +28,13 @@
   display: inline-block;
 }
 
-.event-comments, .event-users {
+.event-comments,
+.event-users {
   position: absolute;
   bottom: -250px;
 }
 
-.event-comments p, .event-users p {
+.event-comments p,
+.event-users p {
   font-weight: 100;
 }
-

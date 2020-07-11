@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import "../styles/login.css";
 import yellowc from "../assets/circle-yellow.svg";
 import { bindActionCreators } from "redux";
@@ -85,7 +85,8 @@ class Login extends Component {
               <Button
                 onClick={this.loginSubmit.bind(this)}
                 id="tag-submit"
-                size="lg">
+                size="lg"
+                style={{ cursor: "pointer" }}>
                 {`Join ${this.props.eventName}`}
               </Button>
             </Form>
@@ -103,7 +104,7 @@ class Login extends Component {
               </Button>
             </Link>
           </Col>
-          <img id="yellowc" src={yellowc} />
+          <img id="yellowc" src={yellowc} alt="Background of a yellow circle" />
         </Row>
       );
   }
