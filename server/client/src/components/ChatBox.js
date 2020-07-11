@@ -128,7 +128,7 @@ class ChatBox extends Component {
           });
         };
 
-        if (typing == false) {
+        if (typing === false) {
           typing = true;
           //socket to broadcast current user to other users
           this.socket.emit("USER_TYPING", {
@@ -268,7 +268,8 @@ class ChatBox extends Component {
                   pill
                   variant="danger"
                   className="close-button ml-4"
-                  onClick={this.exitConversation}>
+                  onClick={this.exitConversation}
+                  style={{ cursor: "pointer" }}>
                   X
                 </Badge>
                 <hr />
@@ -290,7 +291,8 @@ class ChatBox extends Component {
                     <Button
                       className="ml-2"
                       variant="outline-secondary"
-                      onClick={this.sendMessage}>
+                      onClick={this.sendMessage}
+                      style={{ cursor: "pointer" }}>
                       Send
                     </Button>
                   </InputGroup.Append>

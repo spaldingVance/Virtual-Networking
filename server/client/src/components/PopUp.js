@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import "../styles/login.css";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -27,9 +27,8 @@ class PopUp extends Component {
       // reset conversation name to be nothing
       this.setState({ conversationName: "" });
       // then disappear
-      document.getElementById("convo-popup").style.display = "none"
+      document.getElementById("convo-popup").style.display = "none";
     } else alert("Please fill out a conversation title");
-
   }
 
   updateConversationName(event) {
@@ -37,8 +36,8 @@ class PopUp extends Component {
       console.log(`convoName changed to ${this.state.conversationName}`);
     });
     if (event.keyCode === 13) {
-      event.preventDefault()
-      this.conversationSubmit()
+      event.preventDefault();
+      this.conversationSubmit();
     }
   }
 
@@ -55,16 +54,16 @@ class PopUp extends Component {
                 size="lg"
                 type="text"
                 placeholder="Conversation Name"
-                value = {this.state.conversationName}
+                value={this.state.conversationName}
                 onKeyDown={this.updateConversationName.bind(this)}
                 onChange={this.updateConversationName.bind(this)}
-
               />
               <br />
               <Button
                 onClick={this.conversationSubmit.bind(this)}
                 id="convo-submit"
-                size="lg">
+                size="lg"
+                style={{ cursor: "pointer" }}>
                 Start New Conversation
               </Button>
             </Form>

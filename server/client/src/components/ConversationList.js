@@ -22,22 +22,27 @@ class ConversationList extends Component {
     //Javascript and HTML are hardcoded because getConversations is not pulling in the redux store conversations yet
     this.state = {
       active: false,
+      eventId: this.props.match.params.eventId,
     };
 
     this.renderConversationList = this.renderConversationList.bind(this);
     this.handleJoinConversation = this.handleJoinConversation.bind(this);
-
-    this.props.getConversations(this.props.match.params.eventId);
   }
 
   componentDidMount() {
-    // Activate the event listener
-    this.setupBeforeUnloadListener();
+    // need to grab the data for the conversations
+    this.getTheData();
   }
 
-  componentDidUpdate() {
-    // grab from URL
-    this.props.getConversations(this.props.match.params.eventId);
+  componentWillUnmount() {
+    clearTimeout(this.intervalID);
+    this.logoutUser();
+  }
+
+  getTheData() {
+    this.props.getConversations(this.state.eventId);
+    // calling it every 500 ms helps performance
+    this.intervalID = setTimeout(this.getTheData.bind(this), 500);
   }
 
   // Setup the `beforeunload` event listener
@@ -47,10 +52,6 @@ class ConversationList extends Component {
       return this.logoutUser();
     });
   };
-
-  componentWillUnmount() {
-    this.logoutUser();
-  }
 
   handleJoinConversation(conversation) {
     const foundConversationIndex = this.props.conversations.findIndex(
@@ -133,7 +134,8 @@ class ConversationList extends Component {
                 className={this.checkJoinedStatus(conversation)}
                 onClick={(event) => {
                   this.handleJoinConversation(conversation);
-                }}>
+                }}
+                style={{ cursor: "pointer" }}>
                 {conversation.conversationName} ({conversation.users.length}{" "}
                 users)
               </li>
@@ -155,13 +157,15 @@ class ConversationList extends Component {
           <Button
             onClick={this.popUpAppears.bind(this)}
             variant="outline-primary"
-            id="create-event">
+            id="create-event"
+            style={{ cursor: "pointer" }}>
             Create a Conversation
           </Button>
           <Button
             onClick={this.logoutUser.bind(this)}
             variant="outline-danger"
-            id="leave-event">
+            id="leave-event"
+            style={{ cursor: "pointer" }}>
             Leave Event
           </Button>
           <h3 id="join-convo">Join a Conversation</h3>
