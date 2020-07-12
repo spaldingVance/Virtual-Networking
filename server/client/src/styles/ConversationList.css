@@ -1,15 +1,15 @@
 
-.card-body-container::-webkit-scrollbar, .conversation-list::-webkit-scrollbar  {
+.messages::-webkit-scrollbar, .conversation-list::-webkit-scrollbar  {
   width: 7px;
 }
 
-.card-body-container::-webkit-scrollbar-track, .conversation-list::-webkit-scrollbar-track {
+.message::-webkit-scrollbar-track, .conversation-list::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0 0 0 0); 
   border-radius: 10px;
   height: 90%;
 }
 
-.card-body-container::-webkit-scrollbar-thumb, .conversation-list::-webkit-scrollbar-thumb {
+.messages::-webkit-scrollbar-thumb, .conversation-list::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px grey; 
   height: 50%;
