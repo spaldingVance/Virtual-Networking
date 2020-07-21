@@ -15,13 +15,10 @@ const App = () => {
   return (
     <div>
       <Header />
-      <Container id="app_view">
+      <Container id='app_view'>
         <Switch>
           <Route exact path={"/"} component={EventsList} />
-          <Route
-            path={"/events/:eventId/login"}
-            render={(props) => <Login {...props} />}
-          />
+          <Route path={"/events/:eventId/login"} render={(props) => <Login {...props} />} />
           <Route path={"/events/:eventId"} component={EventPage} />
         </Switch>
       </Container>

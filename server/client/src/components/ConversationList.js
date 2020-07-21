@@ -121,15 +121,14 @@ class ConversationList extends Component {
         .sort((a, b) => b.users.length - a.users.length)
         .map((conversation) => {
           return (
-            <a href="#2" key={`ConversationLink${conversation._id}`}>
+            <a href='#2' key={`ConversationLink${conversation._id}`}>
               <li
                 className={this.checkJoinedStatus(conversation)}
                 onClick={(event) => {
                   this.handleJoinConversation(conversation);
                 }}
                 style={{ cursor: "pointer" }}>
-                {conversation.conversationName} ({conversation.users.length}{" "}
-                users)
+                {conversation.conversationName} ({conversation.users.length} users)
               </li>
             </a>
           );
@@ -144,27 +143,25 @@ class ConversationList extends Component {
       return <Redirect to={`/`} />;
     } else {
       return (
-        <div id="conversation-column">
+        <div id='conversation-column'>
           {this.state.active && <PopUp />}
           <Button
             onClick={this.popUpAppears.bind(this)}
-            variant="outline-primary"
-            id="create-event"
+            variant='outline-primary'
+            id='create-event'
             style={{ cursor: "pointer" }}>
             Create a Conversation
           </Button>
           <Button
             onClick={this.logoutUser.bind(this)}
-            variant="outline-danger"
-            id="leave-event"
+            variant='outline-danger'
+            id='leave-event'
             style={{ cursor: "pointer" }}>
             Leave Event
           </Button>
-          <h3 id="join-convo">Join a Conversation</h3>
-          <div className="conversation-list-container">
-            <ul className="conversation-list">
-              {this.renderConversationList()}
-            </ul>
+          <h3 id='join-convo'>Join a Conversation</h3>
+          <div className='conversation-list-container'>
+            <ul className='conversation-list'>{this.renderConversationList()}</ul>
           </div>
         </div>
       );
@@ -190,6 +187,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ConversationList)
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConversationList));
