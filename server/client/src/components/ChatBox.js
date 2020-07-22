@@ -217,7 +217,7 @@ class ChatBox extends Component {
                 : ""
             }>
             <div>
-              <strong className="mr-1">
+              <strong className='mr-1'>
                 {message.username} ({message.role})
               </strong>
               <strong></strong>
@@ -232,15 +232,15 @@ class ChatBox extends Component {
 
   render() {
     return (
-      <Container className="m-0 p-0">
-        <Row className="m-0 p-0">
-          <Col className="m-0 p-0">
-            <Card className="m-0 p-0 shadow-sm">
+      <Container className='m-0 p-0'>
+        <Row className='m-0 p-0'>
+          <Col className='m-0 p-0'>
+            <Card className='m-0 p-0 shadow-sm'>
               <Card.Header>
-                <div className="chatbox-title">
+                <div className='chatbox-title'>
                   {this.props.conversationName}
                   <br />
-                  <span className="number-of-users">
+                  <span className='number-of-users'>
                     {" "}
                     <FontAwesomeIcon icon={faUsers} />{" "}
                     {this.findSizeOfConversation(this.props.conversationName)}
@@ -248,22 +248,22 @@ class ChatBox extends Component {
                 </div>
                 <Button
                   pill
-                  variant="outline-danger"
-                  className="close-button ml-4"
+                  variant='outline-danger'
+                  className='close-button ml-4'
                   onClick={this.exitConversation}
-                  size="sm">
+                  size='sm'>
                   X
                 </Button>
               </Card.Header>
-              <Card.Body className="card-body-container">
-                <div className="messages">{this.loadMessages()}</div>
+              <Card.Body className='card-body-container'>
+                <div className='messages'>{this.loadMessages()}</div>
               </Card.Body>
-              <div className="card-footer">
+              <div className='card-footer'>
                 <InputGroup>
                   <FormControl
-                    placeholder="Message"
-                    aria-label="Message"
-                    aria-describedby="basic-addon2"
+                    placeholder='Message'
+                    aria-label='Message'
+                    aria-describedby='basic-addon2'
                     value={this.state.message}
                     onKeyPress={this.handleKeyPress}
                     onChange={(event) => {
@@ -272,8 +272,8 @@ class ChatBox extends Component {
                   />
                   <InputGroup.Append>
                     <Button
-                      className="ml-2"
-                      variant="outline-secondary"
+                      className='ml-2'
+                      variant='outline-secondary'
                       onClick={this.sendMessage}
                       style={{ cursor: "pointer" }}>
                       Send
@@ -281,7 +281,7 @@ class ChatBox extends Component {
                   </InputGroup.Append>
                 </InputGroup>
                 {/* show users typing  */}
-                <div className="user-typing">{this.currentlyTypingUsers()}</div>
+                <div className='user-typing'>{this.currentlyTypingUsers()}</div>
               </div>
             </Card>
           </Col>
